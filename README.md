@@ -1,3 +1,6 @@
+## Figma
+https://www.figma.com/design/5SDAZdmuYTDqx2WTJOWB1X/Untitled?node-id=0-1&t=Oc0s2vvD2jNpXgUU-1
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
