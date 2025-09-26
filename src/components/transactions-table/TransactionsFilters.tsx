@@ -122,7 +122,7 @@ export default function TransactionsFilters({
 
   return (
     <Drawer open={openFilters} onOpenChange={setOpenFilters} direction="right">
-      <DrawerContent className="overflow-y-auto">
+      <DrawerContent className="overflow-y-auto overflow-x-hidden">
         <DrawerHeader className="text-left">
           <DrawerTitle>Filtros</DrawerTitle>
           <DrawerDescription>
