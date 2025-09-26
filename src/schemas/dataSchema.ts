@@ -11,7 +11,7 @@ export type BankType = z.infer<typeof banksData>;
 
 // OPERATIONS
 export const operationsData = [
-  "Pix",
+  "PIX",
   "Boleto bancário",
   "Débito",
   "Crédito",
