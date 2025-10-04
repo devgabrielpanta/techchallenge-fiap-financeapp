@@ -3,9 +3,6 @@ import type { TransactionType } from "../schemas/dataSchema";
 export const transactionList: TransactionType[] = [
   {
     id: 1,
-    "business-unit": "Custo de vida",
-    category: "Moradia",
-    subcategory: "Aluguel",
     bank: "Banco Santander S.A.",
     type: "saidas",
     operation: "PIX",
@@ -16,9 +13,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 2,
-    "business-unit": "Custo de vida",
-    category: "Moradia",
-    subcategory: "Água",
     bank: "Nu Pagamentos S.A.",
     type: "saidas",
     operation: "Débito",
@@ -29,9 +23,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 3,
-    "business-unit": "Custo de vida",
-    category: "Moradia",
-    subcategory: "Luz",
     bank: "Caixa Econômica Federal",
     type: "saidas",
     operation: "Boleto bancário",
@@ -42,9 +33,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 4,
-    "business-unit": "Custo de vida",
-    category: "Transporte",
-    subcategory: "Gasolina",
     bank: "Banco Santander S.A.",
     type: "saidas",
     operation: "Débito",
@@ -55,9 +43,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 5,
-    "business-unit": "Custo de vida",
-    category: "Transporte",
-    subcategory: "Pedágio",
     bank: "Nu Pagamentos S.A.",
     type: "saidas",
     operation: "Crédito",
@@ -68,9 +53,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 6,
-    "business-unit": "Custo de vida",
-    category: "Transporte",
-    subcategory: "Combustível",
     bank: "Caixa Econômica Federal",
     type: "saidas",
     operation: "PIX",
@@ -81,9 +63,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 7,
-    "business-unit": "Custo de vida",
-    category: "Alimentação",
-    subcategory: "Mercado",
     bank: "Banco Santander S.A.",
     type: "saidas",
     operation: "Débito",
@@ -94,9 +73,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 8,
-    "business-unit": "Custo de vida",
-    category: "Alimentação",
-    subcategory: "Restaurante",
     bank: "Nu Pagamentos S.A.",
     type: "saidas",
     operation: "Crédito",
@@ -107,9 +83,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 9,
-    "business-unit": "Custo de vida",
-    category: "Alimentação",
-    subcategory: "Delivery",
     bank: "Caixa Econômica Federal",
     type: "saidas",
     operation: "PIX",
@@ -120,9 +93,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 10,
-    "business-unit": "Negócios",
-    category: "Receitas",
-    subcategory: "Serviços de programação",
     bank: "Banco Santander S.A.",
     type: "entradas",
     operation: "Transferência",
@@ -133,9 +103,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 11,
-    "business-unit": "Negócios",
-    category: "Receitas",
-    subcategory: "Serviços de consultoria",
     bank: "Nu Pagamentos S.A.",
     type: "entradas",
     operation: "PIX",
@@ -146,9 +113,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 12,
-    "business-unit": "Negócios",
-    category: "Custos",
-    subcategory: "Assinatura de software operacional",
     bank: "Caixa Econômica Federal",
     type: "saidas",
     operation: "Crédito",
@@ -159,9 +123,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 13,
-    "business-unit": "Negócios",
-    category: "Custos",
-    subcategory: "Infraestrutura de TI",
     bank: "Banco Santander S.A.",
     type: "saidas",
     operation: "PIX",
@@ -172,9 +133,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 14,
-    "business-unit": "Negócios",
-    category: "Despesas",
-    subcategory: "Marketing",
     bank: "Nu Pagamentos S.A.",
     type: "saidas",
     operation: "Transferência",
@@ -185,9 +143,6 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 15,
-    "business-unit": "Negócios",
-    category: "Despesas",
-    subcategory: "Assinaturas administrativas",
     bank: "Caixa Econômica Federal",
     type: "saidas",
     operation: "Boleto bancário",

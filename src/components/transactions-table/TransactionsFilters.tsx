@@ -16,13 +16,35 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import type { TransactionType, BusinessUnitType } from "@/schemas/dataSchema";
+import type { TransactionType } from "@/schemas/dataSchema";
 
-type Hierarchy = {
-  [businessUnit: string]: {
-    [category: string]: string[];
-  };
+type FilterSchema = {
+  bank: string[];
+  type: string[];
+  operation: string[];
 };
+
+function generateFilters(transactionsList: TransactionType[]) {
+  const bank = new Set<string>();
+  const type = new Set<string>();
+  const operation = new Set<string>();
+
+  transactionsList.forEach((tx) => {
+    bank.add(tx.bank);
+    type.add(
+      tx.type.replace("entradas", "Entradas").replace("saidas", "Saídas")
+    );
+    operation.add(tx.operation);
+  });
+
+  const filters: FilterSchema = {
+    type: Array.from(type),
+    bank: Array.from(bank),
+    operation: Array.from(operation),
+  };
+
+  return filters;
+}
 
 export default function TransactionsFilters({
   transactions,
@@ -39,70 +61,13 @@ export default function TransactionsFilters({
   openFilters: boolean;
   setOpenFilters: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const [businessUnits, setBusinessUnits] = useState<string[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
-  const [subcategories, setSubcategories] = useState<string[]>([]);
-
-  function generateHierarchicalFilters(
-    transactionsList: typeof transactions
-  ): Hierarchy {
-    return transactionsList.reduce((acc, tx) => {
-      const bu = tx["business-unit"];
-      const cat = tx.category;
-      const sub = tx.subcategory;
-
-      if (!acc[bu]) {
-        acc[bu] = {};
-      }
-
-      if (!acc[bu][cat]) {
-        acc[bu][cat] = [];
-      }
-
-      if (!acc[bu][cat].includes(sub)) {
-        acc[bu][cat].push(sub);
-      }
-
-      return acc;
-    }, {} as Hierarchy);
-  }
-
-  const filters = generateHierarchicalFilters(transactions);
-
-  useEffect(() => {
-    if (transactions && transactions.length > 0) {
-      const businessList: string[] = [];
-      transactions.forEach((transaction) => {
-        if (!businessList.includes(transaction["business-unit"])) {
-          businessList.push(transaction["business-unit"]);
-        }
-      });
-
-      const categoryList: string[] = [];
-      transactions.forEach((transaction) => {
-        if (!categoryList.includes(transaction.category)) {
-          categoryList.push(transaction.category);
-        }
-      });
-
-      const subcategoryList: string[] = [];
-      transactions.forEach((transaction) => {
-        if (!subcategoryList.includes(transaction.subcategory)) {
-          subcategoryList.push(transaction.subcategory);
-        }
-      });
-
-      setBusinessUnits(businessList);
-      setCategories(categoryList);
-      setSubcategories(subcategoryList);
-    }
-  }, [transactions]);
+  const filters = generateFilters(transactions);
 
   const handleCheckboxChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    filterType: "business-unit" | "category" | "subcategory"
+    value: string,
+    checked: boolean | "indeterminate",
+    filterType: "bank" | "type" | "operation"
   ) => {
-    const { value, checked } = e.target;
     let updatedFilters: TransactionType[] = [];
     if (checked) {
       updatedFilters = [
@@ -116,7 +81,6 @@ export default function TransactionsFilters({
         (transaction) => transaction[filterType] !== value
       );
     }
-
     setFilteredTransactions(updatedFilters);
   };
 
@@ -125,91 +89,55 @@ export default function TransactionsFilters({
       <DrawerContent className="overflow-y-auto overflow-x-hidden">
         <DrawerHeader className="text-left">
           <DrawerTitle>Filtros</DrawerTitle>
-          <DrawerDescription>
-            Selecione os campos que deseja exibir
-          </DrawerDescription>
+          <DrawerDescription>Selecione os campos desejados</DrawerDescription>
         </DrawerHeader>
-        <div className="px-6">
-          {Object.entries(filters).map(([bu, categories]) => (
-            <div key={bu} className="mt-4">
-              <div className="flex flex-row justify-start items-center gap-2">
-                <Checkbox
-                  id={`business-unit-${bu}`}
-                  checked={filteredTransactions.some(
-                    (transaction) => transaction["business-unit"] === bu
-                  )}
-                  onCheckedChange={(e) =>
-                    handleCheckboxChange(
-                      {
-                        target: { value: bu, checked: e as boolean },
-                      } as React.ChangeEvent<HTMLInputElement>,
-                      "business-unit"
-                    )
-                  }
-                />
-                <Label
-                  className="font-bold text-xl"
-                  htmlFor={`business-unit-${bu}`}
-                >
-                  {bu}
-                </Label>
-              </div>
-              <hr className="h-0.5 bg-primary/40" />
-              {Object.entries(categories).map(([cat, subs]) => (
-                <div key={cat} className="my-2">
-                  <div className="flex flex-row justify-start items-center gap-2 ml-4 mb-1">
-                    <Checkbox
-                      id={`category-${cat}`}
-                      checked={filteredTransactions.some(
-                        (transaction) => transaction.category === cat
-                      )}
-                      onCheckedChange={(e) =>
-                        handleCheckboxChange(
-                          {
-                            target: { value: cat, checked: e as boolean },
-                          } as React.ChangeEvent<HTMLInputElement>,
-                          "category"
-                        )
-                      }
-                    />
-                    <Label
-                      className="font-semibold text-md"
-                      htmlFor={`category-${bu}`}
-                    >
-                      {cat}
-                    </Label>
-                  </div>
-                  {subs.map((sub) => (
-                    <div
-                      key={sub}
-                      className="flex flex-row justify-start items-center gap-2 ml-10"
-                    >
-                      <Checkbox
-                        id={`subcategory-${sub}`}
-                        checked={filteredTransactions.some(
-                          (transaction) => transaction.subcategory === sub
-                        )}
-                        onCheckedChange={(e) =>
-                          handleCheckboxChange(
-                            {
-                              target: { value: sub, checked: e as boolean },
-                            } as React.ChangeEvent<HTMLInputElement>,
-                            "subcategory"
-                          )
-                        }
-                      />
-                      <Label
-                        className="font-regular text-sm"
-                        htmlFor={`subcategory-${bu}`}
+        <div className="flex flex-col gap-6 px-4">
+          {Object.keys(filters).map((obj) => {
+            const group =
+              obj === "bank"
+                ? "Bancos"
+                : obj === "type"
+                ? "Tipos"
+                : "Operações";
+            return (
+              <div key={obj}>
+                <h4 className="text-lg font-bold text-primary ">{group}</h4>
+                <hr className="mb-2 border-primary" />
+                <ul className="flex flex-col gap-2">
+                  {filters[obj as keyof FilterSchema].map((filter) => {
+                    const transactionFilter = filter
+                      .replace("Entradas", "entradas")
+                      .replace("Saídas", "saidas");
+                    return (
+                      <li
+                        key={filter}
+                        className="flex flex-row justify-start items-center gap-2"
                       >
-                        {sub}
-                      </Label>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          ))}
+                        <Checkbox
+                          id={filter}
+                          checked={filteredTransactions.some((transaction) =>
+                            transaction[obj as keyof FilterSchema].includes(
+                              transactionFilter
+                            )
+                          )}
+                          onCheckedChange={(checked) =>
+                            handleCheckboxChange(
+                              transactionFilter,
+                              checked,
+                              obj as "bank" | "type" | "operation"
+                            )
+                          }
+                        />
+                        <Label className="text-sm font-normal" htmlFor={filter}>
+                          {filter}
+                        </Label>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
+            );
+          })}
         </div>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>

@@ -14,35 +14,7 @@ export const columns: ColumnDef<TransactionType>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Email
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "category",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Categoria
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "subcategory",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Subcategoria
+          ID
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -113,20 +85,6 @@ export const columns: ColumnDef<TransactionType>[] = [
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
           Valor
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "currency",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Moeda
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
