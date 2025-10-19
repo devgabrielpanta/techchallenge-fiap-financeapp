@@ -92,9 +92,45 @@
 
   * {
     @apply border-[--color-border] outline-[--color-primary]/50;
+
+    /* Customização do scrollbar para Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) var(--color-surface);
   }
 
   body {
     @apply bg-[--color-background] text-[--color-text] font-sans;
+  }
+
+  /* ------ Swiper Customização ------- */
+  .swiper-pagination-bullet {
+    background-color: var(--color-primary) !important;
+    opacity: 0.3 !important;
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: var(--color-primary) !important;
+    opacity: 1 !important;
+  }
+
+  /* ------ Customização do Scrollbar ------- */
+  ::-webkit-scrollbar {
+    width: 8px; /* Largura da barra */
+    height: 8px; /* Altura se for horizontal */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface); /* Fundo da barra */
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary); /* Cor do “polegar” */
+    border-radius: 4px;
+    border: 2px solid var(--color-surface); /* Espaçamento ao redor */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-secondary); /* Cor ao passar o mouse */
   }
 }

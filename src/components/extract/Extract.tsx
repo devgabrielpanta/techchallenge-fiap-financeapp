@@ -65,6 +65,7 @@ export const Extract: React.FC<ExtractProps> = () => {
                     day: "2-digit",
                     month: "2-digit",
                     year: "2-digit",
+                    timeZone: "UTC",
                   })}
                 </span>
               </li>
@@ -82,7 +83,7 @@ export const Extract: React.FC<ExtractProps> = () => {
               variant="primary"
               size="md"
               className="w-full"
-              onClick={() => router.push("/extrato")}
+              onClick={() => router.push("/extract")}
             >
               Ver todas
             </Button>

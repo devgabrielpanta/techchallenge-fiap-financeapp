@@ -153,7 +153,9 @@ export default function ExtractPage() {
                 <td className="p-2">{t.bank}</td>
                 <td className="p-2">{formatCurrency(t.amount)}</td>
                 <td className="p-2">
-                  {new Date(t.date).toLocaleDateString("pt-BR")}
+                  {new Date(t.date).toLocaleDateString("pt-BR", {
+                    timeZone: "UTC",
+                  })}
                 </td>
               </tr>
             ))}
