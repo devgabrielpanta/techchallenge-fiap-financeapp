@@ -7,14 +7,14 @@ import { Button } from "@/components/ui/button";
 
 export const columns: ColumnDef<TransactionType>[] = [
   {
-    accessorKey: "id",
+    accessorKey: "operation",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          ID
+          Tipo de pagamento
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -28,49 +28,7 @@ export const columns: ColumnDef<TransactionType>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Banco
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "type",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Tipo
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "operation",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Operação
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-  },
-  {
-    accessorKey: "description",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Descrição
+          Nome/Instituição
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
