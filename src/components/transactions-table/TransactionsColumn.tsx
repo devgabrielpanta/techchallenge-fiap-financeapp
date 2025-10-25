@@ -38,7 +38,7 @@ export const columns: ColumnDef<TransactionType>[] = [
   {
     accessorKey: "amount",
     header: ({ column }) => {
-      return <TableButton column={column} span="Nome/Instituição" />;
+      return <TableButton column={column} span="Valor" />;
     },
     cell: ({ getValue, row }) => {
       const amount = getValue() as number;

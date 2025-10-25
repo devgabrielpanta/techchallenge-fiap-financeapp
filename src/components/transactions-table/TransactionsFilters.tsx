@@ -95,13 +95,15 @@ export default function TransactionsFilters({
           {Object.keys(filters).map((obj) => {
             const group =
               obj === "bank"
-                ? "Bancos"
+                ? "Nome/Instituição"
                 : obj === "type"
-                ? "Tipos"
-                : "Operações";
+                ? "Tipo de pagamento"
+                : "Tipo de pagamento";
             return (
               <div key={obj}>
-                <h4 className="text-lg font-bold text-primary ">{group}</h4>
+                <h4 className="text-lg font-bold text-[var(--color-text-muted)] ">
+                  {group}
+                </h4>
                 <hr className="mb-2 border-primary" />
                 <ul className="flex flex-col gap-2">
                   {filters[obj as keyof FilterSchema].map((filter) => {
@@ -114,6 +116,7 @@ export default function TransactionsFilters({
                         className="flex flex-row justify-start items-center gap-2"
                       >
                         <Checkbox
+                          className=""
                           id={filter}
                           checked={filteredTransactions.some((transaction) =>
                             transaction[obj as keyof FilterSchema].includes(
@@ -141,7 +144,12 @@ export default function TransactionsFilters({
         </div>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
-            <Button variant="outline">Fechar</Button>
+            <Button
+              variant="default"
+              className="w-full flex items-center justify-center gap-2"
+            >
+              Fechar
+            </Button>
           </DrawerClose>
         </DrawerFooter>
       </DrawerContent>
