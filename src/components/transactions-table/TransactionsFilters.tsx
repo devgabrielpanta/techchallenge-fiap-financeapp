@@ -3,7 +3,7 @@
 import * as React from "react";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/button/Button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import {
@@ -145,7 +145,7 @@ export default function TransactionsFilters({
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button
-              variant="default"
+              variant="primary"
               className="w-full flex items-center justify-center gap-2"
             >
               Fechar
