@@ -3,7 +3,7 @@ import { Button } from "@/components/button/Button";
 import { cn } from "@/lib/utils";
 import { X, CirclePlus } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useTransactionModal } from "@/context/TransactionModal";
+import { useTransactionModal } from "@/context/TransactionModalProvider";
 import { useRouter } from "next/navigation";
 
 interface SidebarProps {

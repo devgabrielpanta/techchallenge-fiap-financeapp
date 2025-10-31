@@ -46,9 +46,7 @@ export const TransactionModalProvider: React.FC<{ children: ReactNode }> = ({
   };
 
   const startEditTransaction = (transactionId: number) => {
-    console.log("Editing transaction ID:", transactionId);
     const transaction = transactionList.find((t) => t.id === transactionId);
-    console.log("Found transaction:", transaction);
     if (!transaction) return;
     setTransactionAction("edit");
     setTransactionData(transaction);

@@ -2,7 +2,7 @@
 import type { TransactionType } from "@/schemas/dataSchema";
 import { formatCurrency } from "@/lib/utils";
 import { cn } from "@/lib/utils";
-import { useTransactionModal } from "@/context/TransactionModal";
+import { useTransactionModal } from "@/context/TransactionModalProvider";
 
 export default function ExtractCard({
   transaction,

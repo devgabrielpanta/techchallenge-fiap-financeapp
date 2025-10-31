@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/button/Button";
 import { useUser } from "@/context/UserContext";
 import { X } from "lucide-react";
-import { useTransactionModal } from "@/context/TransactionModal";
+import { useTransactionModal } from "@/context/TransactionModalProvider";
 import {
   operationsData,
   OperationType,
@@ -38,6 +38,7 @@ export const TransactionModal = () => {
   const [displayAmount, setDisplayAmount] = useState(
     formatCurrencyInput(String(transactionData?.amount) || "0")
   );
+  const [hasChanges, setHasChanges] = useState<boolean>(false);
 
   const handleSubmit = () => {
     if (!transactionData) return;
@@ -91,6 +92,39 @@ export const TransactionModal = () => {
       amount: isNaN(parsed) ? 0 : parsed,
     });
   }, [displayAmount]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!transactionData || transactionAction !== "edit") return;
+    const originalTransaction = user.transactionList.find(
+      (t) => t.id === transactionData.id
+    );
+    if (!originalTransaction) return;
+
+    // Verifica se houve mudanças comparando os campos
+    const changed =
+      originalTransaction.bank !== transactionData.bank ||
+      originalTransaction.type !== transactionData.type ||
+      originalTransaction.operation !== transactionData.operation ||
+      originalTransaction.description !== transactionData.description ||
+      originalTransaction.amount !== transactionData.amount ||
+      originalTransaction.currency !== transactionData.currency ||
+      originalTransaction.date !== transactionData.date;
+    setHasChanges(changed);
+  }, [transactionData, transactionAction]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleDelete = () => {
+    if (!transactionData || transactionAction !== "edit") return;
+    const updatedTransactions = user.transactionList.filter(
+      (t) => t.id !== transactionData.id
+    );
+
+    setUser({
+      ...user,
+      transactionList: updatedTransactions,
+    });
+
+    cleanTransactionModal();
+  };
 
   if (transactionAction === null || transactionData === null) return null;
   return (
@@ -206,10 +240,23 @@ export const TransactionModal = () => {
               ))}
             </select>
           </div>
-
-          <Button variant="primary" onClick={handleSubmit}>
-            {transactionAction === "create" ? "Adicionar" : "Salvar Alterações"}
-          </Button>
+          <div className="flex flex-row gap-2 justify-center items-center mt-4">
+            <Button
+              variant="primary"
+              onClick={handleSubmit}
+              disabled={transactionAction === "edit" && !hasChanges}
+              className="disabled:opacity-40"
+            >
+              {transactionAction === "create"
+                ? "Adicionar"
+                : "Salvar Alterações"}
+            </Button>
+            {transactionAction === "edit" && (
+              <Button variant="danger" onClick={handleDelete}>
+                Excluir transação
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>
