@@ -70,15 +70,53 @@ export function DataTable<TData, TValue>({
             <TableRow
               key={row.id}
               data-state={row.getIsSelected() && "selected"}
-              className="border-b border-[var(--color-border)] 
+              className="group border-b border-[var(--color-border)] 
                 transition-colors duration-200 
                 hover:bg-[var(--color-hover)]"
             >
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id} className="p-2">
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
+              {row.getVisibleCells().map((cell, idx, arr) => {
+                {
+                  /** Se for a última célula da linha, adiciona o ícone de editar */
+                }
+                const isLast = idx === arr.length - 1;
+                return (
+                  <TableCell
+                    key={cell.id}
+                    className={`p-2 ${isLast ? "relative" : ""}`}
+                  >
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+
+                    {isLast && (
+                      <button
+                        type="button"
+                        aria-label="Edit row"
+                        className="absolute top-1/2 right-2 -translate-y-1/2 p-1 rounded opacity-0
+                        group-hover:opacity-100 transition bg-[var(--color-surface)] hover:bg-[var(--color-hover)]
+                        cursor-pointer
+                        "
+                        onClick={() => {
+                          /* handle edit click, e.g. open editor for row.original */
+                        }}
+                      >
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <path d="M12 20h9" />
+                          <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                        </svg>
+                      </button>
+                    )}
+                  </TableCell>
+                );
+              })}
             </TableRow>
           ))
         ) : (
