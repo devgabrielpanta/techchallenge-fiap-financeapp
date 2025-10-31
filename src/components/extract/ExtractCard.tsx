@@ -1,12 +1,20 @@
+"use client";
 import type { TransactionType } from "@/schemas/dataSchema";
 import { formatCurrency } from "@/lib/utils";
 import { cn } from "@/lib/utils";
+import { useTransactionModal } from "@/context/TransactionModal";
 
-export default function ExtractCard({ transaction }: { transaction: TransactionType }) {
+export default function ExtractCard({
+  transaction,
+}: {
+  transaction: TransactionType;
+}) {
+  const { startEditTransaction } = useTransactionModal();
   return (
     <li
       key={transaction.id}
       className="flex justify-between items-center px-2 py-1 hover:rounded-md hover:bg-[var(--color-primary)] hover:text-[var(--color-white)] transition-colors border-b border-[var(--color-border)] pb-1 cursor-pointer"
+      onClick={() => startEditTransaction(transaction.id)}
     >
       <div className="flex flex-col text-sm pb-2">
         <span>{transaction.bank}</span>

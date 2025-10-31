@@ -92,8 +92,6 @@ export const TransactionModal = () => {
     });
   }, [displayAmount]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  console.log("Transaction Modal Data:", user.transactionList);
-
   if (transactionAction === null || transactionData === null) return null;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-[2px]">
