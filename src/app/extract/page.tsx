@@ -57,7 +57,7 @@ export default function ExtractPage() {
       );
     });
     setFilteredTransactions(filteredList);
-  }, [searchTerm]); //eslint-disable-line react-hooks/exhaustive-deps
+  }, [searchTerm, user]); //eslint-disable-line react-hooks/exhaustive-deps
 
   // Paginação
   const totalItems = filteredTransactions.length;

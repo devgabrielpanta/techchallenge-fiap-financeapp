@@ -1,11 +1,17 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import { TransactionModal } from "@/components/transactionModal/TransactionModal";
+import { CreateTransactionType, transactionSample } from "@/schemas/dataSchema";
+
+type TransactionAction = "create" | "edit" | null;
 
 interface TransactionModalContextType {
-  openModal: () => void;
-  closeModal: () => void;
+  transactionAction: TransactionAction;
+  setTransactionAction: (action: TransactionAction) => void;
+  transactionData: CreateTransactionType | null;
+  setTransactionData: (data: CreateTransactionType | null) => void;
+  startCreateTransaction: () => void;
+  cleanTransactionModal: () => void;
 }
 
 const TransactionModalContext = createContext<
@@ -15,15 +21,33 @@ const TransactionModalContext = createContext<
 export const TransactionModalProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [transactionAction, setTransactionAction] =
+    useState<TransactionAction>(null);
+  const [transactionData, setTransactionData] =
+    useState<CreateTransactionType | null>(null);
 
-  const openModal = () => setIsOpen(true);
-  const closeModal = () => setIsOpen(false);
+  const startCreateTransaction = () => {
+    setTransactionAction("create");
+    setTransactionData(transactionSample);
+  };
+
+  const cleanTransactionModal = () => {
+    setTransactionAction(null);
+    setTransactionData(null);
+  };
 
   return (
-    <TransactionModalContext.Provider value={{ openModal, closeModal }}>
+    <TransactionModalContext.Provider
+      value={{
+        transactionAction,
+        setTransactionAction,
+        transactionData,
+        setTransactionData,
+        startCreateTransaction,
+        cleanTransactionModal,
+      }}
+    >
       {children}
-      <TransactionModal isOpen={isOpen} onClose={closeModal} />
     </TransactionModalContext.Provider>
   );
 };

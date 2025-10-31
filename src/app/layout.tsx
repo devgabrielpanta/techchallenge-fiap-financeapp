@@ -8,6 +8,7 @@ import { Extract } from "@/components/extract/Extract";
 import { UserProvider } from "@/context/UserContext";
 import { transactionList } from "@/utils/transactionsData";
 import { TransactionModalProvider } from "@/context/TransactionModal";
+import { TransactionModal } from "@/components/transactionModal/TransactionModal";
 import { usePathname } from "next/navigation";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -80,6 +81,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 )}
               </div>
             </div>
+            <TransactionModal />
           </TransactionModalProvider>
         </UserProvider>
       </body>

@@ -15,7 +15,7 @@ interface SidebarProps {
 export const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, onClose }) => {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
-  const { openModal } = useTransactionModal();
+  const { startCreateTransaction } = useTransactionModal();
   const router = useRouter();
 
   return (
@@ -74,10 +74,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, onClose }) => {
                 <Button
                   variant="primary"
                   className="w-full flex items-center justify-center gap-2"
-                  onClick={() => {
-                    openModal();
-                    onClose();
-                  }}
+                  onClick={startCreateTransaction}
                 >
                   <CirclePlus size={18} /> Nova transação
                 </Button>
@@ -117,7 +114,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, onClose }) => {
           <Button
             variant="primary"
             className="w-full flex items-center justify-center gap-2"
-            onClick={openModal}
+            onClick={startCreateTransaction}
           >
             <CirclePlus size={18} /> Nova transação
           </Button>
