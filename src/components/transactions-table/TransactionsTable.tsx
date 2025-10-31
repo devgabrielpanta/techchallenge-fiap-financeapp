@@ -18,6 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { useTransactionModal } from "@/context/TransactionModal";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -29,6 +30,7 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const { startEditTransaction } = useTransactionModal();
 
   const table = useReactTable({
     data,
@@ -94,9 +96,11 @@ export function DataTable<TData, TValue>({
                         group-hover:opacity-100 transition bg-[var(--color-surface)] hover:bg-[var(--color-hover)]
                         cursor-pointer
                         "
-                        onClick={() => {
-                          /* handle edit click, e.g. open editor for row.original */
-                        }}
+                        onClick={() =>
+                          startEditTransaction(
+                            (row.original as { id: number }).id
+                          )
+                        }
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"

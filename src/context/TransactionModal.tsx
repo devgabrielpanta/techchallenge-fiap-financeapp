@@ -1,17 +1,23 @@
 "use client";
 
 import { createContext, useContext, useState, ReactNode } from "react";
-import { CreateTransactionType, transactionSample } from "@/schemas/dataSchema";
+import {
+  CreateTransactionType,
+  transactionSample,
+  TransactionType,
+} from "@/schemas/dataSchema";
+import { useUser } from "@/context/UserContext";
 
 type TransactionAction = "create" | "edit" | null;
 
 interface TransactionModalContextType {
   transactionAction: TransactionAction;
   setTransactionAction: (action: TransactionAction) => void;
-  transactionData: CreateTransactionType | null;
+  transactionData: CreateTransactionType | TransactionType | null;
   setTransactionData: (data: CreateTransactionType | null) => void;
   startCreateTransaction: () => void;
   cleanTransactionModal: () => void;
+  startEditTransaction: (transactionId: number) => void;
 }
 
 const TransactionModalContext = createContext<
@@ -21,10 +27,13 @@ const TransactionModalContext = createContext<
 export const TransactionModalProvider: React.FC<{ children: ReactNode }> = ({
   children,
 }) => {
+  const { user } = useUser();
+  const transactionList = user.transactionList;
   const [transactionAction, setTransactionAction] =
     useState<TransactionAction>(null);
-  const [transactionData, setTransactionData] =
-    useState<CreateTransactionType | null>(null);
+  const [transactionData, setTransactionData] = useState<
+    CreateTransactionType | TransactionType | null
+  >(null);
 
   const startCreateTransaction = () => {
     setTransactionAction("create");
@@ -36,6 +45,15 @@ export const TransactionModalProvider: React.FC<{ children: ReactNode }> = ({
     setTransactionData(null);
   };
 
+  const startEditTransaction = (transactionId: number) => {
+    console.log("Editing transaction ID:", transactionId);
+    const transaction = transactionList.find((t) => t.id === transactionId);
+    console.log("Found transaction:", transaction);
+    if (!transaction) return;
+    setTransactionAction("edit");
+    setTransactionData(transaction);
+  };
+
   return (
     <TransactionModalContext.Provider
       value={{
@@ -45,6 +63,7 @@ export const TransactionModalProvider: React.FC<{ children: ReactNode }> = ({
         setTransactionData,
         startCreateTransaction,
         cleanTransactionModal,
+        startEditTransaction,
       }}
     >
       {children}

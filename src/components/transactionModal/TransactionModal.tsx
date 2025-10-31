@@ -10,6 +10,7 @@ import {
   OperationType,
   banksData,
   BankType,
+  TransactionType,
 } from "@/schemas/dataSchema";
 
 const formatCurrencyInput = (value: string) => {
@@ -41,18 +42,35 @@ export const TransactionModal = () => {
   const handleSubmit = () => {
     if (!transactionData) return;
 
-    const newTransaction = {
-      id: user.transactionList.length + 1,
-      ...transactionData,
-    };
+    let updatedTransactions: TransactionType[] | [] = user.transactionList;
+
+    if (transactionAction === "create") {
+      const newTransaction = {
+        id: user.transactionList.length + 1,
+        ...transactionData,
+      };
+      updatedTransactions = [newTransaction, ...user.transactionList];
+    } else if (transactionAction === "edit") {
+      updatedTransactions = user.transactionList.map((t) =>
+        t.id === transactionData.id ? (transactionData as TransactionType) : t
+      );
+    }
 
     setUser({
       ...user,
-      transactionList: [newTransaction, ...user.transactionList],
+      transactionList: updatedTransactions,
     });
 
     cleanTransactionModal();
   };
+
+  useEffect(() => {
+    if (transactionAction === "edit" && transactionData) {
+      setDisplayAmount(
+        formatCurrencyInput(String(transactionData.amount * 100))
+      );
+    }
+  }, [transactionAction]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // toda vez que displayAmount muda → atualiza transactionData.amount (como número)
   useEffect(() => {
@@ -73,6 +91,8 @@ export const TransactionModal = () => {
       amount: isNaN(parsed) ? 0 : parsed,
     });
   }, [displayAmount]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  console.log("Transaction Modal Data:", user.transactionList);
 
   if (transactionAction === null || transactionData === null) return null;
   return (
@@ -151,7 +171,7 @@ export const TransactionModal = () => {
             <input
               id="date"
               type="date"
-              value={transactionData.date}
+              value={transactionData.date.toLocaleString().split("T")[0]}
               onChange={(e) =>
                 setTransactionData({
                   ...transactionData,
@@ -190,7 +210,7 @@ export const TransactionModal = () => {
           </div>
 
           <Button variant="primary" onClick={handleSubmit}>
-            Adicionar
+            {transactionAction === "create" ? "Adicionar" : "Salvar Alterações"}
           </Button>
         </div>
       </div>
