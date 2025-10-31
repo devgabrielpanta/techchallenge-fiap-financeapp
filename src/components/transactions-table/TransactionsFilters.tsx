@@ -1,8 +1,6 @@
 "use client";
 
 import * as React from "react";
-
-import { useState, useEffect } from "react";
 import { Button } from "@/components/button/Button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
@@ -14,7 +12,6 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-  DrawerTrigger,
 } from "@/components/ui/drawer";
 import type { TransactionType } from "@/schemas/dataSchema";
 

@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
-import { formatCurrency } from "@/lib/utils";
 import { SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import TransactionsFilters from "@/components/transactions-table/TransactionsFilters";
