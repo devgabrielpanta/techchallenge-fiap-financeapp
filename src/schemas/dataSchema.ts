@@ -7,7 +7,7 @@ export const banksData = [
   "Caixa Econômica Federal",
 ] as const;
 export const BankSchema = z.enum(banksData);
-export type BankType = z.infer<typeof banksData>;
+export type BankType = z.infer<typeof BankSchema>;
 
 // OPERATIONS
 export const operationsData = [
@@ -29,7 +29,22 @@ export const TransactionSchema = z.object({
   description: z.string(),
   amount: z.number(),
   currency: z.string(),
-  date: z.iso.datetime(),
+  date: z.iso.date(),
 });
 
+export const CreateTransactionSchema = TransactionSchema.extend({
+  id: z.number().optional(),
+});
+
+export const transactionSample: CreateTransactionType = {
+  bank: "Banco Santander S.A.",
+  type: "saidas",
+  operation: "PIX",
+  description: "Transação via PIX",
+  amount: 100,
+  currency: "BRL",
+  date: new Date().toISOString().split("T")[0],
+};
+
+export type CreateTransactionType = z.infer<typeof CreateTransactionSchema>;
 export type TransactionType = z.infer<typeof TransactionSchema>;

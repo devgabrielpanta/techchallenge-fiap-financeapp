@@ -1,90 +1,138 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/button/Button";
 import { useUser } from "@/context/UserContext";
 import { X } from "lucide-react";
+import { useTransactionModal } from "@/context/TransactionModalProvider";
+import {
+  operationsData,
+  OperationType,
+  banksData,
+  BankType,
+  TransactionType,
+} from "@/schemas/dataSchema";
 
-interface TransactionModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
+const formatCurrencyInput = (value: string) => {
+  // Remove tudo que não é número
+  const numericValue = value.replace(/\D/g, "");
+  // Converte para número com centavos
+  const numberValue = Number(numericValue) / 100;
 
-const bankOptions = [
-  "Banco Santander S.A.",
-  "Nu Pagamentos S.A.",
-  "Caixa Econômica Federal",
-] as const;
-type Bank = (typeof bankOptions)[number];
+  return numberValue.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+  });
+};
 
-export const TransactionModal: React.FC<TransactionModalProps> = ({
-  isOpen,
-  onClose,
-}) => {
+export const TransactionModal = () => {
   const { user, setUser } = useUser();
+  const {
+    transactionAction,
+    setTransactionAction,
+    transactionData,
+    setTransactionData,
+    cleanTransactionModal,
+  } = useTransactionModal();
 
-  const [bank, setBank] = useState<Bank>("Banco Santander S.A.");
-  const [amount, setAmount] = useState<string>("");
-  const [date, setDate] = useState("");
-  const [paymentType, setPaymentType] = useState<
-    "PIX" | "Crédito" | "Débito" | "Boleto bancário" | "Transferência"
-  >("PIX");
-
-  const paymentOptions = [
-    "PIX",
-    "Crédito",
-    "Débito",
-    "Boleto bancário",
-    "Transferência",
-  ] as const;
+  const [displayAmount, setDisplayAmount] = useState(
+    formatCurrencyInput(String(transactionData?.amount) || "0")
+  );
+  const [hasChanges, setHasChanges] = useState<boolean>(false);
 
   const handleSubmit = () => {
-    if (!bank || !amount || !date) return;
-    const numericAmount = Number(amount.replace(/\D/g, "")) / 100;
+    if (!transactionData) return;
 
-    const newTransaction = {
-      id: user.transactionList.length + 1,
-      bank,
-      type: "saidas" as const,
-      operation: paymentType,
-      description: `Transação via ${paymentType}`,
-      amount: numericAmount,
-      currency: "BRL",
-      date: new Date(date).toISOString(),
-    };
+    let updatedTransactions: TransactionType[] | [] = user.transactionList;
+
+    if (transactionAction === "create") {
+      const newTransaction = {
+        id: user.transactionList.length + 1,
+        ...transactionData,
+      };
+      updatedTransactions = [newTransaction, ...user.transactionList];
+    } else if (transactionAction === "edit") {
+      updatedTransactions = user.transactionList.map((t) =>
+        t.id === transactionData.id ? (transactionData as TransactionType) : t
+      );
+    }
 
     setUser({
       ...user,
-      transactionList: [newTransaction, ...user.transactionList],
+      transactionList: updatedTransactions,
     });
 
-    setBank("Banco Santander S.A.");
-    setAmount("");
-    setDate("");
-    setPaymentType("PIX");
-    onClose();
+    cleanTransactionModal();
   };
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (transactionAction === "edit" && transactionData) {
+      setDisplayAmount(
+        formatCurrencyInput(String(transactionData.amount * 100))
+      );
+    }
+  }, [transactionAction]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const formatCurrencyInput = (value: string) => {
-    // Remove tudo que não é número
-    const numericValue = value.replace(/\D/g, "");
-    // Converte para número com centavos
-    const numberValue = Number(numericValue) / 100;
+  // toda vez que displayAmount muda → atualiza transactionData.amount (como número)
+  useEffect(() => {
+    if (!transactionData) return;
+    if (displayAmount === "") {
+      setTransactionData({ ...transactionData, amount: 0 });
+      return;
+    }
 
-    return numberValue.toLocaleString("pt-BR", {
-      style: "currency",
-      currency: "BRL",
+    // remove tudo que não for número ou vírgula
+    const cleaned = displayAmount.replace(/[^\d,]/g, "");
+    // substitui vírgula por ponto
+    const normalized = cleaned.replace(",", ".");
+    const parsed = parseFloat(normalized);
+
+    setTransactionData({
+      ...transactionData,
+      amount: isNaN(parsed) ? 0 : parsed,
     });
+  }, [displayAmount]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!transactionData || transactionAction !== "edit") return;
+    const originalTransaction = user.transactionList.find(
+      (t) => t.id === transactionData.id
+    );
+    if (!originalTransaction) return;
+
+    // Verifica se houve mudanças comparando os campos
+    const changed =
+      originalTransaction.bank !== transactionData.bank ||
+      originalTransaction.type !== transactionData.type ||
+      originalTransaction.operation !== transactionData.operation ||
+      originalTransaction.description !== transactionData.description ||
+      originalTransaction.amount !== transactionData.amount ||
+      originalTransaction.currency !== transactionData.currency ||
+      originalTransaction.date !== transactionData.date;
+    setHasChanges(changed);
+  }, [transactionData, transactionAction]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleDelete = () => {
+    if (!transactionData || transactionAction !== "edit") return;
+    const updatedTransactions = user.transactionList.filter(
+      (t) => t.id !== transactionData.id
+    );
+
+    setUser({
+      ...user,
+      transactionList: updatedTransactions,
+    });
+
+    cleanTransactionModal();
   };
 
+  if (transactionAction === null || transactionData === null) return null;
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-[2px]">
       <div className="bg-[var(--color-surface)] rounded-[var(--radius-md)] w-full max-w-md p-6 relative">
         <button
           className="absolute top-3 right-3 text-[var(--color-text-muted)] hover:text-[var(--color-primary)]"
-          onClick={onClose}
+          onClick={() => setTransactionAction(null)}
         >
           <X size={20} />
         </button>
@@ -107,11 +155,16 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             </label>
             <select
               id="bank"
-              value={bank}
-              onChange={(e) => setBank(e.target.value as Bank)}
+              value={transactionData.bank}
+              onChange={(e) =>
+                setTransactionData({
+                  ...transactionData,
+                  bank: e.target.value as BankType,
+                })
+              }
               className="p-2 border border-[var(--color-border)] rounded-md w-full"
             >
-              {bankOptions.map((b) => (
+              {banksData.map((b) => (
                 <option key={b} value={b}>
                   {b}
                 </option>
@@ -130,9 +183,12 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             <input
               type="text"
               placeholder="Valor"
-              value={amount}
-              onChange={(e) => setAmount(formatCurrencyInput(e.target.value))}
-              className="p-2 border border-[var(--color-border)] rounded-md w-full"
+              className="p-2 w-full flex flex-row gap-2 items-center
+                border border-[var(--color-border)] rounded-md"
+              value={displayAmount}
+              onChange={(e) =>
+                setDisplayAmount(formatCurrencyInput(e.target.value))
+              }
             />
           </div>
 
@@ -147,8 +203,13 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             <input
               id="date"
               type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
+              value={transactionData.date.toLocaleString().split("T")[0]}
+              onChange={(e) =>
+                setTransactionData({
+                  ...transactionData,
+                  date: e.target.value,
+                })
+              }
               className="p-2 border border-[var(--color-border)] rounded-md w-full"
             />
           </div>
@@ -163,25 +224,39 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({
             </label>
             <select
               id="paymentType"
-              value={paymentType}
+              value={transactionData.operation}
               onChange={(e) =>
-                setPaymentType(
-                  e.target.value as (typeof paymentOptions)[number]
-                )
+                setTransactionData({
+                  ...transactionData,
+                  operation: e.target.value as OperationType,
+                })
               }
               className="p-2 border border-[var(--color-border)] rounded-md w-full"
             >
-              {paymentOptions.map((opt) => (
+              {operationsData.map((opt) => (
                 <option key={opt} value={opt}>
                   {opt}
                 </option>
               ))}
             </select>
           </div>
-
-          <Button variant="primary" onClick={handleSubmit}>
-            Adicionar
-          </Button>
+          <div className="flex flex-row gap-2 justify-center items-center mt-4">
+            <Button
+              variant="primary"
+              onClick={handleSubmit}
+              disabled={transactionAction === "edit" && !hasChanges}
+              className="disabled:opacity-40"
+            >
+              {transactionAction === "create"
+                ? "Adicionar"
+                : "Salvar Alterações"}
+            </Button>
+            {transactionAction === "edit" && (
+              <Button variant="danger" onClick={handleDelete}>
+                Excluir transação
+              </Button>
+            )}
+          </div>
         </div>
       </div>
     </div>

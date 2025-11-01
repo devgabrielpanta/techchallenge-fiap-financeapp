@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/button/Button";
 import { useRouter } from "next/navigation";
-import { useTransactionModal } from "@/context/TransactionModal";
+import { useTransactionModal } from "@/context/TransactionModalProvider";
 import { CoverflowCarousel } from "@/components/carousel/Carousel";
 
 export default function HomePage() {

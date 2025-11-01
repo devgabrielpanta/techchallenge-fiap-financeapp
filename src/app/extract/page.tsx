@@ -1,15 +1,25 @@
 "use client";
-
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
-import { formatCurrency } from "@/lib/utils";
+import { SlidersHorizontal } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import TransactionsFilters from "@/components/transactions-table/TransactionsFilters";
+import { DataTable } from "@/components/transactions-table/TransactionsTable";
+import { columns } from "@/components/transactions-table/TransactionsColumn";
+import ExtractCard from "@/components/extract/ExtractCard";
 
 export default function ExtractPage() {
   const { user } = useUser();
 
+  // Transações
+  const transactions = user.transactionList;
+  const [filteredTransactions, setFilteredTransactions] =
+    useState(transactions);
+  const [paginatedList, setPaginatedList] = useState(transactions);
+
   // Filtros
-  const [filterType, setFilterType] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [openFilters, setOpenFilters] = useState(false);
 
   // Paginação e carregamento infinito
   const [visibleCount, setVisibleCount] = useState(10);
@@ -26,37 +36,41 @@ export default function ExtractPage() {
   }, []);
 
   // Filtragem dos dados
-  const filteredList = user.transactionList.filter((t) => {
-    if (!searchTerm) return true;
-
-    const term = searchTerm.toLowerCase();
-
-    switch (filterType) {
-      case "tipo":
-        return t.operation.toLowerCase().includes(term);
-      case "instituicao":
-        return t.bank.toLowerCase().includes(term);
-      case "valor":
-        return formatCurrency(t.amount).includes(term);
-      case "data":
-        return new Date(t.date).toLocaleDateString("pt-BR").includes(term);
-      default:
-        return (
-          t.operation.toLowerCase().includes(term) ||
-          t.bank.toLowerCase().includes(term)
-        );
+  useEffect(() => {
+    if (searchTerm.length === 0) {
+      return setFilteredTransactions(transactions);
     }
-  });
+    const filteredList = transactions.filter((t) => {
+      const term = searchTerm.toLowerCase();
+      const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+      const isNumber = numbers.includes(term[0]);
+      if (isNumber) {
+        return (
+          t.amount.toString().includes(term) ||
+          new Date(t.date).toLocaleDateString("pt-BR").includes(term)
+        );
+      }
+      return (
+        t.operation.toLowerCase().includes(term) ||
+        t.bank.toLowerCase().includes(term)
+      );
+    });
+    setFilteredTransactions(filteredList);
+  }, [searchTerm, user]); //eslint-disable-line react-hooks/exhaustive-deps
 
   // Paginação
-  const totalItems = filteredList.length;
+  const totalItems = filteredTransactions.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
-  const paginatedList = isMobile
-    ? filteredList.slice(0, visibleCount)
-    : filteredList.slice(startIndex, endIndex);
+
+  useEffect(() => {
+    const paginatedListData = isMobile
+      ? filteredTransactions.slice(0, visibleCount)
+      : filteredTransactions.slice(startIndex, endIndex);
+    setPaginatedList(paginatedListData);
+  }, [filteredTransactions, currentPage]); //eslint-disable-line react-hooks/exhaustive-deps
 
   // Aplica carregamento infinito no mobile
   useEffect(() => {
@@ -65,7 +79,7 @@ export default function ExtractPage() {
     const handleScroll = () => {
       const bottom =
         window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
-      if (bottom && visibleCount < filteredList.length) {
+      if (bottom && visibleCount < filteredTransactions.length) {
         setTimeout(() => {
           setVisibleCount((prev) => prev + 5);
         }, 600);
@@ -74,7 +88,7 @@ export default function ExtractPage() {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [isMobile, visibleCount, filteredList.length]);
+  }, [isMobile, visibleCount, filteredTransactions.length]);
 
   // Troca de página na tabela no desktop
   const handleNext = () => {
@@ -91,119 +105,96 @@ export default function ExtractPage() {
         Extrato
       </h1>
 
-      {/* Filtros */}
-      <div className="flex gap-2 mb-4 flex-col sm:flex-row">
-        <input
-          type="text"
-          placeholder="Pesquise por uma transação..."
-          value={searchTerm}
-          onChange={(e) => {
-            setSearchTerm(e.target.value);
-            setCurrentPage(1);
-          }}
-          className="p-2 border border-[var(--color-border)] rounded-md w-full
+      <div className="relative container mx-auto py-10">
+        <div className="flex gap-2 mb-4 flex-row justify-between md:justify-start items-center">
+          {/** Search bar */}
+          <input
+            type="text"
+            placeholder="Pesquisar..."
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setCurrentPage(1);
+            }}
+            className="p-2 border border-[var(--color-border)] rounded-md w-full md:w-96
           text-[var(--color-text)] placeholder:text-[var(--color-text-muted)]
           bg-[var(--color-surface)] focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none"
-        />
+          />
+          {/** Botão com ícone de filtro */}
+          <Button
+            variant="outline"
+            className="p-2 border border-[var(--color-border)] rounded-md text-[var(--color-text)] bg-[var(--color-surface)] cursor-pointer"
+            onClick={() => setOpenFilters(true)}
+          >
+            Filtar por... <SlidersHorizontal />
+          </Button>
+        </div>
 
-        <select
-          value={filterType}
-          onChange={(e) => {
-            setFilterType(e.target.value);
-            setCurrentPage(1);
-          }}
-          className="p-2 border border-[var(--color-border)] rounded-md text-[var(--color-text)] bg-[var(--color-surface)]"
-        >
-          <option value="">Filtrar por...</option>
-          <option value="tipo">Tipo de pagamento</option>
-          <option value="instituicao">Nome/Instituição</option>
-          <option value="valor">Valor</option>
-          <option value="data">Data</option>
-        </select>
-      </div>
+        <div className="overflow-x-auto rounded-md border border-[var(--color-border)]">
+          <div className="hidden md:block">
+            <DataTable columns={columns} data={paginatedList} />
+          </div>
+          <div className="block md:hidden">
+            {paginatedList.length > 0 &&
+              paginatedList.map((transaction) => (
+                <ExtractCard key={transaction.id} transaction={transaction} />
+              ))}
+          </div>
+        </div>
 
-      {/* Tabela */}
-      <div className="overflow-x-auto rounded-md border border-[var(--color-border)]">
-        <table className="w-full border-collapse text-sm">
-          <thead className="bg-[var(--color-surface)] text-[var(--color-text-muted)]">
-            <tr>
-              <th className="border-b border-[var(--color-border)] p-2 w-[15%] text-left">
-                Tipo
-              </th>
-              <th className="border-b border-[var(--color-border)] p-2 w-[55%] text-left">
-                Instituição
-              </th>
-              <th className="border-b border-[var(--color-border)] p-2 w-[15%] text-left">
-                Valor
-              </th>
-              <th className="border-b border-[var(--color-border)] p-2 w-[10%] text-left">
-                Data
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {paginatedList.map((t) => (
-              <tr
-                key={t.id}
-                className="border-b border-[var(--color-border)] 
-                transition-colors duration-200 
-                hover:bg-[var(--color-hover)] cursor-pointer"
-              >
-                <td className="p-2">{t.operation}</td>
-                <td className="p-2">{t.bank}</td>
-                <td className="p-2">{formatCurrency(t.amount)}</td>
-                <td className="p-2">
-                  {new Date(t.date).toLocaleDateString("pt-BR", {
-                    timeZone: "UTC",
-                  })}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+        {/* Paginação no Desktop */}
+        {!isMobile && totalItems > 0 && (
+          <div className="flex justify-between items-center mt-2 flex-wrap gap-3">
+            <span className="text-sm text-[var(--color-text-muted)]">
+              Exibindo {startIndex + 1}–{endIndex} de {totalItems} itens
+            </span>
 
-      {/* Paginação no Desktop */}
-      {!isMobile && totalItems > 0 && (
-        <div className="flex justify-between items-center mt-2 flex-wrap gap-3">
-          <span className="text-sm text-[var(--color-text-muted)]">
-            Exibindo {startIndex + 1}–{endIndex} de {totalItems} itens
-          </span>
-
-          <div className="flex gap-2">
-            <button
-              onClick={handlePrev}
-              disabled={currentPage === 1}
-              className={`px-3 py-1 border rounded-md bg-[var(--color-surface)] transition-colors duration-200 
+            <div className="flex gap-2">
+              <button
+                onClick={handlePrev}
+                disabled={currentPage === 1}
+                className={`px-3 py-1 border rounded-md bg-[var(--color-surface)] transition-colors duration-200 
               ${
                 currentPage === 1
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:bg-[var(--color-hover)] cursor-pointer"
               }`}
-            >
-              Anterior
-            </button>
-            <button
-              onClick={handleNext}
-              disabled={currentPage === totalPages}
-              className={`px-3 py-1 border rounded-md bg-[var(--color-surface)] transition-colors duration-200
+              >
+                Anterior
+              </button>
+              <button
+                onClick={handleNext}
+                disabled={currentPage === totalPages}
+                className={`px-3 py-1 border rounded-md bg-[var(--color-surface)] transition-colors duration-200
               ${
                 currentPage === totalPages
                   ? "opacity-50 cursor-not-allowed"
                   : "hover:bg-[var(--color-hover)] cursor-pointer"
               }`}
-            >
-              Próxima
-            </button>
+              >
+                Próxima
+              </button>
+            </div>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* Indicador de carregamento no mobile */}
-      {isMobile && visibleCount < filteredList.length && (
-        <div className="text-center text-[var(--color-text-muted)] py-4">
-          Carregando mais transações...
-        </div>
+        {/* Indicador de carregamento no mobile */}
+        {isMobile && visibleCount < filteredTransactions.length && (
+          <div className="text-center text-[var(--color-text-muted)] py-4">
+            Carregando mais transações...
+          </div>
+        )}
+      </div>
+
+      {/** Sidebar com opções de filtros */}
+      {openFilters && (
+        <TransactionsFilters
+          transactions={transactions}
+          filteredTransactions={filteredTransactions}
+          setFilteredTransactions={setFilteredTransactions}
+          openFilters={openFilters}
+          setOpenFilters={setOpenFilters}
+        />
       )}
     </div>
   );
