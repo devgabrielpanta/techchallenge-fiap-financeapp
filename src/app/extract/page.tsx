@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
 import { SlidersHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button/button";
 import TransactionsFilters from "@/components/transactions-table/TransactionsFilters";
 import { DataTable } from "@/components/transactions-table/TransactionsTable";
 import { columns } from "@/components/transactions-table/TransactionsColumn";

@@ -3,7 +3,7 @@
 import { ColumnDef, Column } from "@tanstack/react-table";
 import { TransactionType } from "@/schemas/dataSchema";
 import { ArrowUpDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button/button";
 
 interface TableButtonProps {
   column: Column<TransactionType, unknown>;

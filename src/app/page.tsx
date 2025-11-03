@@ -12,7 +12,7 @@ import {
   PiggyBank,
   Activity,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button/button";
 import { useRouter } from "next/navigation";
 import { useTransactionModal } from "@/context/TransactionModalProvider";
 import { CoverflowCarousel } from "@/components/carousel/Carousel";

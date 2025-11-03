@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { useUser } from "@/context/UserContext";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button/button";
 import ExtractCard from "./ExtractCard";
 
 interface ExtractProps {
