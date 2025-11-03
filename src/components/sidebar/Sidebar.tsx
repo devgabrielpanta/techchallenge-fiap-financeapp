@@ -1,5 +1,5 @@
 "use client";
-import { Button } from "@/components/button/Button";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { X, CirclePlus } from "lucide-react";
 import { usePathname } from "next/navigation";

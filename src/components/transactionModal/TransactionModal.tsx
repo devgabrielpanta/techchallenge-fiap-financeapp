@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/button/Button";
+import { Button } from "@/components/ui/button";
 import { useUser } from "@/context/UserContext";
 import { X } from "lucide-react";
 import { useTransactionModal } from "@/context/TransactionModalProvider";
@@ -128,7 +128,7 @@ export const TransactionModal = () => {
 
   if (transactionAction === null || transactionData === null) return null;
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-[2px]">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-[2px]" onClick={cleanTransactionModal}>
       <div className="bg-[var(--color-surface)] rounded-[var(--radius-md)] w-full max-w-md p-6 relative">
         <button
           className="absolute top-3 right-3 text-[var(--color-text-muted)] hover:text-[var(--color-primary)]"

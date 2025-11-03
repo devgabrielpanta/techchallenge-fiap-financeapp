@@ -12,14 +12,14 @@ import {
   PiggyBank,
   Activity,
 } from "lucide-react";
-import { Button } from "@/components/button/Button";
+import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import { useTransactionModal } from "@/context/TransactionModalProvider";
 import { CoverflowCarousel } from "@/components/carousel/Carousel";
 
 export default function HomePage() {
   const { user } = useUser();
-  const { openModal } = useTransactionModal();
+  const { startCreateTransaction } = useTransactionModal();
   const [visible, setVisible] = useState(true);
   const router = useRouter();
   const fakeCards = [
@@ -131,7 +131,7 @@ export default function HomePage() {
           <Button
             variant="primary"
             className="rounded-full w-13 h-13 p-0 flex items-center justify-center"
-            onClick={() => openModal()}
+            onClick={startCreateTransaction}
           >
             <CirclePlus size={30} />
           </Button>

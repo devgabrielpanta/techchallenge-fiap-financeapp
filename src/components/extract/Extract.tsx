@@ -2,9 +2,8 @@
 
 import { cn } from "@/lib/utils";
 import { useUser } from "@/context/UserContext";
-import { formatCurrency } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/button/Button";
+import { Button } from "@/components/ui/button";
 import ExtractCard from "./ExtractCard";
 
 interface ExtractProps {
