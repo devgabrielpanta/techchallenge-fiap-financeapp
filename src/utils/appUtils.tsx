@@ -1,6 +1,7 @@
 import { transactionList } from "@/utils/transactionsData";
 import { TransactionType } from "@/schemas/dataSchema";
 
+
 export interface User {
   name: string;
   avatar: string;
