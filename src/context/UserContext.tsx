@@ -1,20 +1,13 @@
 "use client";
-import { TransactionType } from "@/schemas/dataSchema";
 import { createContext, useContext } from "react";
 import { useState } from "react";
-
-interface User {
-  name: string;
-  avatar: string;
-  lastName: string;
-  date: Date;
-  accountBalance: number;
-  transactionList: TransactionType[];
-}
+import type { User } from "@/utils/appUtils";
 
 interface UserContextType {
   user: User;
   setUser: React.Dispatch<React.SetStateAction<User>>;
+  isMenuOpen: boolean;
+  setIsMenuOpen: (isOpen: boolean) => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -24,9 +17,10 @@ export const UserProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ user: initialUser, children }) => {
   const [user, setUser] = useState<User>(initialUser);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
   return (
-    <UserContext.Provider value={{ user, setUser }}>
+    <UserContext.Provider value={{ user, setUser, isMenuOpen, setIsMenuOpen }}>
       {children}
     </UserContext.Provider>
   );

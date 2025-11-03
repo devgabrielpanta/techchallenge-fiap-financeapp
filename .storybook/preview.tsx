@@ -1,6 +1,8 @@
 import type { Preview } from "@storybook/nextjs-vite";
 import "src/app/globals.css";
-import { background } from "storybook/theming";
+import { UserProvider } from "../src/context/UserContext";
+import { TransactionModalProvider } from "../src/context/TransactionModalProvider";
+import { user } from "../src/utils/appUtils";
 
 const preview: Preview = {
   parameters: {
@@ -26,6 +28,21 @@ const preview: Preview = {
       test: "todo",
     },
   },
+  decorators: [
+    (Story, { parameters }) => {
+      const { pageLayout } = parameters;
+      switch (pageLayout) {
+        default:
+          return (
+            <UserProvider user={user}>
+              <TransactionModalProvider>
+                <Story />
+              </TransactionModalProvider>
+            </UserProvider>
+          );
+      }
+    },
+  ],
 };
 
 export default preview;

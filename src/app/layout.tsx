@@ -6,28 +6,15 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 import { Header } from "@/components/header/Header";
 import { Extract } from "@/components/extract/Extract";
 import { UserProvider } from "@/context/UserContext";
-import { transactionList } from "@/utils/transactionsData";
 import { TransactionModalProvider } from "@/context/TransactionModalProvider";
 import { TransactionModal } from "@/components/transactionModal/TransactionModal";
 import { usePathname } from "next/navigation";
+import { user } from "@/utils/appUtils";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const pathname = usePathname();
   const showExtract = !pathname?.includes("/extract");
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const links = [
-    { label: "Início", href: "/" },
-    { label: "Extrato", href: "/extract" },
-  ];
-  const user = {
-    name: "Joana",
-    lastName: "Silva",
-    avatar: "https://i.pravatar.cc/150?img=47",
-    date: new Date(),
-    accountBalance: 2500,
-    transactionList: transactionList,
-  };
 
   // Aplica o tema
   useEffect(() => {
@@ -43,19 +30,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-screen flex flex-col bg-[var(--color-background)] color-[var(--color-text)] transition-colors">
         <UserProvider user={user}>
           <TransactionModalProvider>
-            <Header
-              theme={theme}
-              toggleTheme={toggleTheme}
-              setIsMenuOpen={setIsMenuOpen}
-            />
+            <Header theme={theme} toggleTheme={toggleTheme} />
 
             <div className="flex flex-1 w-full justify-center mt-[64px]">
               <div className="flex flex-col lg:flex-row w-full max-w-[1600px]">
-                <Sidebar
-                  links={links}
-                  isOpen={isMenuOpen}
-                  onClose={() => setIsMenuOpen(false)}
-                />
+                <Sidebar />
 
                 {/* CONTEÚDO PRINCIPAL */}
                 <div className="flex-1 flex flex-col h-[calc(100vh-64px)] overflow-y-auto gap-10">
