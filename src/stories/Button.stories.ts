@@ -13,7 +13,7 @@ const meta = {
   tags: ["autodocs"],
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
   argTypes: {
-    variant: { options: ["primary", "secondary"], control: { type: "select" }, description: "Button variant" },
+    variant: { options: ["primary", "secondary"], control: { type: "select" }, description: "Botão primario" },
     size: { options: ["sm", "md", "lg"], control: { type: "select" } },    
   },
   // Use `fn` to spy on the onClick arg, which will appear in the actions panel once invoked: https://storybook.js.org/docs/essentials/actions#story-args
