@@ -196,7 +196,7 @@ function DocsPage() {
       </section>
     </main>
   );
-}
+};
 
 const meta: Meta<typeof Drawer> = {
   title: "Components/Drawer",
