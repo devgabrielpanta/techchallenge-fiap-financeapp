@@ -10,10 +10,10 @@ interface HeaderProps {
   setIsMenuOpen: (open: boolean) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({
+export const Header: React.FC<HeaderProps> = ({ 
   theme,
   toggleTheme,
-  setIsMenuOpen,
+  setIsMenuOpen
 }) => {
   const { user } = useUser();
 

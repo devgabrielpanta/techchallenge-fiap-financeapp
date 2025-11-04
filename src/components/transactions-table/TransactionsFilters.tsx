@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button/Button";
+import { Checkbox } from "@/components/ui/checkbox/Checkbox";
+import { Label } from "@/components/ui/label/Label";
 import {
   Drawer,
   DrawerClose,
@@ -12,7 +12,7 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer";
+} from "@/components/ui/drawer/drawer";
 import type { TransactionType } from "@/schemas/dataSchema";
 
 type FilterSchema = {

@@ -6,10 +6,10 @@ import { Sidebar } from "@/components/sidebar/Sidebar";
 import { Header } from "@/components/header/Header";
 import { Extract } from "@/components/extract/Extract";
 import { UserProvider } from "@/context/UserContext";
-import { transactionList } from "@/utils/transactionsData";
 import { TransactionModalProvider } from "@/context/TransactionModalProvider";
 import { TransactionModal } from "@/components/transactionModal/TransactionModal";
 import { usePathname } from "next/navigation";
+import { user } from "@/utils/appUtils";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<"light" | "dark">("light");
@@ -20,14 +20,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     { label: "Início", href: "/" },
     { label: "Extrato", href: "/extract" },
   ];
-  const user = {
-    name: "Joana",
-    lastName: "Silva",
-    avatar: "https://i.pravatar.cc/150?img=47",
-    date: new Date(),
-    accountBalance: 2500,
-    transactionList: transactionList,
-  };
 
   // Aplica o tema
   useEffect(() => {
