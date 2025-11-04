@@ -65,22 +65,13 @@ export const TransactionModal = () => {
     cleanTransactionModal();
   };
 
-  // useEffect(() => {
-  //   if (transactionAction === "edit" && transactionData) {
-  //     setDisplayAmount(
-  //       formatCurrencyInput(String(transactionData.amount * 100))
-  //     );
-  //   }
-  // }, [transactionAction]); // eslint-disable-line react-hooks/exhaustive-deps
-
   useEffect(() => {
   if (transactionAction === "edit" && transactionData) {
     setDisplayAmount(formatCurrencyInput(String(transactionData.amount * 100)));
   } else if (transactionAction === "create") {
-    // Limpa todos os campos para criar
     setDisplayAmount(formatCurrencyInput("0"));
     setTransactionData({
-      id: 0, // ou algum valor temporário
+      id: 0,
       bank: banksData[0],
       type: "entradas",
       operation: operationsData[0],
