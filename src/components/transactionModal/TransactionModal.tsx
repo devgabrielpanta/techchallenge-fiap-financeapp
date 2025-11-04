@@ -66,12 +66,23 @@ export const TransactionModal = () => {
   };
 
   useEffect(() => {
-    if (transactionAction === "edit" && transactionData) {
-      setDisplayAmount(
-        formatCurrencyInput(String(transactionData.amount * 100))
-      );
-    }
-  }, [transactionAction]); // eslint-disable-line react-hooks/exhaustive-deps
+  if (transactionAction === "edit" && transactionData) {
+    setDisplayAmount(formatCurrencyInput(String(transactionData.amount * 100)));
+  } else if (transactionAction === "create") {
+    setDisplayAmount(formatCurrencyInput("0"));
+    setTransactionData({
+      id: 0,
+      bank: banksData[0],
+      type: "entradas",
+      operation: operationsData[0],
+      description: "",
+      amount: 0,
+      currency: "BRL",
+      date: new Date().toISOString().split("T")[0],
+    });
+  }
+}, [transactionAction, transactionData]);
+
 
   // toda vez que displayAmount muda → atualiza transactionData.amount (como número)
   useEffect(() => {
@@ -132,6 +143,10 @@ export const TransactionModal = () => {
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-[2px]"
       onClick={cleanTransactionModal}
     >
+      <div
+    className="bg-[var(--color-surface)] rounded-[var(--radius-md)] w-full max-w-md p-6 relative"
+    onClick={(e) => e.stopPropagation()} // <- isso impede o fechamento ao clicar dentro
+  >
       <div className="bg-[var(--color-surface)] rounded-[var(--radius-md)] w-full max-w-md p-6 relative">
         <button
           className="absolute top-3 right-3 text-[var(--color-text-muted)] hover:text-[var(--color-primary)]"
@@ -261,6 +276,7 @@ export const TransactionModal = () => {
             )}
           </div>
         </div>
+      </div>
       </div>
     </div>
   );
