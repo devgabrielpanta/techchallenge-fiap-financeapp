@@ -11,7 +11,7 @@ import {
   DrawerTitle,
   DrawerDescription,
   DrawerClose,
-} from "./drawer";
+} from "./Drawer";
 import { Button } from "../button/Button"; // Supondo que você tenha um Button
 
 const meta: Meta<typeof Drawer> = {
