@@ -8,7 +8,7 @@ import {
   CirclePlus,
   DollarSign,
 } from "lucide-react";
-import { Button } from "@/components/ui/button/button";
+import { Button } from "@/components/ui/button/Button";
 import { useRouter } from "next/navigation";
 import { useTransactionModal } from "@/context/TransactionModalProvider";
 import { CoverflowCarousel } from "@/components/carousel/Carousel";

@@ -7,10 +7,15 @@ import { useUser } from "@/context/UserContext";
 interface HeaderProps {
   theme: "light" | "dark";
   toggleTheme: () => void;
+  setIsMenuOpen: (open: boolean) => void;
 }
 
-export const Header: React.FC<HeaderProps> = ({ theme, toggleTheme }) => {
-  const { user, setIsMenuOpen } = useUser();
+export const Header: React.FC<HeaderProps> = ({ 
+  theme,
+  toggleTheme,
+  setIsMenuOpen
+}) => {
+  const { user } = useUser();
 
   return (
     <header className="fixed top-0 left-0 right-0 h-[64px] z-50 bg-[var(--color-background)]">

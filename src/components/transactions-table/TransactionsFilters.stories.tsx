@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import TransactionsFilters from "./TransactionsFilters";
 import { TransactionType } from "@/schemas/dataSchema";
-import { Button } from "@/components/ui/button/button";
+import { Button } from "@/components/ui/button/Button";
 
 // Dados de exemplo
 const sampleTransactions: TransactionType[] = [
@@ -40,7 +40,8 @@ const sampleTransactions: TransactionType[] = [
 
 // Componente para storybook
 const TransactionsFiltersStory = () => {
-  const [filteredTransactions, setFilteredTransactions] = useState<TransactionType[]>(sampleTransactions);
+  const [filteredTransactions, setFilteredTransactions] =
+    useState<TransactionType[]>(sampleTransactions);
   const [openFilters, setOpenFilters] = useState(false);
 
   return (
@@ -58,7 +59,12 @@ const TransactionsFiltersStory = () => {
         <ul>
           {filteredTransactions.map((tx) => (
             <li key={tx.id}>
-              {tx.operation} - {tx.bank} - {tx.amount.toLocaleString("pt-BR", { style: "currency", currency: "BRL" })} - {tx.type}
+              {tx.operation} - {tx.bank} -{" "}
+              {tx.amount.toLocaleString("pt-BR", {
+                style: "currency",
+                currency: "BRL",
+              })}{" "}
+              - {tx.type}
             </li>
           ))}
         </ul>

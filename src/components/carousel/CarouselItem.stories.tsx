@@ -3,6 +3,7 @@ import React from "react";
 import CarouselItem from "./CarouselItem";
 import { CreditCard, PiggyBank, DollarSign, Activity } from "lucide-react";
 
+// Ícones usados
 const iconMap = {
   CreditCard: <CreditCard size={36} className="text-white" />,
   PiggyBank: <PiggyBank size={36} className="text-white" />,
@@ -10,29 +11,130 @@ const iconMap = {
   Activity: <Activity size={36} className="text-white" />,
 };
 
-const meta = {
-  title: "Components/Carousel",
+/* -------------------------------------------
+  Custom Docs Page — esta função renderiza a página de Docs.
+------------------------------------------- */
+function DocsPage() {
+  const codeExample = `
+    import CarouselItem from "@/components/carousel/CarouselItem";
+    import { CreditCard } from "lucide-react";
+
+    <CarouselItem
+      id={1}
+      title="Cartão de Crédito"
+      description="Gerencie seus gastos."
+      icon={<CreditCard size={36} className='text-white' />}
+      bg="bg-blue-500"
+    />
+      `.trim();
+
+  return (
+    <main
+      style={{ fontFamily: "Inter, sans-serif", padding: 24, maxWidth: 900 }}
+    >
+      <header>
+        <h1 style={{ fontSize: 26, marginBottom: 8 }}>
+          CarouselItem — Cartão do Carousel
+        </h1>
+        <p style={{ color: "#555" }}>
+          O <strong>CarouselItem</strong> é o componente que representa cada
+          cartão individual dentro do <strong>CoverflowCarousel</strong>. Ele
+          exibe:
+        </p>
+        <ul style={{ color: "#555", marginTop: 8 }}>
+          <li style={{ listStyle: "none" }}>✅ Ícone (Lucide)</li>
+          <li style={{ listStyle: "none" }}>✅ Título</li>
+          <li style={{ listStyle: "none" }}>✅ Descrição</li>
+          <li style={{ listStyle: "none" }}>✅ Cor de fundo (Tailwind)</li>
+        </ul>
+      </header>
+
+      <section style={{ marginTop: 24 }}>
+        <h2 style={{ fontSize: 18 }}>🎛️ Como utilizar</h2>
+
+        <pre
+          style={{
+            background: "#0f1724",
+            color: "#f8fafc",
+            padding: 12,
+            borderRadius: 6,
+            overflowX: "auto",
+            marginTop: 10,
+          }}
+        >
+          <code>{codeExample}</code>
+        </pre>
+      </section>
+
+      <section style={{ marginTop: 24 }}>
+        <h2 style={{ fontSize: 18 }}>🎨 Personalização</h2>
+        <p style={{ color: "#555", marginTop: 6 }}>Você pode alterar:</p>
+        <ul>
+          <li>
+            <strong>icon</strong> → qualquer ícone do Lucide
+          </li>
+          <li>
+            <strong>bg</strong> → classes Tailwind de cor
+          </li>
+          <li>
+            <strong>title</strong> → texto principal
+          </li>
+          <li>
+            <strong>description</strong> → explicação do card
+          </li>
+        </ul>
+      </section>
+
+      <section style={{ marginTop: 24 }}>
+        <h2 style={{ fontSize: 18 }}>🔎 Exemplo interativo</h2>
+        <p style={{ color: "#555" }}>
+          Abaixo está o componente renderizado, com controles editáveis no
+          painel lateral.
+        </p>
+
+        <div
+          style={{
+            marginTop: 16,
+            padding: 20,
+            border: "1px solid rgba(0,0,0,0.06)",
+            borderRadius: 8,
+            background: "#fff",
+            display: "inline-block",
+          }}
+        >
+          <CarouselItem
+            id={1}
+            title="Cartão de Crédito"
+            description="Gerencie seus gastos."
+            icon={iconMap.CreditCard}
+            bg="bg-blue-500"
+          />
+        </div>
+      </section>
+    </main>
+  );
+}
+
+const meta: Meta<typeof CarouselItem> = {
+  title: "Components/Carousel/Item",
   component: CarouselItem,
+  tags: ["autodocs"],
+
   parameters: {
     layout: "centered",
+
+    docs: {
+      page: () => <DocsPage />,
+    },
   },
-  globals: {
-    background: "light",
-  },
+
   argTypes: {
-    id: {
-      control: { type: "number" },
-      description: "Identificador do item",
-    },
-    title: {
-      control: { type: "text" },
-      description: "Título exibido no cartão",
-    },
-    description: {
-      control: { type: "text" },
-      description: "Descrição exibida no cartão",
-    },
+    id: { control: { type: "number" }, description: "Identificador do item" },
+    title: { control: "text", description: "Título exibido" },
+    description: { control: "text", description: "Descrição exibida" },
+
     bg: {
+      control: "select",
       options: [
         "bg-blue-500",
         "bg-green-500",
@@ -45,42 +147,44 @@ const meta = {
         "bg-indigo-500",
         "bg-lime-500",
       ],
-      control: { type: "select" },
-      description: "Classe de background (Tailwind) do cartão",
+      description: "Cor de fundo (classe Tailwind)",
     },
-    // use Storybook mapping so we control the existing `icon` prop (no new prop added)
+
     icon: {
-      control: { type: "select" },
+      control: "select",
       options: Object.keys(iconMap),
       mapping: iconMap,
-      description: "Escolha um ícone (será passado para a prop `icon`)",
+      description: "Ícone exibido (Lucide)",
     },
   },
-} satisfies Meta<typeof CarouselItem>;
+};
 
 export default meta;
+
+/* -------------------------------------------
+  Story principal
+------------------------------------------- */
 type Story = StoryObj<typeof meta>;
 
 export const Item: Story = {
+  name: "Item",
   args: {
     id: 1,
-    icon: "CreditCard", // this key will be mapped to the actual React node by Storybook
+    icon: "CreditCard",
     title: "Cartão de Crédito",
     description: "Controle seus gastos e aproveite benefícios exclusivos.",
     bg: "bg-blue-500",
   },
-  render: (args: any) => {
-    // args.icon will be the mapped React node because of `mapping` above
-    return (
-      <div style={{ padding: 20 }}>
-        <CarouselItem
-          id={args.id}
-          icon={args.icon}
-          title={args.title}
-          description={args.description}
-          bg={args.bg}
-        />
-      </div>
-    );
-  },
+
+  render: (args) => (
+    <div style={{ padding: 20 }}>
+      <CarouselItem
+        id={args.id}
+        title={args.title}
+        description={args.description}
+        icon={args.icon}
+        bg={args.bg}
+      />
+    </div>
+  ),
 };

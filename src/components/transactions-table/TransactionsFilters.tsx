@@ -1,9 +1,9 @@
 "use client";
 
 import * as React from "react";
-import { Button } from "@/components/ui/button/button";
-import { Checkbox } from "@/components/ui/checkbox/checkbox";
-import { Label } from "@/components/ui/label/label";
+import { Button } from "@/components/ui/button/Button";
+import { Checkbox } from "@/components/ui/checkbox/Checkbox";
+import { Label } from "@/components/ui/label/Label";
 import {
   Drawer,
   DrawerClose,

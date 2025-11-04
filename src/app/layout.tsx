@@ -15,6 +15,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const pathname = usePathname();
   const showExtract = !pathname?.includes("/extract");
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const links = [
+    { label: "Início", href: "/" },
+    { label: "Extrato", href: "/extract" },
+  ];
 
   // Aplica o tema
   useEffect(() => {
@@ -30,11 +35,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       <body className="min-h-screen flex flex-col bg-[var(--color-background)] color-[var(--color-text)] transition-colors">
         <UserProvider user={user}>
           <TransactionModalProvider>
-            <Header theme={theme} toggleTheme={toggleTheme} />
+            <Header
+              theme={theme}
+              toggleTheme={toggleTheme}
+              setIsMenuOpen={setIsMenuOpen}
+            />
 
             <div className="flex flex-1 w-full justify-center mt-[64px]">
               <div className="flex flex-col lg:flex-row w-full max-w-[1600px]">
-                <Sidebar />
+                <Sidebar
+                  links={links}
+                  isOpen={isMenuOpen}
+                  onClose={() => setIsMenuOpen(false)}
+                />
 
                 {/* CONTEÚDO PRINCIPAL */}
                 <div className="flex-1 flex flex-col h-[calc(100vh-64px)] overflow-y-auto gap-10">

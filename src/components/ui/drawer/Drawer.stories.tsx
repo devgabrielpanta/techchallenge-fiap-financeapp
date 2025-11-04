@@ -12,7 +12,7 @@ import {
   DrawerDescription,
   DrawerClose,
 } from "./drawer";
-import { Button } from "../button/button"; // Supondo que você tenha um Button
+import { Button } from "../button/Button"; // Supondo que você tenha um Button
 
 const meta: Meta<typeof Drawer> = {
   title: "Components/Drawer",
