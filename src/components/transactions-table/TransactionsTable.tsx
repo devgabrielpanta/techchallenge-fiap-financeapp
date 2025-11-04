@@ -17,7 +17,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table/table";
+} from "@/components/ui/table/Table";
 import { useTransactionModal } from "@/context/TransactionModalProvider";
 
 interface DataTableProps<TData, TValue> {

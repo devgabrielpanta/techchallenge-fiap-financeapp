@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button/button";
+import { Button } from "@/components/ui/button/Button";
 import { useUser } from "@/context/UserContext";
 import { X } from "lucide-react";
 import { useTransactionModal } from "@/context/TransactionModalProvider";
