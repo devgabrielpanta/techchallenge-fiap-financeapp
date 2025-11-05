@@ -19,7 +19,7 @@ Siga estas instruções para configurar o projeto localmente para fins de desenv
 
 ### 📋 Pré-requisitos
 
-- Node.js 18.0 ou superior
+- Node.js 20.0 ou superior
 - npm ou yarn
 - Git
 
