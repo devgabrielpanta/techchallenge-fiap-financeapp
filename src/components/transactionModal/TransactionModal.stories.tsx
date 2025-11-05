@@ -160,7 +160,7 @@ function DocsPage() {
 }
 
 const meta: Meta<typeof TransactionModalFake> = {
-  title: "Components/TransactionModal",
+  title: "Components/Transactions/TransactionModal",
   component: TransactionModalFake,
   parameters: {
     layout: "centered",
