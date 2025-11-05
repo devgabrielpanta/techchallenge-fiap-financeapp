@@ -1,23 +1,23 @@
-"use client";
+"use client"
 
-import { cn } from "@/lib/utils";
-import { useUser } from "@/context/UserContext";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button/Button";
-import ExtractCard from "./ExtractCard";
+import { Button } from "@/components/ui/button/Button"
+import { useUser } from "@/context/UserContext"
+import { cn } from "@/lib/utils"
+import { useRouter } from "next/navigation"
+import ExtractCard from "./ExtractCard"
 
 interface ExtractProps {
-  children?: React.ReactNode;
+  children?: React.ReactNode
 }
 
 export const Extract: React.FC<ExtractProps> = () => {
-  const { user } = useUser();
-  const router = useRouter();
+  const { user } = useUser()
+  const router = useRouter()
 
   // Últimas transações
   const lastFiveTransactions = [...user.transactionList]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // mais recentes primeiro
-    .slice(0, 5); // pega os 5 primeiros
+    .slice(0, 5) // pega os 5 primeiros
 
   return (
     <aside
@@ -42,8 +42,11 @@ export const Extract: React.FC<ExtractProps> = () => {
 
         {lastFiveTransactions.length > 0 ? (
           <ul className="flex flex-col gap-2">
-            {lastFiveTransactions.map((tx) => (
-              <ExtractCard key={`transactionCard${tx.id}`} transaction={tx} />
+            {lastFiveTransactions.map((tx, index) => (
+              <ExtractCard
+                key={`transactionCard-${tx.id}-${index}`}
+                transaction={tx}
+              />
             ))}
           </ul>
         ) : (
@@ -66,5 +69,5 @@ export const Extract: React.FC<ExtractProps> = () => {
         )}
       </div>
     </aside>
-  );
-};
+  )
+}
