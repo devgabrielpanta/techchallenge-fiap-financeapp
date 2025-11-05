@@ -1,103 +1,102 @@
-"use client";
-import { useEffect, useState } from "react";
-import { useUser } from "@/context/UserContext";
-import { SlidersHorizontal } from "lucide-react";
-import { Button } from "@/components/ui/button/Button";
-import TransactionsFilters from "@/components/transactions-table/TransactionsFilters";
-import { DataTable } from "@/components/transactions-table/TransactionsTable";
-import { columns } from "@/components/transactions-table/TransactionsColumn";
-import ExtractCard from "@/components/extract/ExtractCard";
+"use client"
+import ExtractCard from "@/components/extract/ExtractCard"
+import { columns } from "@/components/transactions-table/TransactionsColumn"
+import TransactionsFilters from "@/components/transactions-table/TransactionsFilters"
+import { DataTable } from "@/components/transactions-table/TransactionsTable"
+import { Button } from "@/components/ui/button/Button"
+import { useUser } from "@/context/UserContext"
+import { SlidersHorizontal } from "lucide-react"
+import { useEffect, useState } from "react"
 
 export default function ExtractPage() {
-  const { user } = useUser();
+  const { user } = useUser()
 
   // Transações
-  const transactions = user.transactionList;
-  const [filteredTransactions, setFilteredTransactions] =
-    useState(transactions);
-  const [paginatedList, setPaginatedList] = useState(transactions);
+  const transactions = user.transactionList
+  const [filteredTransactions, setFilteredTransactions] = useState(transactions)
+  const [paginatedList, setPaginatedList] = useState(transactions)
 
   // Filtros
-  const [searchTerm, setSearchTerm] = useState("");
-  const [openFilters, setOpenFilters] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("")
+  const [openFilters, setOpenFilters] = useState(false)
 
   // Paginação e carregamento infinito
-  const [visibleCount, setVisibleCount] = useState(10);
-  const [isMobile, setIsMobile] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [visibleCount, setVisibleCount] = useState(10)
+  const [isMobile, setIsMobile] = useState(false)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
 
   // Detecta se é mobile
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1024);
-    handleResize();
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    const handleResize = () => setIsMobile(window.innerWidth < 1024)
+    handleResize()
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
   // Filtragem dos dados
   useEffect(() => {
     if (searchTerm.length === 0) {
-      return setFilteredTransactions(transactions);
+      return setFilteredTransactions(transactions)
     }
     const filteredList = transactions.filter((t) => {
-      const term = searchTerm.toLowerCase();
-      const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
-      const isNumber = numbers.includes(term[0]);
+      const term = searchTerm.toLowerCase()
+      const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+      const isNumber = numbers.includes(term[0])
       if (isNumber) {
         return (
           t.amount.toString().includes(term) ||
           new Date(t.date).toLocaleDateString("pt-BR").includes(term)
-        );
+        )
       }
       return (
         t.operation.toLowerCase().includes(term) ||
         t.bank.toLowerCase().includes(term)
-      );
-    });
-    setFilteredTransactions(filteredList);
-  }, [searchTerm, user]); //eslint-disable-line react-hooks/exhaustive-deps
+      )
+    })
+    setFilteredTransactions(filteredList)
+  }, [searchTerm, user]) //eslint-disable-line react-hooks/exhaustive-deps
 
   // Paginação
-  const totalItems = filteredTransactions.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const totalItems = filteredTransactions.length
+  const totalPages = Math.ceil(totalItems / itemsPerPage)
 
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
+  const startIndex = (currentPage - 1) * itemsPerPage
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems)
 
   useEffect(() => {
     const paginatedListData = isMobile
       ? filteredTransactions.slice(0, visibleCount)
-      : filteredTransactions.slice(startIndex, endIndex);
-    setPaginatedList(paginatedListData);
-  }, [filteredTransactions, currentPage]); //eslint-disable-line react-hooks/exhaustive-deps
+      : filteredTransactions.slice(startIndex, endIndex)
+    setPaginatedList(paginatedListData)
+  }, [filteredTransactions, currentPage]) //eslint-disable-line react-hooks/exhaustive-deps
 
   // Aplica carregamento infinito no mobile
   useEffect(() => {
-    if (!isMobile) return;
+    if (!isMobile) return
 
     const handleScroll = () => {
       const bottom =
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 100
       if (bottom && visibleCount < filteredTransactions.length) {
         setTimeout(() => {
-          setVisibleCount((prev) => prev + 5);
-        }, 600);
+          setVisibleCount((prev) => prev + 5)
+        }, 600)
       }
-    };
+    }
 
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [isMobile, visibleCount, filteredTransactions.length]);
+    window.addEventListener("scroll", handleScroll)
+    return () => window.removeEventListener("scroll", handleScroll)
+  }, [isMobile, visibleCount, filteredTransactions.length])
 
   // Troca de página na tabela no desktop
   const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage((p) => p + 1);
-  };
+    if (currentPage < totalPages) setCurrentPage((p) => p + 1)
+  }
 
   const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage((p) => p - 1);
-  };
+    if (currentPage > 1) setCurrentPage((p) => p - 1)
+  }
 
   return (
     <div className="flex flex-col gap-6 pb-10">
@@ -113,8 +112,8 @@ export default function ExtractPage() {
             placeholder="Pesquisar..."
             value={searchTerm}
             onChange={(e) => {
-              setSearchTerm(e.target.value);
-              setCurrentPage(1);
+              setSearchTerm(e.target.value)
+              setCurrentPage(1)
             }}
             className="p-2 border border-[var(--color-border)] rounded-md w-full md:w-96
           text-[var(--color-text)] placeholder:text-[var(--color-text-muted)]
@@ -136,8 +135,11 @@ export default function ExtractPage() {
           </div>
           <div className="block md:hidden">
             {paginatedList.length > 0 &&
-              paginatedList.map((transaction) => (
-                <ExtractCard key={transaction.id} transaction={transaction} />
+              paginatedList.map((transaction, index) => (
+                <ExtractCard
+                  key={`extract-${transaction.id}-${index}`}
+                  transaction={transaction}
+                />
               ))}
           </div>
         </div>
@@ -197,5 +199,5 @@ export default function ExtractPage() {
         />
       )}
     </div>
-  );
+  )
 }
