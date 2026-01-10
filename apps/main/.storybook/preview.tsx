@@ -1,7 +1,7 @@
 import type { Preview } from "@storybook/nextjs-vite";
-import "src/app/globals.css";
-import { UserProvider } from "../src/context/UserContext";
+import "../src/app/globals.css";
 import { TransactionModalProvider } from "../src/context/TransactionModalProvider";
+import { UserProvider } from "../src/context/UserContext";
 import { user } from "../src/utils/appUtils";
 
 const preview: Preview = {
@@ -22,9 +22,6 @@ const preview: Preview = {
     },
 
     a11y: {
-      // 'todo' - show a11y violations in the test UI only
-      // 'error' - fail CI on a11y violations
-      // 'off' - skip a11y checks entirely
       test: "todo",
     },
   },
