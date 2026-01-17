@@ -1,0 +1,15 @@
+node_modules
+.next
+dist
+build
+storybook-static
+.DS_Store
+*.log
+.git
+.gitignore
+README.md
+.env*.local
+.vscode
+.idea
+coverage
+.nyc_output

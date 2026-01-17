@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   devIndicators: false,
-  
+  output: 'standalone', // Para Docker
   webpack(config, options) {
     // Module Federation configuration will be added here
     // Currently disabled due to compatibility issues with Next.js 15.5
