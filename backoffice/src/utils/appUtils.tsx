@@ -1,7 +1,6 @@
 import { transactionList } from "@/utils/transactionsData";
 import { TransactionType } from "@/schemas/dataSchema";
 
-
 export interface User {
   name: string;
   avatar: string;
@@ -19,3 +18,12 @@ export const user: User = {
   accountBalance: 2500,
   transactionList: transactionList,
 };
+
+export async function getTransactions(): Promise<TransactionType[]> {
+  // Simula uma chamada assíncrona, como uma requisição a uma API
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      resolve(transactionList);
+    }, 100); // Simula um atraso de 100ms
+  });
+}

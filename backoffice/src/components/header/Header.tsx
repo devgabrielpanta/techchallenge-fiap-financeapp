@@ -1,21 +1,23 @@
 "use client";
 
+import { useEffect } from "react";
 import { Menu, Sun, Moon } from "lucide-react";
 import Logo from "@/images/Logo.png";
-import { useUser } from "@/context/UserContext";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { setTheme, setIsMenuOpen } from "@/store/slices/globalSlice";
 
-interface HeaderProps {
-  theme: "light" | "dark";
-  toggleTheme: () => void;
-  setIsMenuOpen: (open: boolean) => void;
-}
+export const Header: React.FC = () => {
+  const dispatch = useDispatch<AppDispatch>();
+  const theme = useSelector((state: RootState) => state.global.theme);
+  const user = useSelector((state: RootState) => state.global.user);
 
-export const Header: React.FC<HeaderProps> = ({ 
-  theme,
-  toggleTheme,
-  setIsMenuOpen
-}) => {
-  const { user } = useUser();
+  // Aplica o tema
+  useEffect(() => {
+    const root = window.document.documentElement;
+    root.classList.remove(theme === "light" ? "dark" : "light");
+    root.classList.add(theme);
+  }, [theme]);
 
   return (
     <header className="fixed top-0 left-0 right-0 h-[64px] z-50 bg-[var(--color-background)]">
@@ -24,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Botão Menu do mobile */}
           <button
             className="lg:hidden p-2 rounded-md bg-[var(--color-surface)] text-[var(--color-primary)] hover:bg-[var(--color-primary)] hover:text-[var(--color-white)] transition-colors"
-            onClick={() => setIsMenuOpen(true)}
+            onClick={() => dispatch(setIsMenuOpen(true))}
             aria-label="Abrir menu"
           >
             <Menu size={20} />
@@ -48,7 +50,9 @@ export const Header: React.FC<HeaderProps> = ({
 
           {/* Botão de tema */}
           <button
-            onClick={toggleTheme}
+            onClick={() =>
+              dispatch(setTheme(theme === "light" ? "dark" : "light"))
+            }
             className="p-2 rounded-full transition-colors bg-[var(--color-background)] hover:bg-[var(--color-primary)] hover:text-[var(--color-white)] color-[var(--color-text)] cursor-pointer"
             aria-label="Alternar tema"
           >

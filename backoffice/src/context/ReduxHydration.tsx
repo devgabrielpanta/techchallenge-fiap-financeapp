@@ -1,0 +1,21 @@
+"use client";
+
+import { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setUserTransactions } from "@/store/slices/globalSlice";
+import { AppDispatch } from "@/store/store";
+import { TransactionType } from "@/schemas/dataSchema";
+
+export function ReduxHydration({
+  transactions,
+}: {
+  transactions: TransactionType[];
+}) {
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(setUserTransactions(transactions));
+  }, [dispatch, transactions]);
+
+  return null;
+}

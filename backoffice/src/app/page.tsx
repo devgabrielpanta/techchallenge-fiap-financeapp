@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { useUser } from "@/context/UserContext";
 import { formatCurrency } from "@/lib/utils";
 import {
   Eye,
@@ -10,13 +9,15 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button/Button";
 import { useRouter } from "next/navigation";
-import { useTransactionModal } from "@/context/TransactionModalProvider";
 import { CoverflowCarousel } from "@/components/carousel/Carousel";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { startCreateTransaction } from "@/store/slices/transactionSlice";
 
 
 export default function HomePage() {
-  const { user } = useUser();
-  const { startCreateTransaction } = useTransactionModal();
+  const user = useSelector((state: RootState) => state.global.user);
+  const dispatch = useDispatch<AppDispatch>();
   const [visible, setVisible] = useState(true);
   const router = useRouter();
 
@@ -56,7 +57,7 @@ export default function HomePage() {
           <Button
             variant="primary"
             className="rounded-full w-13 h-13 p-0 flex items-center justify-center"
-            onClick={startCreateTransaction}
+            onClick={() => dispatch(startCreateTransaction())}
           >
             <CirclePlus size={30} />
           </Button>

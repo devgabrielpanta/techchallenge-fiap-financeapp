@@ -3,20 +3,28 @@ import { Button } from "@/components/ui/button/Button";
 import { cn } from "@/lib/utils";
 import { X, CirclePlus } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { useTransactionModal } from "@/context/TransactionModalProvider";
 import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import { setIsMenuOpen } from "@/store/slices/globalSlice";
+import { startCreateTransaction } from "@/store/slices/transactionSlice";
 
-interface SidebarProps {
-  links: { label: string; href: string }[];
-  isOpen: boolean;
-  onClose: () => void;
-}
+const links = [
+  { label: "Início", href: "/" },
+  { label: "Extrato", href: "/extract" },
+  { label: "Upload", href: "/upload" },
+];
 
-export const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, onClose }) => {
+export const Sidebar: React.FC = () => {
   const pathname = usePathname();
   const isActive = (href: string) => pathname === href;
-  const { startCreateTransaction } = useTransactionModal();
   const router = useRouter();
+  const dispatch = useDispatch<AppDispatch>();
+  const isOpen = useSelector((state: RootState) => state.global.isMenuOpen);
+
+  const onClose = () => {
+    dispatch(setIsMenuOpen(false));
+  };
 
   return (
     <>
@@ -29,7 +37,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, onClose }) => {
           />
           <aside
             className={cn(
-              "relative z-[70] w-[260px] h-full bg-[var(--color-surface)] shadow-xl flex flex-col transform transition-transform duration-300 rounded-r-[var(--radius-md)]"
+              "relative z-[70] w-[260px] h-full bg-[var(--color-surface)] shadow-xl flex flex-col transform transition-transform duration-300 rounded-r-[var(--radius-md)]",
             )}
           >
             {/* Header */}
@@ -61,7 +69,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, onClose }) => {
                       "block px-3 py-2 text-center transition-colors border-b border-[var(--color-border)] cursor-pointer",
                       isActive(link.href)
                         ? "text-[var(--color-secondary)] font-semibold"
-                        : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+                        : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]",
                     )}
                   >
                     {link.label}
@@ -74,7 +82,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, onClose }) => {
                 <Button
                   variant="primary"
                   className="w-full flex items-center justify-center gap-2"
-                  onClick={startCreateTransaction}
+                  onClick={() => dispatch(startCreateTransaction())}
                 >
                   <CirclePlus size={18} /> Nova transação
                 </Button>
@@ -90,7 +98,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, onClose }) => {
           "hidden lg:flex lg:flex-col lg:justify-between",
           "sticky top-[64px] h-[calc(100vh-84px)] w-[260px] p-4",
           "bg-[var(--color-surface)] border border-[var(--color-border)] shadow-lg",
-          "rounded-[var(--radius-md)] m-[10px] overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--color-border)] scrollbar-track-transparent"
+          "rounded-[var(--radius-md)] m-[10px] overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--color-border)] scrollbar-track-transparent",
         )}
       >
         <nav className="flex flex-col gap-2">
@@ -102,7 +110,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, onClose }) => {
                 "block px-3 py-2 text-center transition-colors border-b border-[var(--color-border)] cursor-pointer",
                 isActive(link.href)
                   ? "text-[var(--color-secondary)] font-semibold"
-                  : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]"
+                  : "text-[var(--color-text-muted)] hover:text-[var(--color-text)]",
               )}
             >
               {link.label}
@@ -114,7 +122,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ links, isOpen, onClose }) => {
           <Button
             variant="primary"
             className="w-full flex items-center justify-center gap-2"
-            onClick={startCreateTransaction}
+            onClick={() => dispatch(startCreateTransaction())}
           >
             <CirclePlus size={18} /> Nova transação
           </Button>

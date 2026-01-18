@@ -2,19 +2,21 @@
 import type { TransactionType } from "@/schemas/dataSchema";
 import { formatCurrency } from "@/lib/utils";
 import { cn } from "@/lib/utils";
-import { useTransactionModal } from "@/context/TransactionModalProvider";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
+import { startEditTransaction } from "@/store/slices/transactionSlice";
 
 export default function ExtractCard({
   transaction,
 }: {
   transaction: TransactionType;
 }) {
-  const { startEditTransaction } = useTransactionModal();
+  const dispatch = useDispatch<AppDispatch>();
   return (
     <li
       key={transaction.id}
       className="flex justify-between items-center px-2 py-1 hover:rounded-md hover:bg-[var(--color-primary)] hover:text-[var(--color-white)] transition-colors border-b border-[var(--color-border)] pb-1 cursor-pointer"
-      onClick={() => startEditTransaction(transaction.id)}
+      onClick={() => dispatch(startEditTransaction(transaction))}
     >
       <div className="flex flex-col text-sm pb-2">
         <span>{transaction.bank}</span>
@@ -22,7 +24,7 @@ export default function ExtractCard({
         <span
           className={cn(
             "text-sm font-semibold",
-            transaction.type === "entradas" ? "text-green-500" : "text-red-500"
+            transaction.type === "entradas" ? "text-green-500" : "text-red-500",
           )}
         >
           {transaction.type === "saidas" ? "- " : "+ "}

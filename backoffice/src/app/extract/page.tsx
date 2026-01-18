@@ -4,15 +4,18 @@ import { columns } from "@/components/transactions-table/TransactionsColumn"
 import TransactionsFilters from "@/components/transactions-table/TransactionsFilters"
 import { DataTable } from "@/components/transactions-table/TransactionsTable"
 import { Button } from "@/components/ui/button/Button"
-import { useUser } from "@/context/UserContext"
 import { SlidersHorizontal } from "lucide-react"
 import { useEffect, useState } from "react"
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
 
 export default function ExtractPage() {
-  const { user } = useUser()
+  const dispatch = useDispatch<AppDispatch>();
 
   // Transações
-  const transactions = user.transactionList
+    const transactions = useSelector(
+      (state: RootState) => state.global.user.transactionList,
+    );
   const [filteredTransactions, setFilteredTransactions] = useState(transactions)
   const [paginatedList, setPaginatedList] = useState(transactions)
 
@@ -37,25 +40,25 @@ export default function ExtractPage() {
   // Filtragem dos dados
   useEffect(() => {
     if (searchTerm.length === 0) {
-      return setFilteredTransactions(transactions)
+      return setFilteredTransactions(transactions);
     }
     const filteredList = transactions.filter((t) => {
-      const term = searchTerm.toLowerCase()
-      const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-      const isNumber = numbers.includes(term[0])
+      const term = searchTerm.toLowerCase();
+      const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+      const isNumber = numbers.includes(term[0]);
       if (isNumber) {
         return (
           t.amount.toString().includes(term) ||
           new Date(t.date).toLocaleDateString("pt-BR").includes(term)
-        )
+        );
       }
       return (
         t.operation.toLowerCase().includes(term) ||
         t.bank.toLowerCase().includes(term)
-      )
-    })
-    setFilteredTransactions(filteredList)
-  }, [searchTerm, user]) //eslint-disable-line react-hooks/exhaustive-deps
+      );
+    });
+    setFilteredTransactions(filteredList);
+  }, [searchTerm, transactions]); //eslint-disable-line react-hooks/exhaustive-deps
 
   // Paginação
   const totalItems = filteredTransactions.length
