@@ -30,6 +30,13 @@ export const TransactionSchema = z.object({
   amount: z.number(),
   currency: z.string(),
   date: z.iso.date(),
+  attachment: z
+    .object({
+      fileId: z.string(),
+      fileName: z.string(),
+      fileSize: z.number(),
+    })
+    .optional(),
 });
 
 export const CreateTransactionSchema = TransactionSchema.extend({
