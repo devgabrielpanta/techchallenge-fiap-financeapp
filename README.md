@@ -32,7 +32,6 @@ O projeto simula um sistema de gestão financeira que inclui:
 ### Contexto Acadêmico
 
 Este projeto faz parte do **Tech Challenge da FIAP**, uma atividade prática que visa:
-
 - Aplicar conceitos de arquitetura de software aprendidos em aula
 - Demonstrar habilidades de desenvolvimento frontend moderno
 - Criar uma base de conhecimento para projetos profissionais futuros
@@ -77,21 +76,18 @@ techchallenge-fiap-financeapp/
     │   ├── package.json
     │   └── webpack.config.js    # Webpack + Single-SPA config
     │
-    ├── app-react/               # Microfrontend 1 - React (Dashboard)
+    ├── app-react/               # Microfrontend 1 - React (Upload)
     │   ├── src/
     │   │   ├── index.js         # Entry point React
     │   │   └── App.jsx          # Componente principal
     │   ├── package.json
     │   └── webpack.config.js
     │
-    └── app-angular/             # Microfrontend 2 - Angular (Upload & Viewer)
+    └── app-angular/             # Microfrontend 2 - Angular (Viewer)
         ├── src/
         │   ├── app/             # Estrutura Angular
-        │   │   ├── app.component.ts
-        │   │   ├── app.component.html
-        │   │   └── app.component.css
+        │   │   └── app.component.ts
         │   └── main.ts          # Entry point Angular
-        ├── public/              # Armazenamento de arquivos
         ├── angular.json
         ├── package.json
         └── tsconfig.json
@@ -115,25 +111,21 @@ Aplicação principal que funciona como shell/container:
 Sistema de upload e visualização de PDFs, orquestrado por **Single-SPA**:
 
 **2.1 Root Config**
-
 - **Single-SPA Root Config**: Define e carrega os microfrontends
 - Gerencia o ciclo de vida dos apps
 - Roteamento interno entre apps React e Angular
 
-**2.2 App Angular**
-
+**2.2 App React**
 - Upload de PDFs
-- Visualizador de PDFs integrado
+- Upload de múltiplos arquivos
 - Validação de arquivos
-- Gerenciamento de arquivos enviados
+- Feedback visual
+
+**2.3 App Angular**
+- Visualizador de PDFs
+- Navegação entre páginas
+- Controles de zoom e navegação
 - Preview em tempo real
-
-**2.3 App React**
-
-- Dashboard financeiro
-- Gráficos e análises
-- Visualização de métricas
-- Interface de relatórios
 
 ## 🔗 Integração via iframe
 
@@ -159,31 +151,26 @@ O backoffice Next.js integra o microfrontend `uploader` usando iframe:
 ### Comunicação
 
 **Backoffice → Uploader (via URL Query):**
-
 ```typescript
-<iframe
+<iframe 
   src="http://localhost:4200/upload?transaction-id=123"
   className="w-full h-full"
 />
 ```
 
 **Uploader → Backoffice (via postMessage):**
-
 ```javascript
-window.parent.postMessage(
-  {
-    type: "FILE_UPLOADED",
-    fileId: "20251253abcde",
-    transactionId: "123",
-  },
-  "http://localhost:3000",
-);
+window.parent.postMessage({
+  type: 'FILE_UPLOADED',
+  fileId: '20251253abcde',
+  transactionId: '123'
+}, 'http://localhost:3000');
 ```
 
 ```typescript
 useEffect(() => {
-  window.addEventListener("message", (event) => {
-    if (event.data.type === "FILE_UPLOADED") {
+  window.addEventListener('message', (event) => {
+    if (event.data.type === 'FILE_UPLOADED') {
       handleFileUpload(event.data.fileId);
     }
   });
@@ -201,28 +188,24 @@ useEffect(() => {
 ### Instalação
 
 1. **Instalar dependências do Backoffice:**
-
 ```bash
 cd backoffice
 pnpm install
 ```
 
 2. **Instalar dependências do Uploader Root:**
-
 ```bash
 cd uploader/root
 pnpm install
 ```
 
 3. **Instalar dependências do App React:**
-
 ```bash
 cd uploader/app-react
 pnpm install
 ```
 
 4. **Instalar dependências do App Angular:**
-
 ```bash
 cd uploader/app-angular
 pnpm install
@@ -231,28 +214,24 @@ pnpm install
 ### Executando as Aplicações
 
 **Terminal 1 - Backoffice (Next.js):**
-
 ```bash
 cd backoffice
 pnpm dev
 ```
 
 **Terminal 2 - Uploader Root (Single-SPA):**
-
 ```bash
 cd uploader/root
 pnpm start
 ```
 
-**Terminal 3 - App React (Dashboard):**
-
+**Terminal 3 - App React (Upload):**
 ```bash
 cd uploader/app-react
 pnpm start
 ```
 
-**Terminal 4 - App Angular (Upload & Viewer):**
-
+**Terminal 4 - App Angular (Viewer):**
 ```bash
 cd uploader/app-angular
 pnpm start
@@ -273,10 +252,9 @@ docker-compose down
 ```
 
 **Containers criados:**
-
 - `backoffice` - Aplicação Next.js (porta 3000)
 - `uploader-root` - Single-SPA Root (porta 4200)
-- **Uploader React**: Serve o bundle React para dashboard financeiro (porta 3001)
+- `uploader-react` - Microfrontend React (porta 3001)
 - `uploader-angular` - Microfrontend Angular (porta 4201)
 
 ### Executando o Storybook
@@ -284,7 +262,6 @@ docker-compose down
 O Storybook está configurado no **backoffice** para documentação e desenvolvimento de componentes isolados.
 
 **Rodar Storybook:**
-
 ```bash
 cd backoffice
 pnpm storybook
@@ -293,7 +270,6 @@ pnpm storybook
 O Storybook estará disponível em: **http://localhost:6006**
 
 **Build estático do Storybook:**
-
 ```bash
 cd backoffice
 pnpm build-storybook
@@ -303,18 +279,17 @@ O build será gerado na pasta `backoffice/storybook-static/`.
 
 ### Configuração de Portas
 
-| Aplicação                     | Porta | URL                   |
-| ----------------------------- | ----- | --------------------- |
-| Backoffice (Host)             | 3000  | http://localhost:3000 |
-| Uploader Root                 | 4200  | http://localhost:4200 |
-| App React (Dashboard)         | 3001  | http://localhost:3001 |
-| App Angular (Upload & Viewer) | 4201  | http://localhost:4201 |
-| Storybook                     | 6006  | http://localhost:6006 |
+| Aplicação | Porta | URL |
+|-----------|-------|-----|
+| Backoffice (Host) | 3000 | http://localhost:3000 |
+| Uploader Root | 4200 | http://localhost:4200 |
+| App React | 3001 | http://localhost:3001 |
+| App Angular | 4201 | http://localhost:4201 |
+| Storybook | 6006 | http://localhost:6006 |
 
 ## 🔧 Tecnologias Utilizadas
 
 ### Backoffice
-
 - **Next.js 15** - Framework React com App Router
 - **React 19** - Biblioteca para interfaces
 - **TypeScript** - Tipagem estática
@@ -322,10 +297,9 @@ O build será gerado na pasta `backoffice/storybook-static/`.
 - **Storybook** - Documentação de componentes da UI
 
 ### Uploader
-
 - **Single-SPA** - Framework orquestrador de microfrontends
-- **React** - Microfrontend de dashboard
-- **Angular** - Microfrontend de upload e visualização
+- **React** - Microfrontend de upload
+- **Angular** - Microfrontend de visualização
 - **Webpack 5** - Module bundler
 - **TypeScript** - Tipagem estática
 
@@ -340,13 +314,11 @@ O build será gerado na pasta `backoffice/storybook-static/`.
 ### Eventos Suportados
 
 **Do Backoffice para Uploader:**
-
 - `INIT_UPLOAD`: Inicializar processo de upload
 - `transaction-id`: ID da transação (via URL query)
 - `user-id`: ID do usuário autenticado
 
 **Do Uploader para Backoffice:**
-
 - `FILE_UPLOADED`: Arquivo enviado com sucesso
 - `FILE_ERROR`: Erro no upload
 - `NAVIGATION_REQUEST`: Navegação solicitada pelo microfrontend
@@ -362,9 +334,8 @@ O build será gerado na pasta `backoffice/storybook-static/`.
 
 ### Microfrontend Uploader
 
-- ✅ **Upload de PDFs**: Interface Angular para envio de documentos
+- ✅ **Upload de PDFs**: Interface React para envio de documentos
 - ✅ **Visualizador de PDFs**: Interface Angular para visualização de documentos
-- ✅ **Dashboard Financeiro**: Interface React para gráficos e análises
 - ✅ **Comunicação Bidirecional**: Integração com backoffice via postMessage
 
 ## 🏆 Objetivos de Aprendizado

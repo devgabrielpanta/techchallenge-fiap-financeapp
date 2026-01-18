@@ -1,5 +1,0 @@
-# Ignorar todos os arquivos PDF enviados pelos usuários
-*.pdf
-
-# Manter o .gitkeep para versionar a pasta vazia
-!.gitkeep

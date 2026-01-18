@@ -1,24 +1,28 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button/Button"
-import { useUser } from "@/context/UserContext"
-import { cn } from "@/lib/utils"
-import { useRouter } from "next/navigation"
-import ExtractCard from "./ExtractCard"
-
+import { Button } from "@/components/ui/button/Button";
+import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import ExtractCard from "./ExtractCard";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { usePathname } from "next/navigation";
 interface ExtractProps {
-  children?: React.ReactNode
+  children?: React.ReactNode;
 }
 
 export const Extract: React.FC<ExtractProps> = () => {
-  const { user } = useUser()
-  const router = useRouter()
+  const user = useSelector((state: RootState) => state.global.user);
+  const pathname = usePathname();
+  const showExtract = !pathname?.includes("/extract");
+  const router = useRouter();
 
   // Últimas transações
   const lastFiveTransactions = [...user.transactionList]
     .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()) // mais recentes primeiro
-    .slice(0, 5) // pega os 5 primeiros
+    .slice(0, 5); // pega os 5 primeiros
 
+  if (!showExtract) return null;
   return (
     <aside
       className={cn(
@@ -29,7 +33,7 @@ export const Extract: React.FC<ExtractProps> = () => {
         // Desktop
         "lg:sticky lg:top-[64px] lg:h-[calc(100vh-84px)]",
         "lg:m-[10px]",
-        "flex flex-col justify-between"
+        "flex flex-col justify-between",
       )}
     >
       <div className="p-4 flex flex-col gap-3">
@@ -69,5 +73,5 @@ export const Extract: React.FC<ExtractProps> = () => {
         )}
       </div>
     </aside>
-  )
-}
+  );
+};

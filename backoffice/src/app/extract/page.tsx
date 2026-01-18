@@ -1,102 +1,125 @@
-"use client"
-import ExtractCard from "@/components/extract/ExtractCard"
-import { columns } from "@/components/transactions-table/TransactionsColumn"
-import TransactionsFilters from "@/components/transactions-table/TransactionsFilters"
-import { DataTable } from "@/components/transactions-table/TransactionsTable"
-import { Button } from "@/components/ui/button/Button"
-import { useUser } from "@/context/UserContext"
-import { SlidersHorizontal } from "lucide-react"
-import { useEffect, useState } from "react"
+"use client";
+import ExtractCard from "@/components/extract/ExtractCard";
+import { columns } from "@/components/transactions-table/TransactionsColumn";
+import TransactionsFilters from "@/components/transactions-table/TransactionsFilters";
+import { DataTable } from "@/components/transactions-table/TransactionsTable";
+import { Button } from "@/components/ui/button/Button";
+import { SlidersHorizontal } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/store/store";
+import {
+  Command,
+  CommandDialog,
+  CommandEmpty,
+  CommandInput,
+  CommandItem,
+  CommandList,
+} from "@/components/ui/command/Command";
+import { createCategoryTransaction } from "@/store/slices/transactionSlice";
 
 export default function ExtractPage() {
-  const { user } = useUser()
+  const dispatch = useDispatch<AppDispatch>();
 
   // Transações
-  const transactions = user.transactionList
-  const [filteredTransactions, setFilteredTransactions] = useState(transactions)
-  const [paginatedList, setPaginatedList] = useState(transactions)
+  const transactions = useSelector(
+    (state: RootState) => state.global.user.transactionList,
+  );
+  const [filteredTransactions, setFilteredTransactions] =
+    useState(transactions);
+  const [paginatedList, setPaginatedList] = useState(transactions);
 
   // Filtros
-  const [searchTerm, setSearchTerm] = useState("")
-  const [openFilters, setOpenFilters] = useState(false)
+  const [searchTerm, setSearchTerm] = useState("");
+  const [openFilters, setOpenFilters] = useState(false);
 
   // Paginação e carregamento infinito
-  const [visibleCount, setVisibleCount] = useState(10)
-  const [isMobile, setIsMobile] = useState(false)
-  const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 10
+  const [visibleCount, setVisibleCount] = useState(10);
+  const [isMobile, setIsMobile] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  // Dialog de adicionar por categoria
+  const [openCategoryDialog, setOpenCategoryDialog] = useState(false);
 
   // Detecta se é mobile
   useEffect(() => {
-    const handleResize = () => setIsMobile(window.innerWidth < 1024)
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    return () => window.removeEventListener("resize", handleResize)
-  }, [])
+    const handleResize = () => setIsMobile(window.innerWidth < 1024);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Filtragem dos dados
   useEffect(() => {
     if (searchTerm.length === 0) {
-      return setFilteredTransactions(transactions)
+      return setFilteredTransactions(transactions);
     }
     const filteredList = transactions.filter((t) => {
-      const term = searchTerm.toLowerCase()
-      const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
-      const isNumber = numbers.includes(term[0])
+      const term = searchTerm.toLowerCase();
+      const numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
+      const isNumber = numbers.includes(term[0]);
       if (isNumber) {
         return (
           t.amount.toString().includes(term) ||
           new Date(t.date).toLocaleDateString("pt-BR").includes(term)
-        )
+        );
       }
       return (
         t.operation.toLowerCase().includes(term) ||
-        t.bank.toLowerCase().includes(term)
-      )
-    })
-    setFilteredTransactions(filteredList)
-  }, [searchTerm, user]) //eslint-disable-line react-hooks/exhaustive-deps
+        t.category.toLowerCase().includes(term) ||
+        t.description.toLowerCase().includes(term)
+      );
+    });
+    setFilteredTransactions(filteredList);
+  }, [searchTerm, transactions]); //eslint-disable-line react-hooks/exhaustive-deps
 
   // Paginação
-  const totalItems = filteredTransactions.length
-  const totalPages = Math.ceil(totalItems / itemsPerPage)
+  const totalItems = filteredTransactions.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
 
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const endIndex = Math.min(startIndex + itemsPerPage, totalItems)
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = Math.min(startIndex + itemsPerPage, totalItems);
 
   useEffect(() => {
     const paginatedListData = isMobile
       ? filteredTransactions.slice(0, visibleCount)
-      : filteredTransactions.slice(startIndex, endIndex)
-    setPaginatedList(paginatedListData)
-  }, [filteredTransactions, currentPage]) //eslint-disable-line react-hooks/exhaustive-deps
+      : filteredTransactions.slice(startIndex, endIndex);
+    setPaginatedList(paginatedListData);
+  }, [filteredTransactions, currentPage]); //eslint-disable-line react-hooks/exhaustive-deps
 
   // Aplica carregamento infinito no mobile
   useEffect(() => {
-    if (!isMobile) return
+    if (!isMobile) return;
 
     const handleScroll = () => {
       const bottom =
-        window.innerHeight + window.scrollY >= document.body.offsetHeight - 100
+        window.innerHeight + window.scrollY >= document.body.offsetHeight - 100;
       if (bottom && visibleCount < filteredTransactions.length) {
         setTimeout(() => {
-          setVisibleCount((prev) => prev + 5)
-        }, 600)
+          setVisibleCount((prev) => prev + 5);
+        }, 600);
       }
-    }
+    };
 
-    window.addEventListener("scroll", handleScroll)
-    return () => window.removeEventListener("scroll", handleScroll)
-  }, [isMobile, visibleCount, filteredTransactions.length])
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isMobile, visibleCount, filteredTransactions.length]);
 
   // Troca de página na tabela no desktop
   const handleNext = () => {
-    if (currentPage < totalPages) setCurrentPage((p) => p + 1)
-  }
+    if (currentPage < totalPages) setCurrentPage((p) => p + 1);
+  };
 
   const handlePrev = () => {
-    if (currentPage > 1) setCurrentPage((p) => p - 1)
-  }
+    if (currentPage > 1) setCurrentPage((p) => p - 1);
+  };
+
+  // Fecha o dialog e inicia a criação por categoria
+  const startAddingToCategory = (category: string) => {
+    setOpenCategoryDialog(false);
+    dispatch(createCategoryTransaction(category));
+  };
 
   return (
     <div className="flex flex-col gap-6 pb-10">
@@ -105,28 +128,63 @@ export default function ExtractPage() {
       </h1>
 
       <div className="relative container mx-auto py-10">
-        <div className="flex gap-2 mb-4 flex-row justify-between md:justify-start items-center">
-          {/** Search bar */}
-          <input
-            type="text"
-            placeholder="Pesquisar..."
-            value={searchTerm}
-            onChange={(e) => {
-              setSearchTerm(e.target.value)
-              setCurrentPage(1)
-            }}
-            className="p-2 border border-[var(--color-border)] rounded-md w-full md:w-96
-          text-[var(--color-text)] placeholder:text-[var(--color-text-muted)]
-          bg-[var(--color-surface)] focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none"
-          />
-          {/** Botão com ícone de filtro */}
-          <Button
-            variant="outline"
-            className="p-2 border border-[var(--color-border)] rounded-md text-[var(--color-text)] bg-[var(--color-surface)] cursor-pointer"
-            onClick={() => setOpenFilters(true)}
-          >
-            Filtar por... <SlidersHorizontal />
-          </Button>
+        <div className="grid grid-cols-1 md:grid-cols-2 space-y-2">
+          {/** Dialog de adicionar por categoria */}
+          <div className="order-1 md:order-2 flex justify-center md:justify-end w-full h-fit">
+            <Button className="" onClick={() => setOpenCategoryDialog(true)}>
+              Adicionar transação por categoria
+            </Button>
+
+            <CommandDialog
+              open={openCategoryDialog}
+              onOpenChange={setOpenCategoryDialog}
+            >
+              <Command className="rounded-lg border shadow-md md:min-w-[450px]">
+                <CommandInput placeholder="Presquisar por uma categoria..." />
+                <CommandList>
+                  <CommandEmpty>No results found.</CommandEmpty>
+                  {Array.from(new Set(transactions.map((t) => t.category))).map(
+                    (category) => (
+                      <CommandItem
+                        key={`cmd-item-${category}`}
+                        onSelect={() => startAddingToCategory(category)}
+                        className="group cursor-pointer hover:bg-[var(--color-hover)] active:bg-[var(--color-hover)]"
+                      >
+                        <span className="font-medium group-hover:font-semibold group-active:font-semibold group-hover:text-[var(--color-primary)] group-active:text-[var(--color-primary)]">
+                          {category}
+                        </span>
+                      </CommandItem>
+                    ),
+                  )}
+                </CommandList>
+              </Command>
+            </CommandDialog>
+          </div>
+
+          <div className="order-2 md:order-1 flex gap-2 mb-4 flex-row justify-between md:justify-start items-center">
+            {/** Search bar */}
+            <input
+              type="text"
+              placeholder="Pesquisar..."
+              value={searchTerm}
+              onChange={(e) => {
+                setSearchTerm(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="p-2 border border-[var(--color-border)] rounded-md w-full md:w-96
+              text-[var(--color-text)] placeholder:text-[var(--color-text-muted)]
+              bg-[var(--color-surface)] focus:ring-2 focus:ring-[var(--color-primary)] focus:outline-none"
+            />
+            {/** Filtros */}
+            <Button
+              variant="outline"
+              className="p-2 border border-[var(--color-border)] rounded-md text-[var(--color-text)] bg-[var(--color-surface)] cursor-pointer gap-2"
+              onClick={() => setOpenFilters(true)}
+            >
+              <span className="hidden md:block">Filtros</span>
+              <SlidersHorizontal />
+            </Button>
+          </div>
         </div>
 
         <div className="overflow-x-auto rounded-md border border-[var(--color-border)]">
@@ -199,5 +257,5 @@ export default function ExtractPage() {
         />
       )}
     </div>
-  )
+  );
 }

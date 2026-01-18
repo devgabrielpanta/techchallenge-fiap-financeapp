@@ -13,7 +13,7 @@ interface TableButtonProps {
 const TableButton: React.FC<TableButtonProps> = ({ column, span }) => (
   <Button
     style={{ padding: "0" }}
-    className="font-bold cursor-pointer hover:scale-102 active:scale-102 transition-transform duration-200"
+    className="font-bold cursor-pointer hover:scale-102 active:scale-102 transition-transform duration-200 hover:bg-transparent hover:text-[var(--color-primary)] hover:underline"
     variant="ghost"
     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
   >
@@ -24,21 +24,32 @@ const TableButton: React.FC<TableButtonProps> = ({ column, span }) => (
 
 export const columns: ColumnDef<TransactionType>[] = [
   {
+    accessorKey: "date",
+    header: ({ column }) => {
+      return <TableButton column={column} span="Data" />;
+    },
+    cell: ({ getValue }) => {
+      const date = new Date(getValue() as string);
+      return date.toLocaleDateString("pt-BR", { timeZone: "UTC" });
+    },
+  },
+  {
+    accessorKey: "category",
+    header: ({ column }) => {
+      return <TableButton column={column} span="Categoria" />;
+    },
+  },
+  {
     accessorKey: "operation",
     header: ({ column }) => {
       return <TableButton column={column} span="Tipo de pagamento" />;
     },
   },
   {
-    accessorKey: "bank",
-    header: ({ column }) => {
-      return <TableButton column={column} span="Nome/Instituição" />;
-    },
-  },
-  {
+    id: "amount-income",
     accessorKey: "amount",
     header: ({ column }) => {
-      return <TableButton column={column} span="Valor" />;
+      return <TableButton column={column} span="Entradas" />;
     },
     cell: ({ getValue, row }) => {
       const amount = getValue() as number;
@@ -48,23 +59,30 @@ export const columns: ColumnDef<TransactionType>[] = [
       });
       return (
         <span
-          className={`${
-            row.original.type === "entradas" ? "text-green-500" : "text-red-500"
-          }`}
+          className={row.original.type === "entradas" ? "text-green-500" : ""}
         >
-          {formattedAmount}
+          {row.original.type === "entradas" ? formattedAmount : "-"}
         </span>
       );
     },
   },
   {
-    accessorKey: "date",
+    id: "amount-expense",
+    accessorKey: "amount",
     header: ({ column }) => {
-      return <TableButton column={column} span="Data" />;
+      return <TableButton column={column} span="Saídas" />;
     },
-    cell: ({ getValue }) => {
-      const date = new Date(getValue() as string);
-      return date.toLocaleDateString("pt-BR", { timeZone: "UTC" });
+    cell: ({ getValue, row }) => {
+      const amount = getValue() as number;
+      const formattedAmount = amount.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL",
+      });
+      return (
+        <span className={row.original.type === "saidas" ? "text-red-500" : ""}>
+          {row.original.type === "saidas" ? formattedAmount : "-"}
+        </span>
+      );
     },
   },
 ];
