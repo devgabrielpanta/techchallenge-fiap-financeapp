@@ -58,10 +58,18 @@ export const TransactionModal = () => {
     formatCurrencyInput(String(transactionData?.amount) || "0"),
   );
   const [hasChanges, setHasChanges] = useState<boolean>(false);
+  const [uploadedFile, setUploadedFile] = useState<{
+    fileId: string;
+    fileName: string;
+    fileSize: number;
+    fileData?: string;
+  } | null>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const [iframeReady, setIframeReady] = useState(false);
   const [addingCategory, setAddingCategory] = useState<boolean>(false);
   const [newCategoryError, setNewCategoryError] = useState<string>("");
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!transactionData) return;
     // Validações
     if (transactionData.category === "") {
@@ -74,16 +82,75 @@ export const TransactionModal = () => {
     }
 
     let updatedTransactions: TransactionType[] | [] = user.transactionList;
+    let attachmentToSave = uploadedFile;
+
+    // Se há um novo arquivo com dados, salva no servidor
+    if (uploadedFile?.fileData) {
+      try {
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            fileId: uploadedFile.fileId,
+            fileName: uploadedFile.fileName,
+            fileData: uploadedFile.fileData,
+          }),
+        });
+
+        if (!response.ok) {
+          alert("Erro ao salvar arquivo");
+          return;
+        }
+
+        attachmentToSave = {
+          fileId: uploadedFile.fileId,
+          fileName: uploadedFile.fileName,
+          fileSize: uploadedFile.fileSize,
+        };
+      } catch (error) {
+        console.error("Error saving file:", error);
+        alert("Erro ao salvar arquivo");
+        return;
+      }
+    }
 
     if (transactionAction === "create") {
       const newTransaction = {
         ...transactionData,
         id: new Date().getTime(),
+        attachment: attachmentToSave || undefined,
       };
       updatedTransactions = [newTransaction, ...user.transactionList];
     } else if (transactionAction === "edit") {
+      const originalTransaction = user.transactionList.find(
+        (t) => t.id === transactionData.id,
+      );
+
+      // Se o arquivo foi removido ou substituído, deleta o antigo
+      if (
+        originalTransaction?.attachment?.fileId &&
+        originalTransaction.attachment.fileId !== uploadedFile?.fileId
+      ) {
+        try {
+          await fetch("/api/upload", {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              fileId: originalTransaction.attachment.fileId,
+            }),
+          });
+        } catch (error) {
+          console.error("Error deleting old file:", error);
+        }
+      }
+
       updatedTransactions = user.transactionList.map((t) =>
-        t.id === transactionData.id ? (transactionData as TransactionType) : t,
+        t.id === transactionData.id
+          ? ({
+              ...transactionData,
+              attachment: attachmentToSave || undefined,
+            } as TransactionType)
+          : t,
       );
     }
 
@@ -110,12 +177,60 @@ export const TransactionModal = () => {
   };
 
   useEffect(() => {
+    setIframeReady(false);
     if (transactionAction === "edit" && transactionData) {
       setDisplayAmount(
         formatCurrencyInput(String(transactionData.amount * 100)),
       );
+      setUploadedFile(transactionData.attachment || null);
+    } else if (transactionAction === "create") {
+      setDisplayAmount(formatCurrencyInput("0"));
+      setUploadedFile(null);
     }
   }, [transactionAction]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (!iframeReady || !iframeRef.current?.contentWindow) return;
+
+    try {
+      if (transactionAction === "edit" && transactionData?.attachment) {
+        iframeRef.current.contentWindow.postMessage(
+          {
+            type: "LOAD_ATTACHMENT",
+            attachment: transactionData.attachment,
+          },
+          "http://localhost:4200",
+        );
+      } else if (transactionAction === "create") {
+        iframeRef.current.contentWindow.postMessage(
+          { type: "CLEAR_ATTACHMENT" },
+          "http://localhost:4200",
+        );
+      }
+    } catch (error) {
+      console.error("Error sending message to iframe:", error);
+    }
+  }, [iframeReady, transactionAction, transactionData?.attachment]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    const handleMessage = async (event: MessageEvent) => {
+      if (event.origin !== "http://localhost:4200") return;
+
+      if (event.data.type === "FILE_UPLOADED") {
+        setUploadedFile({
+          fileId: event.data.fileId,
+          fileName: event.data.fileName,
+          fileSize: event.data.fileSize,
+          fileData: event.data.fileData,
+        });
+      } else if (event.data.type === "FILE_REMOVED") {
+        setUploadedFile(null);
+      }
+    };
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
 
   // toda vez que displayAmount muda → atualiza transactionData.amount (como número)
   useEffect(() => {
@@ -146,6 +261,9 @@ export const TransactionModal = () => {
     );
     if (!originalTransaction) return;
 
+    const attachmentChanged =
+      originalTransaction.attachment?.fileId !== uploadedFile?.fileId;
+
     // Verifica se houve mudanças comparando os campos
     const changed =
       originalTransaction.category !== transactionData.category ||
@@ -155,7 +273,8 @@ export const TransactionModal = () => {
       originalTransaction.amount !== transactionData.amount ||
       originalTransaction.currency !== transactionData.currency ||
       new Date(originalTransaction.date).toISOString() !==
-        new Date(transactionData.date).toISOString();
+        new Date(transactionData.date).toISOString() ||
+      attachmentChanged;
     setHasChanges(changed);
   }, [transactionData, transactionAction]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -424,6 +543,24 @@ export const TransactionModal = () => {
                   </option>
                 </select>
               )}
+            </div>
+
+            {/* ANEXAR DOCUMENTO */}
+            <div className="flex flex-col gap-1">
+              <label className="text-sm font-medium text-[var(--color-text)]">
+                Anexar Documento
+              </label>
+              <div className="relative w-full h-[60px]">
+                <iframe
+                  ref={iframeRef}
+                  src="http://localhost:4200/upload"
+                  className="w-full h-full border-0"
+                  title="Upload de Documento"
+                  style={{ overflow: "hidden" }}
+                  loading="eager"
+                  onLoad={() => setIframeReady(true)}
+                />
+              </div>
             </div>
 
             <div className="flex flex-row gap-2 justify-center items-center mt-4">

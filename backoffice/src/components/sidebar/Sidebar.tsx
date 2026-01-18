@@ -12,7 +12,7 @@ import { startCreateTransaction } from "@/store/slices/transactionSlice";
 const links = [
   { label: "Início", href: "/" },
   { label: "Extrato", href: "/extract" },
-  { label: "Upload", href: "/upload" },
+  { label: "Dashboard", href: "/dashboard" },
 ];
 
 export const Sidebar: React.FC = () => {

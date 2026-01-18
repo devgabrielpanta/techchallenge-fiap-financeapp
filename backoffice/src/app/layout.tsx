@@ -66,6 +66,14 @@ export default async function RootLayout({
           </div>
           <Feedback />
           <TransactionModal />
+
+          {/* Iframe oculto para pré-carregar o componente Angular */}
+          <iframe
+            src="http://localhost:4200/upload"
+            className="hidden"
+            title="Preload Upload Component"
+            aria-hidden="true"
+          />
         </ReduxProvider>
       </body>
     </html>
