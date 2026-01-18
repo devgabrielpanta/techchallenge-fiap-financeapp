@@ -19,7 +19,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   const links = [
     { label: "Início", href: "/" },
     { label: "Extrato", href: "/extract" },
-    { label: "Upload", href: "/upload" },
+    { label: "Dashboard", href: "/dashboard" },
   ];
 
   // Aplica o tema
@@ -75,6 +75,14 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               </div>
             </div>
             <TransactionModal />
+
+            {/* Iframe oculto para pré-carregar o componente Angular */}
+            <iframe
+              src="http://localhost:4200/upload"
+              className="hidden"
+              title="Preload Upload Component"
+              aria-hidden="true"
+            />
           </TransactionModalProvider>
         </UserProvider>
       </body>
