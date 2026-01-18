@@ -14,7 +14,11 @@ export function ReduxHydration({
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
-    dispatch(setUserTransactions(transactions));
+    const mappedTransactions = transactions.map((transaction) => ({
+      ...transaction,
+      date: new Date(transaction.date).toISOString(),
+    }));
+    dispatch(setUserTransactions(mappedTransactions));
   }, [dispatch, transactions]);
 
   return null;

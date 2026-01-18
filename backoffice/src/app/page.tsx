@@ -29,7 +29,7 @@ export default function HomePage() {
             Olá, {user.name}! :)
           </h1>
           <span className="capitalize">
-            {user.date.toLocaleDateString("pt-BR", {
+            {new Date(user.date).toLocaleDateString("pt-BR", {
               weekday: "long",
               day: "2-digit",
               month: "2-digit",
