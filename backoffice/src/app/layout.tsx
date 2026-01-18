@@ -19,6 +19,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   const links = [
     { label: "Início", href: "/" },
     { label: "Extrato", href: "/extract" },
+    { label: "Upload", href: "/upload" },
   ];
 
   // Aplica o tema
