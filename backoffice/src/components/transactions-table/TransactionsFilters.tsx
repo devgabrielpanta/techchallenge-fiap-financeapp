@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { Button } from "@/components/ui/button/Button"
-import { Checkbox } from "@/components/ui/checkbox/Checkbox"
+import { Button } from "@/components/ui/button/Button";
+import { Checkbox } from "@/components/ui/checkbox/Checkbox";
 import {
   Drawer,
   DrawerClose,
@@ -10,10 +10,10 @@ import {
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
-} from "@/components/ui/drawer/Drawer"
-import { Label } from "@/components/ui/label/Label"
-import type { TransactionType } from "@/schemas/dataSchema"
-import * as React from "react"
+} from "@/components/ui/drawer/Drawer";
+import { Label } from "@/components/ui/label/Label";
+import type { TransactionType } from "@/schemas/dataSchema";
+import * as React from "react";
 
 type FilterSchema = {
   category: string[];
@@ -23,16 +23,16 @@ type FilterSchema = {
 
 function generateFilters(transactionsList: TransactionType[]) {
   const category = new Set<string>();
-  const type = new Set<string>()
-  const operation = new Set<string>()
+  const type = new Set<string>();
+  const operation = new Set<string>();
 
   transactionsList.forEach((tx) => {
-    category.add(tx.category)
+    category.add(tx.category);
     type.add(
-      tx.type.replace("entradas", "Entradas").replace("saidas", "Saídas")
-    )
-    operation.add(tx.operation)
-  })
+      tx.type.replace("entradas", "Entradas").replace("saidas", "Saídas"),
+    );
+    operation.add(tx.operation);
+  });
 
   const filters: FilterSchema = {
     type: Array.from(type),
@@ -40,7 +40,7 @@ function generateFilters(transactionsList: TransactionType[]) {
     operation: Array.from(operation),
   };
 
-  return filters
+  return filters;
 }
 
 export default function TransactionsFilters({
@@ -50,15 +50,15 @@ export default function TransactionsFilters({
   openFilters,
   setOpenFilters,
 }: {
-  transactions: TransactionType[]
-  filteredTransactions: TransactionType[]
+  transactions: TransactionType[];
+  filteredTransactions: TransactionType[];
   setFilteredTransactions: React.Dispatch<
     React.SetStateAction<TransactionType[]>
-  >
-  openFilters: boolean
-  setOpenFilters: React.Dispatch<React.SetStateAction<boolean>>
+  >;
+  openFilters: boolean;
+  setOpenFilters: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
-  const filters = generateFilters(transactions)
+  const filters = generateFilters(transactions);
 
   const handleCheckboxChange = (
     value: string,
@@ -91,11 +91,11 @@ export default function TransactionsFilters({
         <div className="flex flex-col gap-6 px-4">
           {Object.keys(filters).map((obj) => {
             const group =
-              obj === "bank"
-                ? "Nome/Instituição"
+              obj === "category"
+                ? "Categoria"
                 : obj === "type"
-                ? "Natureza do pagamento"
-                : "Tipo de pagamento"
+                  ? "Natureza do pagamento"
+                  : "Tipo de pagamento";
             return (
               <div key={obj}>
                 <h4 className="text-lg font-bold text-[var(--color-text-muted)] ">
@@ -106,7 +106,7 @@ export default function TransactionsFilters({
                   {filters[obj as keyof FilterSchema].map((filter) => {
                     const transactionFilter = filter
                       .replace("Entradas", "entradas")
-                      .replace("Saídas", "saidas")
+                      .replace("Saídas", "saidas");
                     return (
                       <li
                         key={filter}
@@ -117,14 +117,14 @@ export default function TransactionsFilters({
                           id={filter}
                           checked={filteredTransactions.some((transaction) =>
                             transaction[obj as keyof FilterSchema].includes(
-                              transactionFilter
-                            )
+                              transactionFilter,
+                            ),
                           )}
                           onCheckedChange={(checked) =>
                             handleCheckboxChange(
                               transactionFilter,
                               checked,
-                              obj as "category" | "type" | "operation"
+                              obj as "category" | "type" | "operation",
                             )
                           }
                         />
@@ -132,11 +132,11 @@ export default function TransactionsFilters({
                           {filter}
                         </Label>
                       </li>
-                    )
+                    );
                   })}
                 </ul>
               </div>
-            )
+            );
           })}
         </div>
         <DrawerFooter className="pt-2">
@@ -151,5 +151,5 @@ export default function TransactionsFilters({
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  )
+  );
 }
