@@ -1,5 +1,3 @@
-"use client";
-
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -48,12 +46,14 @@ export default function RankingByCategoryChart({ period }: Props) {
       {
         label: "Despesas",
         data: sorted.map((c) => c.amount),
-        backgroundColor: sorted.map(
-          (_, idx) =>
-            ["#EF4444", "#F97316", "#EAB308", "#22C55E", "#3B82F6", "#6366F1"][
-              idx % 6
-            ]
-        ),
+        backgroundColor: [
+          "#6d28d9",
+          "#ef4444",
+          "#f59e0b",
+          "#6366f1",
+          "#22c55e",
+          "#0ea5e9",
+        ],
       } as ChartDataset<"bar", number[]>,
     ],
   };
@@ -86,7 +86,7 @@ export default function RankingByCategoryChart({ period }: Props) {
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 h-[400px] flex flex-col">
+    <div className="bg-[var(--color-surface)] p-4 rounded-[var(--radius-md)] shadow-sm border border-[var(--color-border)] h-[400px] flex flex-col">
       <h2 className="text-lg font-semibold mb-4">
         Ranking de Categorias ({periodLabel})
       </h2>

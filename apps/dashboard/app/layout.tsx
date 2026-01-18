@@ -1,4 +1,3 @@
-// app/layout.tsx
 import './globals.css';
 import { ReduxProvider } from './providers/redux-provider';
 
@@ -9,7 +8,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body>
+      <body className="bg-transparent text-inherit ">
         <ReduxProvider>{children}</ReduxProvider>
       </body>
     </html>

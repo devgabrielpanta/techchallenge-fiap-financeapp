@@ -1,5 +1,3 @@
-'use client';
-
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,8 +6,8 @@ import {
   LineElement,
   Tooltip,
   Legend,
-} from 'chart.js';
-import { Line } from 'react-chartjs-2';
+} from "chart.js";
+import { Line } from "react-chartjs-2";
 
 ChartJS.register(
   CategoryScale,
@@ -22,19 +20,19 @@ ChartJS.register(
 
 export default function LineChart() {
   const data = {
-    labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
+    labels: ["Jan", "Fev", "Mar", "Abr", "Mai"],
     datasets: [
       {
-        label: 'Receitas',
+        label: "Receitas",
         data: [12000, 15000, 14000, 18000, 20000],
-        borderColor: '#10B981',
-        backgroundColor: 'rgba(16, 185, 129, 0.2)',
+        borderColor: "#22c55e",
+        backgroundColor: "rgba(16, 185, 129, 0.2)",
       },
       {
-        label: 'Despesas',
+        label: "Despesas",
         data: [8000, 9000, 11000, 10000, 13000],
-        borderColor: '#EF4444',
-        backgroundColor: 'rgba(239, 68, 68, 0.2)',
+        borderColor: "#ef4444",
+        backgroundColor: "rgba(239, 68, 68, 0.2)",
       },
     ],
   };
@@ -43,7 +41,7 @@ export default function LineChart() {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: "top" as const,
       },
     },
   };

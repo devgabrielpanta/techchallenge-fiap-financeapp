@@ -1,0 +1,133 @@
+/* -------------------------------
+   🎨 THEME CONFIGURATION
+-------------------------------- */
+
+@custom-variant dark (&:is(.dark *));
+
+/*  Design Tokens - Tema Principal (Bytebank) */
+@theme bytebank-theme {
+  /* Cores principais */
+  --color-primary: #6d28d9; /* Roxo principal */
+  --color-secondary: #4c1d95; /* Roxo escuro */
+  --color-elements: #202024; /* Fundo intermediário */
+  --color-background: #09090b; /* Fundo geral */
+  --color-surface: #1a1a1a; /* Cards, blocos */
+  --color-title: #c4c4cc; /* Texto principal */
+  --color-text: #e1e1e6; /* Títulos */
+  --color-white: #ffffff; /* Branco puro */
+  --color-text-muted: #a1a1aa; /* Texto secundário */
+  --color-border: #4c4c4c; /* Linhas e divisores */
+  --color-success: #16a34a; /* Verde sucesso */
+  --color-error: #dc2626; /* Vermelho erro */
+
+  /* Tipografia */
+  --font-sans: "Inter", sans-serif;
+
+  /* Font sizes */
+  --text-xxs: 0.5rem; /* 8px */
+  --text-xs: 0.75rem; /* 12px */
+  --text-sm: 0.875rem; /* 14px */
+  --text-base: 1rem; /* 16px */
+  --text-lg: 1.125rem; /* 18px */
+  --text-xl: 1.25rem; /* 20px */
+  --text-2xl: 1.5rem; /* 24px */
+  --text-3xl: 2rem; /* 32px */
+
+  /* Font weights */
+  --font-light: 300;
+  --font-regular: 400;
+  --font-bold: 700;
+
+  /* Line height base (120%) */
+  --line-height-base: 1.2;
+
+  /* Radius e espaçamento */
+  --radius-sm: 0.25rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+
+  /* Transições */
+  --transition-base: 150ms ease-in-out;
+}
+
+.light {
+  --color-background: #ffffff;
+  --color-surface: #f4f4f5;
+  --color-text: #1f1f23;
+  --color-text-muted: #6b6b72;
+  --color-border: #e5e5e5;
+  --color-primary: #4c1d95;
+  --color-secondary: #6d28d9;
+  --color-hover: rgba(0, 0, 0, 0.05);
+}
+
+/* -------------------------------
+   🌙 Tema Escuro (automático)
+-------------------------------- */
+.dark {
+  --color-background: #0c0c0d;
+  --color-surface: #18181a;
+  --color-text: #e1e1e6;
+  --color-text-muted: #a1a1aa;
+  --color-border: #3f3f46;
+  --color-primary: #4c1d95;
+  --color-secondary: #6d28d9;
+  --color-hover: rgba(255, 255, 255, 0.08);
+}
+
+@layer base {
+  html {
+    background-color: var(--color-background);
+    color: var(--color-text);
+    font-family: "Inter", sans-serif;
+    line-height: var(--line-height-base);
+    transition:
+      background-color var(--transition-base),
+      color var(--transition-base);
+  }
+
+  * {
+    @apply border-[--color-border] outline-[--color-primary]/50;
+
+    /* Customização do scrollbar para Firefox */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) var(--color-surface);
+  }
+
+  body {
+    @apply bg-[--color-background] text-[--color-text] font-sans;
+  }
+
+  /* ------ Swiper Customização ------- */
+  .swiper-pagination-bullet {
+    background-color: var(--color-primary) !important;
+    opacity: 0.3 !important;
+  }
+
+  .swiper-pagination-bullet-active {
+    background-color: var(--color-primary) !important;
+    opacity: 1 !important;
+  }
+
+  /* ------ Customização do Scrollbar ------- */
+  ::-webkit-scrollbar {
+    width: 8px; /* Largura da barra */
+    height: 8px; /* Altura se for horizontal */
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-surface); /* Fundo da barra */
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary); /* Cor do “polegar” */
+    border-radius: 4px;
+    border: 2px solid var(--color-surface); /* Espaçamento ao redor */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--color-secondary); /* Cor ao passar o mouse */
+  }
+}

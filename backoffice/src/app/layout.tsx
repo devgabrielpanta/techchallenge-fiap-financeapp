@@ -14,12 +14,14 @@ import { user } from "@/utils/appUtils";
 export default function RootLayout({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<"light" | "dark">("light");
   const pathname = usePathname();
-  const showExtract = !pathname?.includes("/extract");
+  const showExtract =
+    !pathname?.includes("/extract") && !pathname?.includes("/dashboard");
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const links = [
     { label: "Início", href: "/" },
     { label: "Extrato", href: "/extract" },
     { label: "Upload", href: "/upload" },
+    { label: "Dashboard", href: "/dashboard" },
   ];
 
   // Aplica o tema
@@ -32,7 +34,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className="light">
       <body className="min-h-screen flex flex-col bg-[var(--color-background)] color-[var(--color-text)] transition-colors">
         <UserProvider user={user}>
           <TransactionModalProvider>
@@ -51,8 +53,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 />
 
                 {/* CONTEÚDO PRINCIPAL */}
-                <div className="flex-1 flex flex-col h-[calc(100vh-64px)] overflow-y-auto gap-10">
-                  <main className="flex-1 p-4">{children}</main>
+                <div className="flex-1 flex flex-col h-[calc(100vh-64px)] min-h-0">
+                  <main className="flex-1 min-h-0 p-4 overflow-y-auto">
+                    {children}
+                  </main>
 
                   {/* EXTRATO - MOBILE */}
                   {showExtract && (

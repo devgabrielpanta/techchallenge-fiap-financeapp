@@ -17,27 +17,27 @@ export default function Card({
   const isNegative = change < 0;
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
-      <p className="text-sm text-gray-500 mb-1">{title}</p>
+    <div className="bg-[var(--color-surface)] p-4 rounded-[var(--radius-md)] shadow-sm border border-[var(--color-border)]">
+      <p className="text-sm text-[var(--color-text-muted)] mb-1">{title}</p>
 
       {isLoading ? (
         <>
-          <div className="h-8 w-32 bg-gray-200 rounded animate-pulse mb-2" />
-          <div className="h-4 w-20 bg-gray-200 rounded animate-pulse" />
+          <div className="h-8 w-32 bg-[var(--color-border)] rounded animate-pulse mb-2" />
+          <div className="h-4 w-20 bg-[var(--color-border)] rounded animate-pulse" />
         </>
       ) : (
         <>
-          <p className="text-2xl font-bold">
+          <p className="text-2xl font-bold text-[var(--color-text)]">
             R$ {value.toLocaleString("pt-BR")}
           </p>
 
           <div
             className={`flex items-center gap-1 text-sm font-medium ${
               isPositive
-                ? "text-green-600"
+                ? "text-[var(--color-success)]"
                 : isNegative
-                  ? "text-red-600"
-                  : "text-gray-500"
+                  ? "text-[var(--color-danger)]"
+                  : "text-[var(--color-text-muted)]"
             }`}
           >
             {isPositive && <ArrowUp size={16} />}

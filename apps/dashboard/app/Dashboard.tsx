@@ -9,9 +9,26 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import RankingByCategoryChart from "./components/RankingByCategoryChart";
 import AccumulatedAreaChart from "./components/AccumulatedAreaChart";
+import { useEffect } from "react";
+
+export function useThemeSync() {
+  useEffect(() => {
+    function handleMessage(event: MessageEvent) {
+      if (event.data?.type === "SET_THEME") {
+        const root = document.documentElement;
+        root.classList.remove("light", "dark");
+        root.classList.add(event.data.theme);
+      }
+    }
+
+    window.addEventListener("message", handleMessage);
+    return () => window.removeEventListener("message", handleMessage);
+  }, []);
+}
 
 export default function DashboardRoot() {
-  // 🔹 Hook unificado para todos os dados do dashboard
+  useThemeSync();
+
   const selectedPeriod = useSelector(
     (state: RootState) => state.dashboard.selectedPeriod
   );
@@ -32,12 +49,13 @@ export default function DashboardRoot() {
     : 0;
 
   return (
-    <div className="grid grid-cols-1 gap-6 p-6">
-      {/* Header + Selector */}
+    <div className="w-full overflow-x-hidden grid grid-cols-1 gap-6 md:pr-4">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Dashboard Financeiro</h1>
-          <p className="text-sm text-gray-500 mb-6">
+          <h1 className="text-3xl font-bold text-[var(--color-text)]">
+            Dashboard Financeiro
+          </h1>
+          <p className="text-sm text-[var(--color-text-muted)] mb-6">
             Visão geral das finanças por período
           </p>
         </div>
@@ -45,7 +63,6 @@ export default function DashboardRoot() {
         <PeriodSelector aria-label="Selecionar período para atualização dos gráficos" />
       </div>
 
-      {/* Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div
           tabIndex={0}
@@ -125,7 +142,7 @@ export default function DashboardRoot() {
           </span>
         )}
       </div>
-      {/* Gráficos */}
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         <div
           tabIndex={0}
@@ -186,7 +203,6 @@ export default function DashboardRoot() {
         </div>
       </div>
 
-      {/* Gráficos complementares */}
       <div
         tabIndex={0}
         aria-label={`Gráfico de área acumulada mostrando a evolução acumulada de receitas e despesas ao longo do período ${selectedPeriod}.`}

@@ -1,4 +1,3 @@
-// FinancialEvolutionChart.tsx
 import { Line } from "react-chartjs-2";
 import { useDashboardData } from "../hooks/useDashboardCharts";
 import type { Period } from "../services/dashboardService";
@@ -25,7 +24,7 @@ ChartJS.register(
 
 type Props = {
   period: Period;
-  showBalanceLine?: boolean; // nova prop opcional
+  showBalanceLine?: boolean;
 };
 
 export default function FinancialEvolutionChart({
@@ -55,20 +54,20 @@ export default function FinancialEvolutionChart({
     {
       label: "Receitas",
       data: charts.evolution.revenue,
-      borderColor: "#22C55E",
+      borderColor: "#22c55e",
       backgroundColor: "rgba(34,197,94,0.15)",
       tension: 0.4,
     },
     {
       label: "Despesas",
       data: charts.evolution.expenses,
-      borderColor: "#EF4444",
+      borderColor: "#ef4444",
       backgroundColor: "rgba(239,68,68,0.15)",
       tension: 0.4,
     },
   ];
 
-  // 🔹 Aqui entra a linha de saldo, se a prop estiver ativa
+  // Aqui entra a linha de saldo, se a prop estiver ativa
   if (showBalanceLine && charts) {
     const saldo = charts.evolution.revenue.map(
       (rev, idx) => rev - charts.evolution.expenses[idx]
@@ -76,7 +75,7 @@ export default function FinancialEvolutionChart({
     datasets.push({
       label: "Saldo",
       data: saldo,
-      borderColor: "#3B82F6",
+      borderColor: "#6d28d9",
       backgroundColor: "rgba(59,130,246,0.1)",
       borderDash: [5, 5],
       tension: 0.4,
@@ -127,7 +126,7 @@ export default function FinancialEvolutionChart({
   };
 
   return (
-    <div className="bg-white p-4 rounded-lg shadow-sm border border-gray-100 h-[350px] flex flex-col">
+    <div className="bg-[var(--color-surface)] p-4 rounded-[var(--radius-md)] shadow-sm border border-[var(--color-border)] h-[350px] flex flex-col">
       <h2 className="text-lg font-semibold mb-4">
         Evolução Financeira ({periodLabel})
       </h2>

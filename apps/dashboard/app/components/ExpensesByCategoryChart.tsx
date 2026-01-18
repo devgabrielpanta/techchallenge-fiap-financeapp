@@ -1,5 +1,3 @@
-"use client";
-
 import { Doughnut } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -19,7 +17,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 type Props = {
   period: Period;
-  showPercentage?: boolean; // nova prop opcional
+  showPercentage?: boolean;
 };
 
 export default function ExpensesByCategoryChart({
@@ -39,7 +37,6 @@ export default function ExpensesByCategoryChart({
   const expensesByCategory = dashboardData?.charts.expensesByCategory ?? [];
   const hasData = expensesByCategory.length > 0;
 
-  // monta chart data com tipagem correta
   const chartData: ChartData<"doughnut", number[], string> = {
     labels: expensesByCategory.map((item) => item.category),
     datasets: [
@@ -47,12 +44,12 @@ export default function ExpensesByCategoryChart({
         label: "Despesas",
         data: expensesByCategory.map((item) => item.amount),
         backgroundColor: [
-          "#EF4444",
-          "#F97316",
-          "#EAB308",
-          "#22C55E",
-          "#3B82F6",
-          "#6366F1",
+          "#6d28d9",
+          "#ef4444",
+          "#f59e0b",
+          "#22c55e",
+          "#6366f1",
+          "#0ea5e9",
         ],
         borderWidth: 1,
       } as ChartDataset<"doughnut", number[]>,
@@ -105,7 +102,7 @@ export default function ExpensesByCategoryChart({
 
   return (
     <div
-      className="bg-white p-4 rounded-lg shadow-sm border border-gray-100"
+      className="bg-[var(--color-surface)] p-4 rounded-[var(--radius-md)] shadow-sm border border-[var(--color-border)]"
       aria-label="Gráfico de despesas por categoria"
     >
       <h2 className="text-lg font-semibold mb-4">
