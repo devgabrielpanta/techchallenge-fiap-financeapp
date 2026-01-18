@@ -8,6 +8,32 @@ import { ReduxHydration } from "@/context/ReduxHydration";
 import { getTransactions } from "@/utils/appUtils";
 import Feedback from "@/components/feedback/Feedback";
 
+// SSG - Static Site Generation - Gerar o HTML estaticamente em tempo de build
+export const metadata = {
+  generator: "Next.js",
+  applicationName: "Baytebank Backoffice",
+  title: "Bytebank",
+  description:
+    "App de gestão financeira desenvolvido para o Tech Challenge da FIAP.",
+  keywords: ["Bytebank", "Tech Challenge", "FIAP", "Gestão Financeira"],
+  authors: [
+    { name: "David Cristian" },
+    { name: "Gabriel Panta" },
+    { name: "Henrique Xavier" },
+    { name: "Tatiane Entler" },
+    { name: "Vinicius Pretti" },
+  ],
+  openGraph: {
+    title: "Bytebank Backoffice",
+    description:
+      "App de gestão financeira desenvolvido para o Tech Challenge da FIAP.",
+    url: "https://github.com/devgabrielpanta/techchallenge-fiap-bytebank",
+    siteName: "Bytebank Backoffice",
+    locale: "pt-BR",
+    type: "website",
+  },
+};
+
 export default async function RootLayout({
   children,
 }: {
