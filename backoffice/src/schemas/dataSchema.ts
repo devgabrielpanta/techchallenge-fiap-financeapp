@@ -1,14 +1,5 @@
 import { z } from "zod";
 
-// BANKS
-export const banksData = [
-  "Banco Santander S.A.",
-  "Nu Pagamentos S.A.",
-  "Caixa Econômica Federal",
-] as const;
-export const BankSchema = z.enum(banksData);
-export type BankType = z.infer<typeof BankSchema>;
-
 // OPERATIONS
 export const operationsData = [
   "PIX",
@@ -23,7 +14,7 @@ export type OperationType = z.infer<typeof OperationSchema>;
 // TRANSACTIONS
 export const TransactionSchema = z.object({
   id: z.number(),
-  bank: BankSchema,
+  category: z.string(),
   type: z.enum(["saidas", "entradas"]),
   operation: OperationSchema,
   description: z.string(),
@@ -37,7 +28,7 @@ export const CreateTransactionSchema = TransactionSchema.extend({
 });
 
 export const transactionSample: CreateTransactionType = {
-  bank: "Banco Santander S.A.",
+  category: "",
   type: "saidas",
   operation: "PIX",
   description: "Transação via PIX",
@@ -48,3 +39,16 @@ export const transactionSample: CreateTransactionType = {
 
 export type CreateTransactionType = z.infer<typeof CreateTransactionSchema>;
 export type TransactionType = z.infer<typeof TransactionSchema>;
+
+export const NewCategorySchema = z
+  .string()
+  .min(3, "A categoria deve ter no mínimo 3 caracteres")
+  .max(30, "A categoria deve ter no máximo 30 caracteres")
+  .refine((value) => !/\d/.test(value), {
+    message: "A categoria não pode conter números",
+  })
+  .refine((value) => /^[A-Za-zÀ-ÖØ-öø-ÿ\s-]+$/.test(value), {
+    message: "A categoria não pode conter caracteres especiais",
+  });
+
+export type NewCategoryType = z.infer<typeof NewCategorySchema>;

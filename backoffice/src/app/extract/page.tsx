@@ -54,7 +54,8 @@ export default function ExtractPage() {
       }
       return (
         t.operation.toLowerCase().includes(term) ||
-        t.bank.toLowerCase().includes(term)
+        t.category.toLowerCase().includes(term) ||
+        t.description.toLowerCase().includes(term)
       );
     });
     setFilteredTransactions(filteredList);

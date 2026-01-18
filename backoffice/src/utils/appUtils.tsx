@@ -1,5 +1,10 @@
 import { transactionList } from "@/utils/transactionsData";
-import { TransactionType } from "@/schemas/dataSchema";
+import {
+  TransactionType,
+  NewCategorySchema,
+  NewCategoryType,
+} from "@/schemas/dataSchema";
+import { ZodSafeParseResult } from "zod";
 
 export interface User {
   name: string;
@@ -26,4 +31,14 @@ export async function getTransactions(): Promise<TransactionType[]> {
       resolve(transactionList);
     }, 100); // Simula um atraso de 100ms
   });
+}
+
+export function validateNewCategory(category: string): string {
+  const result: ZodSafeParseResult<NewCategoryType> =
+    NewCategorySchema.safeParse(category);
+  if (!result.success) {
+    const error = result.error.issues;
+    return error[0]?.message || "categoria inválida";
+  }
+  return "";
 }

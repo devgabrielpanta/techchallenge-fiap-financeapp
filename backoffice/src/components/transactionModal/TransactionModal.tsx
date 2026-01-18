@@ -2,8 +2,6 @@
 
 import { Button } from "@/components/ui/button/Button";
 import {
-  banksData,
-  BankType,
   operationsData,
   OperationType,
   TransactionType,
@@ -117,7 +115,7 @@ export const TransactionModal = () => {
 
     // Verifica se houve mudanças comparando os campos
     const changed =
-      originalTransaction.bank !== transactionData.bank ||
+      originalTransaction.category !== transactionData.category ||
       originalTransaction.type !== transactionData.type ||
       originalTransaction.operation !== transactionData.operation ||
       originalTransaction.description !== transactionData.description ||
@@ -178,27 +176,52 @@ export const TransactionModal = () => {
             {/* SELECT DE BANCO */}
             <div className="flex flex-col gap-1">
               <label
-                htmlFor="bank"
+                htmlFor="category"
                 className="text-sm font-medium text-[var(--color-text)]"
               >
-                Nome / Instituição
+                Categoria
               </label>
               <select
-                id="bank"
-                value={transactionData.bank}
-                onChange={(e) =>
-                  setTransactionData({
-                    ...transactionData,
-                    bank: e.target.value as BankType,
-                  })
-                }
+                id="category"
+                name="category"
+                value={transactionData.category}
+                onChange={(e) => {
+                  const selectedValue = e.target.value;
+                  if (selectedValue === "add-category") {
+                    //setAddingCategory(true);
+                    dispatch(
+                      setTransactionData({
+                        ...transactionData,
+                        category: "",
+                      }),
+                    );
+                  } else {
+                    dispatch(
+                      setTransactionData({
+                        ...transactionData,
+                        category: e.target.value,
+                      }),
+                    );
+                  }
+                }}
                 className="p-2 border border-[var(--color-border)] rounded-md w-full"
               >
-                {banksData.map((b) => (
-                  <option key={b} value={b}>
-                    {b}
+                <option disabled value="">
+                  Selecione...
+                </option>
+                {Array.from(
+                  new Set(user.transactionList.map((t) => t.category)),
+                ).map((category) => (
+                  <option key={`categoryOption-${category}`} value={category}>
+                    {category}
                   </option>
                 ))}
+                <option
+                  className="bg-[var(--color-primary)] text-[var(--color-white)] hover:bg-[var(--color-secondary)] focus:ring-[var(--color-primary)]"
+                  value="add-category"
+                >
+                  + Adicionar Categoria
+                </option>
               </select>
             </div>
 
@@ -235,10 +258,12 @@ export const TransactionModal = () => {
                 type="date"
                 value={transactionData.date.toLocaleString().split("T")[0]}
                 onChange={(e) =>
-                  setTransactionData({
-                    ...transactionData,
-                    date: e.target.value,
-                  })
+                  dispatch(
+                    setTransactionData({
+                      ...transactionData,
+                      date: e.target.value,
+                    }),
+                  )
                 }
                 className="p-2 border border-[var(--color-border)] rounded-md w-full"
               />
@@ -256,10 +281,12 @@ export const TransactionModal = () => {
                 id="paymentType"
                 value={transactionData.operation}
                 onChange={(e) =>
-                  setTransactionData({
-                    ...transactionData,
-                    operation: e.target.value as OperationType,
-                  })
+                  dispatch(
+                    setTransactionData({
+                      ...transactionData,
+                      operation: e.target.value as OperationType,
+                    }),
+                  )
                 }
                 className="p-2 border border-[var(--color-border)] rounded-md w-full"
               >

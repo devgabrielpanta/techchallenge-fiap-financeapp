@@ -16,18 +16,18 @@ import type { TransactionType } from "@/schemas/dataSchema"
 import * as React from "react"
 
 type FilterSchema = {
-  bank: string[]
-  type: string[]
-  operation: string[]
-}
+  category: string[];
+  type: string[];
+  operation: string[];
+};
 
 function generateFilters(transactionsList: TransactionType[]) {
-  const bank = new Set<string>()
+  const category = new Set<string>();
   const type = new Set<string>()
   const operation = new Set<string>()
 
   transactionsList.forEach((tx) => {
-    bank.add(tx.bank)
+    category.add(tx.category)
     type.add(
       tx.type.replace("entradas", "Entradas").replace("saidas", "Saídas")
     )
@@ -36,9 +36,9 @@ function generateFilters(transactionsList: TransactionType[]) {
 
   const filters: FilterSchema = {
     type: Array.from(type),
-    bank: Array.from(bank),
+    category: Array.from(category),
     operation: Array.from(operation),
-  }
+  };
 
   return filters
 }
@@ -63,23 +63,23 @@ export default function TransactionsFilters({
   const handleCheckboxChange = (
     value: string,
     checked: boolean | "indeterminate",
-    filterType: "bank" | "type" | "operation"
+    filterType: "category" | "type" | "operation",
   ) => {
-    let updatedFilters: TransactionType[] = []
+    let updatedFilters: TransactionType[] = [];
     if (checked) {
       updatedFilters = [
         ...filteredTransactions,
         ...transactions.filter(
-          (transaction) => transaction[filterType] === value
+          (transaction) => transaction[filterType] === value,
         ),
-      ]
+      ];
     } else {
       updatedFilters = filteredTransactions.filter(
-        (transaction) => transaction[filterType] !== value
-      )
+        (transaction) => transaction[filterType] !== value,
+      );
     }
-    setFilteredTransactions(updatedFilters)
-  }
+    setFilteredTransactions(updatedFilters);
+  };
 
   return (
     <Drawer open={openFilters} onOpenChange={setOpenFilters} direction="right">
@@ -124,7 +124,7 @@ export default function TransactionsFilters({
                             handleCheckboxChange(
                               transactionFilter,
                               checked,
-                              obj as "bank" | "type" | "operation"
+                              obj as "category" | "type" | "operation"
                             )
                           }
                         />
