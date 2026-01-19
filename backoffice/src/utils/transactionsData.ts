@@ -3,7 +3,7 @@ import type { TransactionType } from "../schemas/dataSchema";
 export const transactionList: TransactionType[] = [
   {
     id: 1,
-    bank: "Banco Santander S.A.",
+    category: "Habitação",
     type: "saidas",
     operation: "PIX",
     description: "Pagamento do aluguel de outubro",
@@ -13,7 +13,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 2,
-    bank: "Nu Pagamentos S.A.",
+    category: "Habitação",
     type: "saidas",
     operation: "Débito",
     description: "Conta de água referente a setembro",
@@ -23,7 +23,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 3,
-    bank: "Caixa Econômica Federal",
+    category: "Habitação",
     type: "saidas",
     operation: "Boleto bancário",
     description: "Pagamento da conta de energia elétrica",
@@ -33,7 +33,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 4,
-    bank: "Banco Santander S.A.",
+    category: "Transportes",
     type: "saidas",
     operation: "Débito",
     description: "Abastecimento do carro",
@@ -43,7 +43,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 5,
-    bank: "Nu Pagamentos S.A.",
+    category: "Transportes",
     type: "saidas",
     operation: "Crédito",
     description: "Despesa com pedágios em viagem",
@@ -53,7 +53,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 6,
-    bank: "Caixa Econômica Federal",
+    category: "Transportes",
     type: "saidas",
     operation: "PIX",
     description: "Abastecimento de moto",
@@ -63,7 +63,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 7,
-    bank: "Banco Santander S.A.",
+    category: "Alimentação",
     type: "saidas",
     operation: "Débito",
     description: "Compras de supermercado do mês",
@@ -73,7 +73,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 8,
-    bank: "Nu Pagamentos S.A.",
+    category: "Alimentação",
     type: "saidas",
     operation: "Crédito",
     description: "Jantar em restaurante",
@@ -83,7 +83,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 9,
-    bank: "Caixa Econômica Federal",
+    category: "Alimentação",
     type: "saidas",
     operation: "PIX",
     description: "Pedido de delivery de pizza",
@@ -93,7 +93,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 10,
-    bank: "Banco Santander S.A.",
+    category: "Receita",
     type: "entradas",
     operation: "Transferência",
     description: "Recebimento por projeto de desenvolvimento web",
@@ -103,7 +103,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 11,
-    bank: "Nu Pagamentos S.A.",
+    category: "Receita",
     type: "entradas",
     operation: "PIX",
     description: "Receita por consultoria estratégica",
@@ -113,7 +113,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 12,
-    bank: "Caixa Econômica Federal",
+    category: "Serviços Profissionais",
     type: "saidas",
     operation: "Crédito",
     description: "Pagamento mensal de ferramenta de CRM",
@@ -123,7 +123,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 13,
-    bank: "Banco Santander S.A.",
+    category: "Serviços Profissionais",
     type: "saidas",
     operation: "PIX",
     description: "Pagamento de servidor em nuvem",
@@ -133,7 +133,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 14,
-    bank: "Nu Pagamentos S.A.",
+    category: "Serviços Profissionais",
     type: "saidas",
     operation: "Transferência",
     description: "Campanha de anúncios online",
@@ -143,7 +143,7 @@ export const transactionList: TransactionType[] = [
   },
   {
     id: 15,
-    bank: "Caixa Econômica Federal",
+    category: "Serviços Profissionais",
     type: "saidas",
     operation: "Boleto bancário",
     description: "Assinatura de serviços contábeis",

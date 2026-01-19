@@ -18,7 +18,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table/Table";
-import { useTransactionModal } from "@/context/TransactionModalProvider";
+import { startEditTransaction } from "@/store/slices/transactionSlice";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/store/store";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -30,7 +32,7 @@ export function DataTable<TData, TValue>({
   data,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
-  const { startEditTransaction } = useTransactionModal();
+  const dispatch = useDispatch<AppDispatch>();
 
   const table = useReactTable({
     data,
@@ -97,9 +99,7 @@ export function DataTable<TData, TValue>({
                         cursor-pointer
                         "
                         onClick={() =>
-                          startEditTransaction(
-                            (row.original as { id: number }).id
-                          )
+                          dispatch(startEditTransaction(row.original))
                         }
                       >
                         <svg
