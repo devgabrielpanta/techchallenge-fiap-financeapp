@@ -1,23 +1,23 @@
 import { registerApplication, start } from "single-spa";
 
-// Registrar aplicação React (Upload)
-registerApplication({
-  name: "react-app",
-  app: () =>
-    System.import(
-      "http://localhost:3001/main.js" // URL do app React
-    ),
-  activeWhen: ["/upload", "/"],
-});
-
-// Registrar aplicação Angular (Viewer)
+// Registrar aplicação Angular (Upload e Viewer)
 registerApplication({
   name: "angular-app",
   app: () =>
     System.import(
-      "http://localhost:4201/main.js" // URL do app Angular
+      "http://localhost:4201/main.js", // URL do app Angular
     ),
-  activeWhen: ["/viewer"],
+  activeWhen: ["/upload"],
+});
+
+// Registrar aplicação React (Dashboard)
+registerApplication({
+  name: "react-app",
+  app: () =>
+    System.import(
+      "http://localhost:3001/main.js", // URL do app React
+    ),
+  activeWhen: ["/dashboard"],
 });
 
 // Iniciar Single-SPA

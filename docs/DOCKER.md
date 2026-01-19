@@ -41,21 +41,25 @@ A aplicação é containerizada em **4 containers independentes**:
 ### Comandos Básicos
 
 **Construir e iniciar todos os containers:**
+
 ```bash
 docker-compose up --build
 ```
 
 **Executar em background:**
+
 ```bash
 docker-compose up -d --build
 ```
 
 **Parar todos os containers:**
+
 ```bash
 docker-compose down
 ```
 
 **Ver logs:**
+
 ```bash
 docker-compose logs -f
 
@@ -66,6 +70,7 @@ docker-compose logs -f uploader-angular
 ```
 
 **Reconstruir um container específico:**
+
 ```bash
 docker-compose up --build backoffice
 ```
@@ -85,17 +90,17 @@ docker-compose up --build backoffice
 - **Servidor:** Webpack Dev Server
 - **Função:** Orquestra os microfrontends React e Angular
 
-### Uploader React
-
-- **Porta:** 3001
-- **Servidor:** Webpack Dev Server
-- **Função:** Serve o bundle React para upload de PDFs
-
 ### Uploader Angular
 
 - **Porta:** 4201
 - **Servidor:** Angular CLI Dev Server
-- **Função:** Serve o bundle Angular para visualização de PDFs
+- **Função:** Serve o bundle Angular para upload e visualização de PDFs
+
+### Uploader React
+
+- **Porta:** 3001
+- **Servidor:** Webpack Dev Server
+- **Função:** Serve o bundle React para dashboard financeiro
 
 ## 🔧 Configuração
 
@@ -167,5 +172,5 @@ Após subir os containers, os serviços estarão disponíveis em:
 
 - Backoffice: http://localhost:3000
 - Uploader Root: http://localhost:4200
-- Uploader React: http://localhost:3001
-- Uploader Angular: http://localhost:4201
+- Uploader Angular (Upload): http://localhost:4201
+- Uploader React (Dashboard): http://localhost:3001
