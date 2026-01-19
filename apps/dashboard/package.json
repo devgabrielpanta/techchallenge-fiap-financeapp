@@ -9,7 +9,6 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@module-federation/nextjs-mf": "^8.8.51",
     "@reduxjs/toolkit": "^2.11.2",
     "chart.js": "^4.5.1",
     "lucide-react": "^0.562.0",
@@ -22,11 +21,11 @@
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
     "eslint": "^9",
     "eslint-config-next": "16.1.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5.4.5"
   }
 }
