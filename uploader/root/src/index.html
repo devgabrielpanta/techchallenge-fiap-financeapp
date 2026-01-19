@@ -14,11 +14,23 @@
       -moz-osx-font-smoothing: grayscale;
     }
   </style>
+  <!-- Zone.js - Obrigatório para Angular -->
+  <script src="https://cdn.jsdelivr.net/npm/zone.js@0.14.10/bundles/zone.umd.min.js"></script>
+
   <!-- SystemJS - Necessário para System.import() -->
   <script src="https://cdn.jsdelivr.net/npm/systemjs@6.14.3/dist/system.min.js"></script>
+
+  <script type="systemjs-importmap">
+  {
+    "imports": {
+      "angular-app": "http://localhost:4201/main.js",
+      "react-app": "http://localhost:3001/main.js"
+    }
+  }
+  </script>
 </head>
 <body>
-  <div id="single-spa-application:react-app"></div>
-  <div id="single-spa-application:angular-app"></div>
+    <div id="single-spa-application:angular-app"></div>
+    <div id="single-spa-application:react-app"></div>
 </body>
 </html>
