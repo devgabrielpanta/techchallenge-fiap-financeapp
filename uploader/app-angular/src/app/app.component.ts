@@ -27,7 +27,7 @@ import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
             <polyline points="17 8 12 3 7 8"></polyline>
             <line x1="12" y1="3" x2="12" y2="15"></line>
           </svg>
-          Escolher arquivo
+          Selecionar arquivo
         </label>
         <p class="helper-text">Nenhum arquivo selecionado</p>
       </div>
@@ -76,14 +76,12 @@ import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
     `
       .upload-container {
         width: 100%;
-        font-family:
-          -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
       }
 
       .upload-wrapper {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 4px;
       }
 
       .file-input {
@@ -95,7 +93,7 @@ import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
         align-items: center;
         gap: 8px;
         padding: 8px 16px;
-        background-color: #7c3aed;
+        background-color: #6d28d9;
         color: white;
         border: none;
         border-radius: 6px;
@@ -107,7 +105,7 @@ import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
       }
 
       .upload-button:hover {
-        background-color: #6d28d9;
+        background-color: rgba(125, 48, 250, 1);
       }
 
       .file-display {
@@ -115,8 +113,8 @@ import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
         align-items: center;
         justify-content: space-between;
         gap: 8px;
-        padding: 10px 12px;
-        background-color: #f9fafb;
+        padding: 8px;
+        background-color: transparent;
         border: 1px solid #e5e7eb;
         border-radius: 6px;
       }
@@ -132,12 +130,13 @@ import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
 
       .file-info svg {
         flex-shrink: 0;
-        color: #6b7280;
+        color: #374151;
       }
 
       .file-name {
-        font-size: 14px;
-        color: #374151;
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #1f1f23;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
