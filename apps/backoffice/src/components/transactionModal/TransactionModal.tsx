@@ -276,7 +276,7 @@ export const TransactionModal = () => {
         new Date(transactionData.date).toISOString() ||
       attachmentChanged;
     setHasChanges(changed);
-  }, [transactionData, transactionAction]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [transactionData, transactionAction, uploadedFile]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleDelete = () => {
     if (!transactionData || transactionAction !== "edit") return;
@@ -556,26 +556,40 @@ export const TransactionModal = () => {
                   src="http://localhost:4200/upload"
                   className="w-full h-full border-0"
                   title="Upload de Documento"
-                  style={{ overflow: "hidden" }}
+                  style={{
+                    overflow: "hidden",
+                    opacity: iframeReady ? 1 : 0,
+                    transition: "opacity 0.15s ease-in",
+                  }}
                   loading="eager"
                   onLoad={() => setIframeReady(true)}
                 />
               </div>
             </div>
 
-            <div className="flex flex-row gap-2 justify-center items-center mt-4">
+            <div
+              className={`flex flex-row gap-2 items-center mt-4 ${
+                transactionAction === "create" ? "justify-center" : "w-full"
+              }`}
+            >
               <Button
                 variant="primary"
                 onClick={handleSubmit}
                 disabled={transactionAction === "edit" && !hasChanges}
-                className="disabled:opacity-40"
+                className={`disabled:opacity-40 ${
+                  transactionAction === "edit" ? "flex-1" : ""
+                }`}
               >
                 {transactionAction === "create"
                   ? "Adicionar"
                   : "Salvar Alterações"}
               </Button>
               {transactionAction === "edit" && (
-                <Button variant="danger" onClick={handleDelete}>
+                <Button
+                  variant="danger"
+                  onClick={handleDelete}
+                  className="flex-1"
+                >
                   Excluir transação
                 </Button>
               )}
