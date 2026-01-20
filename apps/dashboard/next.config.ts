@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   devIndicators: false,
 
   // 🔴 SEM ISSO, NÃO FUNCIONA
-  turbopack: {},
+  //turbopack: {}, -- desabilitado temporariamente por falta de suporte ao Module Federation
 
   webpack(config) {
     config.plugins.push(
