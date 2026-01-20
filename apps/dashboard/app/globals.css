@@ -1,5 +1,5 @@
 @import "tailwindcss";
-@import "../../../backoffice/src/styles/theme.css";
+@import "@finance-app/theme/src/theme.css";
 
 @layer base {
   html,

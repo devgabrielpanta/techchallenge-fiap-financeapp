@@ -1,7 +1,9 @@
 import type { Preview } from "@storybook/nextjs-vite";
 import "../src/app/globals.css";
-import { TransactionModalProvider } from "../src/context/TransactionModalProvider";
-import { UserProvider } from "../src/context/UserContext";
+import ReduxProvider from "../src/context/ReduxProvider";
+import { ReduxHydration } from "../src/context/ReduxHydration";
+
+import { transactionList } from "../src/utils/transactionsData";
 import { user } from "../src/utils/appUtils";
 
 const preview: Preview = {
@@ -31,11 +33,10 @@ const preview: Preview = {
       switch (pageLayout) {
         default:
           return (
-            <UserProvider user={user}>
-              <TransactionModalProvider>
-                <Story />
-              </TransactionModalProvider>
-            </UserProvider>
+            <ReduxProvider>
+              <ReduxHydration transactions={transactionList} />
+              <Story />
+            </ReduxProvider>
           );
       }
     },
