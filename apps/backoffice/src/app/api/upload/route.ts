@@ -19,7 +19,13 @@ export async function POST(request: NextRequest) {
     const buffer = Buffer.from(base64Data, "base64");
 
     // Caminho para a pasta public/uploads na raiz do projeto
-    const uploadsDir = path.join(process.cwd(), "..", "public", "uploads");
+    const uploadsDir = path.join(
+      process.cwd(),
+      "..",
+      "..",
+      "public",
+      "uploads",
+    );
     const filePath = path.join(uploadsDir, `${fileId}.pdf`);
 
     // Salva o arquivo

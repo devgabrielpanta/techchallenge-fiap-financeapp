@@ -18,7 +18,7 @@ import type { TransactionType } from "@/schemas/dataSchema";
 const initialData: TransactionType[] = [
   {
     id: 1,
-    bank: "Banco Santander S.A.",
+    category: "Category 1",
     type: "entradas",
     operation: "PIX",
     description: "Pagamento recebido",
@@ -28,7 +28,7 @@ const initialData: TransactionType[] = [
   },
   {
     id: 2,
-    bank: "Nu Pagamentos S.A.",
+    category: "Category 2",
     type: "saidas",
     operation: "Boleto bancário",
     description: "Compra online",
@@ -38,7 +38,7 @@ const initialData: TransactionType[] = [
   },
   {
     id: 3,
-    bank: "Caixa Econômica Federal",
+    category: "Category 3",
     type: "entradas",
     operation: "Crédito",
     description: "Transferência recebida",
@@ -75,9 +75,19 @@ const TransactionsTableStory = () => {
   /* Simula a reordenação asc/desc ao clicar no cabeçalho */
   const toggleSort = (key: keyof TransactionType) => {
     const sorted = [...data].sort((a, b) => {
-      if (a[key] < b[key]) return -1;
-      if (a[key] > b[key]) return 1;
-      return 0;
+      const av = (a as unknown as Record<keyof TransactionType, unknown>)[key];
+      const bv = (b as unknown as Record<keyof TransactionType, unknown>)[key];
+
+      if (av == null) return 1;
+      if (bv == null) return -1;
+
+      if (typeof av === "number" && typeof bv === "number") {
+        return av - bv;
+      }
+
+      const asStr = String(av);
+      const bsStr = String(bv);
+      return asStr.localeCompare(bsStr, "pt-BR", { numeric: true });
     });
     /* Alterna entre ordem crescente e decrescente */
     if (JSON.stringify(data) === JSON.stringify(sorted)) {
@@ -99,8 +109,8 @@ const TransactionsTableStory = () => {
           </TableHead>
           <TableHead className="border-b border-[var(--color-border)] p-2 text-left text-[var(--color-text-muted)]">
             <TableButton
-              span="Nome/Instituição"
-              onClick={() => toggleSort("bank")}
+              span="Categoria"
+              onClick={() => toggleSort("category")}
             />
           </TableHead>
           <TableHead className="border-b border-[var(--color-border)] p-2 text-left text-[var(--color-text-muted)]">
@@ -121,7 +131,7 @@ const TransactionsTableStory = () => {
             className="hover:bg-[var(--color-hover)] cursor-pointer transition-colors"
           >
             <TableCell className="p-2">{row.operation}</TableCell>
-            <TableCell className="p-2">{row.bank}</TableCell>
+            <TableCell className="p-2">{row.category}</TableCell>
             <TableCell
               className={`p-2 ${
                 row.type === "entradas" ? "text-green-500" : "text-red-500"

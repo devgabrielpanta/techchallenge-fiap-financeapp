@@ -20,7 +20,7 @@ export const ExtractCardStatic: React.FC<{ transaction: TransactionType }> = ({
         </span>
       </div>
       <div className="flex justify-between text-xs text-gray-400 mt-1">
-        <span>{transaction.bank}</span>
+        <span>{transaction.category}</span>
         <span>{transaction.operation}</span>
       </div>
     </div>
@@ -129,7 +129,7 @@ function DocsPage() {
           <ExtractCardStatic
             transaction={{
               id: 1,
-              bank: "Nu Pagamentos S.A.",
+              category: "Category 1",
               operation: "PIX",
               type: "entradas",
               amount: 2500,
@@ -141,7 +141,7 @@ function DocsPage() {
           <ExtractCardStatic
             transaction={{
               id: 2,
-              bank: "Banco Santander S.A.",
+              category: "Category 2",
               operation: "Débito",
               type: "saidas",
               amount: 150,
@@ -190,7 +190,7 @@ export const Entrada: Story = {
   args: {
     transaction: {
       id: 1,
-      bank: "Nu Pagamentos S.A.",
+      category: "Category 1",
       operation: "PIX",
       type: "entradas",
       amount: 2500,
@@ -205,7 +205,7 @@ export const Saida: Story = {
   args: {
     transaction: {
       id: 2,
-      bank: "Banco Santander S.A.",
+      category: "Category 2",
       operation: "Débito",
       type: "saidas",
       amount: 150,

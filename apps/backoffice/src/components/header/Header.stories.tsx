@@ -157,6 +157,11 @@ const meta = {
 
 export default meta;
 
+type ThemeWrapperType = {
+  theme: "light" | "dark";
+  setIsMenuOpen: () => void;
+};
+
 /* ---------------------------------------------------------
  Wrapper para manter controle do tema no Storybook
 --------------------------------------------------------- */
@@ -164,16 +169,17 @@ function ThemeWrapper({
   args,
   updateArgs,
 }: {
-  args: { theme: "light" | "dark" };
-  updateArgs: (patch: Partial<{ theme: "light" | "dark" }>) => void;
+  args: Partial<ThemeWrapperType>;
+  updateArgs: (patch: Partial<ThemeWrapperType>) => void;
 }) {
   const [theme, setTheme] = useState(args.theme);
 
   useEffect(() => {
-    setTheme(args.theme);
-
-    document.documentElement.classList.remove("light", "dark");
-    document.documentElement.classList.add(args.theme);
+    if(args.theme) {
+      setTheme(args.theme);
+      document.documentElement.classList.remove("light", "dark");
+      document.documentElement.classList.add(args.theme);
+    }
   }, [args.theme]);
 
   const handleToggle = () => {
@@ -187,26 +193,27 @@ function ThemeWrapper({
 
   return (
     <div className="w-full h-[100px]">
-      <Header
-        {...args}
-        theme={theme}
-        toggleTheme={handleToggle}
-        setIsMenuOpen={() => {}}
-      />
+      <Header />
     </div>
   );
 }
 
 type Story = StoryObj<typeof meta>;
 export const Light: Story = {
-  args: { theme: "light", setIsMenuOpen: () => {} },
+  args: {
+    theme: "light" as "light" | "dark",
+    setIsMenuOpen: () => {},
+  } as ThemeWrapperType,
   render: (args, ctx) => (
     <ThemeWrapper args={args} updateArgs={ctx.updateArgs} />
   ),
 };
 
 export const Dark: Story = {
-  args: { theme: "dark", setIsMenuOpen: () => {} },
+  args: {
+    theme: "dark" as "light" | "dark",
+    setIsMenuOpen: () => {},
+  } as ThemeWrapperType,
   render: (args, ctx) => (
     <ThemeWrapper args={args} updateArgs={ctx.updateArgs} />
   ),

@@ -10,7 +10,7 @@ import type { TransactionType } from "@/schemas/dataSchema";
 const transactionsExample: TransactionType[] = [
   {
     id: 1,
-    bank: "Banco Santander S.A.",
+    category: "Category 1",
     type: "entradas",
     operation: "PIX",
     description: "Pagamento recebido",
@@ -20,7 +20,7 @@ const transactionsExample: TransactionType[] = [
   },
   {
     id: 2,
-    bank: "Nu Pagamentos S.A.",
+    category: "Category 2",
     type: "saidas",
     operation: "Boleto bancário",
     description: "Compra online",
@@ -30,7 +30,7 @@ const transactionsExample: TransactionType[] = [
   },
   {
     id: 3,
-    bank: "Caixa Econômica Federal",
+    category: "Category 3",
     type: "entradas",
     operation: "Crédito",
     description: "Transferência recebida",
