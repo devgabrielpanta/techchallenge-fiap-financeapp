@@ -24,8 +24,11 @@
     "@angular-builders/custom-webpack": "^18.0.0",
     "@angular/cli": "^18.0.0",
     "@angular/compiler-cli": "^18.0.0",
+    "@rollup/rollup-linux-arm64-gnu": "^4.0.0",
+    "@rollup/rollup-linux-x64-gnu": "^4.0.0",
     "@types/node": "^20.0.0",
     "css-loader": "^7.1.2",
+    "rollup": "^4.0.0",
     "style-loader": "^3.3.1",
     "typescript": "~5.4.5"
   }

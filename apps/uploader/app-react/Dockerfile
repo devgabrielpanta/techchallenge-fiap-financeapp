@@ -7,15 +7,15 @@ WORKDIR /app
 
 # Copiar arquivos de dependências da raiz
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
-COPY uploader/app-react/package.json ./uploader/app-react/
+COPY apps/uploader/app-react/package.json ./apps/uploader/app-react/
 
 # Instalar dependências do workspace
 RUN pnpm install --frozen-lockfile
 
 # Copiar código fonte
-COPY uploader/app-react/ ./uploader/app-react/
+COPY apps/uploader/app-react/ ./apps/uploader/app-react/
 
-WORKDIR /app/uploader/app-react
+WORKDIR /app/apps/uploader/app-react
 
 EXPOSE 3001
 

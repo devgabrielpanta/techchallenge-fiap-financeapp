@@ -7,6 +7,7 @@ import { Header } from "@/components/header/Header";
 import { TransactionModal } from "@/components/transactionModal/TransactionModal";
 import Feedback from "@/components/feedback/Feedback";
 import { ThemeBridge } from "@/components/theme/ThemeBridge";
+import { config } from "@/lib/config";
 
 export default function ClientLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
@@ -38,7 +39,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
 
       {/* Preload Angular */}
       <iframe
-        src="http://localhost:4200/upload"
+        src={`${config.uploaderRoot}/upload`}
         className="hidden"
         title="Preload Upload Component"
         aria-hidden

@@ -203,29 +203,29 @@ useEffect(() => {
 1. **Instalar dependências do Backoffice:**
 
 ```bash
-cd backoffice
+cd apps/backoffice
 pnpm install
 ```
 
 2. **Instalar dependências do Uploader Root:**
 
 ```bash
-cd uploader/root
-pnpm install
+cd apps/uploader/root
+npm install
 ```
 
 3. **Instalar dependências do App React:**
 
 ```bash
-cd uploader/app-react
-pnpm install
+cd apps/uploader/app-react
+npm install
 ```
 
 4. **Instalar dependências do App Angular:**
 
 ```bash
-cd uploader/app-angular
-pnpm install
+cd apps/uploader/app-angular
+npm install
 ```
 
 ### Executando as Aplicações
@@ -233,29 +233,29 @@ pnpm install
 **Terminal 1 - Backoffice (Next.js):**
 
 ```bash
-cd backoffice
+cd apps/backoffice
 pnpm dev
 ```
 
 **Terminal 2 - Uploader Root (Single-SPA):**
 
 ```bash
-cd uploader/root
-pnpm start
+cd apps/uploader/root
+npm start
 ```
 
 **Terminal 3 - App React (Dashboard):**
 
 ```bash
-cd uploader/app-react
-pnpm start
+cd apps/uploader/app-react
+npm start
 ```
 
 **Terminal 4 - App Angular (Upload & Viewer):**
 
 ```bash
-cd uploader/app-angular
-pnpm start
+cd apps/uploader/app-angular
+npm start
 ```
 
 ## 🐳 Docker
@@ -286,7 +286,7 @@ O Storybook está configurado no **backoffice** para documentação e desenvolvi
 **Rodar Storybook:**
 
 ```bash
-cd backoffice
+cd apps/backoffice
 pnpm storybook
 ```
 
@@ -295,11 +295,11 @@ O Storybook estará disponível em: **http://localhost:6006**
 **Build estático do Storybook:**
 
 ```bash
-cd backoffice
+cd apps/backoffice
 pnpm build-storybook
 ```
 
-O build será gerado na pasta `backoffice/storybook-static/`.
+O build será gerado na pasta `apps/backoffice/storybook-static/`.
 
 ### Configuração de Portas
 

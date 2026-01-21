@@ -1,5 +1,6 @@
 "use client";
 
+import { config } from "@/lib/config";
 import { useEffect, useRef, useState } from "react";
 
 export default function DashboardIframe() {
@@ -34,7 +35,7 @@ export default function DashboardIframe() {
   return (
     <iframe
       ref={iframeRef}
-      src="http://localhost:3001"
+      src={`${config.uploaderRoot}/dashboard`}
       onLoad={() => setReady(true)}
       className="w-full h-full border-none"
       title="Dashboard Financeiro"

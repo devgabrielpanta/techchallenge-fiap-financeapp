@@ -4,13 +4,15 @@ services:
   backoffice:
     build:
       context: .
-      dockerfile: backoffice/Dockerfile
+      dockerfile: apps/backoffice/Dockerfile
     container_name: finance-app-backoffice
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
       - PORT=3000
+      - NEXT_PUBLIC_UPLOADER_ROOT_URL=http://localhost:4200
+      - NEXT_PUBLIC_BACKOFFICE_URL=http://localhost:3000
     networks:
       - finance-app-network
     depends_on:
@@ -21,7 +23,7 @@ services:
   uploader-root:
     build:
       context: .
-      dockerfile: uploader/root/Dockerfile
+      dockerfile: apps/uploader/root/Dockerfile
     container_name: finance-app-uploader-root
     ports:
       - "4200:4200"
@@ -36,7 +38,7 @@ services:
   uploader-react:
     build:
       context: .
-      dockerfile: uploader/app-react/Dockerfile
+      dockerfile: apps/uploader/app-react/Dockerfile
     container_name: finance-app-uploader-react
     ports:
       - "3001:3001"
@@ -48,7 +50,7 @@ services:
   uploader-angular:
     build:
       context: .
-      dockerfile: uploader/app-angular/Dockerfile
+      dockerfile: apps/uploader/app-angular/Dockerfile
     container_name: finance-app-uploader-angular
     ports:
       - "4201:4201"

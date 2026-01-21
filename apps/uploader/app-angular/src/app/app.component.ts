@@ -176,9 +176,18 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     console.log("Angular upload component loaded");
 
+    // Obter URL do backoffice dinamicamente
+    // No navegador, sempre usar hostname atual pois os serviços são expostos nas portas do host
+    const getBackofficeUrl = () => {
+      const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+      return (window as any).__BACKOFFICE_URL__ || `http://${hostname}:3000`;
+    };
+
+    const backofficeUrl = getBackofficeUrl();
+
     // Listener para receber dados do anexo do backoffice
     window.addEventListener("message", (event) => {
-      if (event.origin !== "http://localhost:3000") return;
+      if (event.origin !== backofficeUrl) return;
 
       if (event.data.type === "LOAD_ATTACHMENT") {
         // Carrega o anexo existente
@@ -210,6 +219,8 @@ export class AppComponent implements OnInit {
     reader.onload = () => {
       const base64 = reader.result as string;
 
+      const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+      const backofficeUrl = (window as any).__BACKOFFICE_URL__ || `http://${hostname}:3000`;
       window.parent.postMessage(
         {
           type: "FILE_UPLOADED",
@@ -218,7 +229,7 @@ export class AppComponent implements OnInit {
           fileSize: file.size,
           fileData: base64,
         },
-        "http://localhost:3000",
+        backofficeUrl,
       );
     };
     reader.readAsDataURL(file);
@@ -230,11 +241,12 @@ export class AppComponent implements OnInit {
       this.fileInput.nativeElement.value = "";
     }
 
+    const backofficeUrl = (window as any).__BACKOFFICE_URL__ || 'http://localhost:3000';
     window.parent.postMessage(
       {
         type: "FILE_REMOVED",
       },
-      "http://localhost:3000",
+      backofficeUrl,
     );
   }
 }

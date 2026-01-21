@@ -31,6 +31,7 @@ import {
   InputGroupInput,
 } from "@/components/ui/input-group/InputGroup";
 import { validateNewCategory } from "@/utils/appUtils";
+import { config } from "@/lib/config";
 
 const formatCurrencyInput = (value: string) => {
   // Remove tudo que não é número
@@ -199,12 +200,12 @@ export const TransactionModal = () => {
             type: "LOAD_ATTACHMENT",
             attachment: transactionData.attachment,
           },
-          "http://localhost:4200",
+          config.uploaderRoot,
         );
       } else if (transactionAction === "create") {
         iframeRef.current.contentWindow.postMessage(
           { type: "CLEAR_ATTACHMENT" },
-          "http://localhost:4200",
+          config.uploaderRoot,
         );
       }
     } catch (error) {
@@ -214,7 +215,7 @@ export const TransactionModal = () => {
 
   useEffect(() => {
     const handleMessage = async (event: MessageEvent) => {
-      if (event.origin !== "http://localhost:4200") return;
+      if (event.origin !== config.uploaderRoot) return;
 
       if (event.data.type === "FILE_UPLOADED") {
         setUploadedFile({
@@ -553,7 +554,7 @@ export const TransactionModal = () => {
               <div className="relative w-full h-[60px]">
                 <iframe
                   ref={iframeRef}
-                  src="http://localhost:4200/upload"
+                  src={`${config.uploaderRoot}/upload`}
                   className="w-full h-full border-0"
                   title="Upload de Documento"
                   style={{

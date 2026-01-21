@@ -7,8 +7,8 @@ process.env.NEXT_PRIVATE_LOCAL_WEBPACK = '5';
 const nextConfig: NextConfig = {
   devIndicators: false,
 
-  // 🔴 SEM ISSO, NÃO FUNCIONA
-  //turbopack: {}, -- desabilitado temporariamente por falta de suporte ao Module Federation
+  // 🔴 SEM ISSO, NÃO FUNCIONA (desabilitado temporariamente por falta de suporte ao Module Federation)
+  turbopack: {},
 
   webpack(config) {
     config.plugins.push(

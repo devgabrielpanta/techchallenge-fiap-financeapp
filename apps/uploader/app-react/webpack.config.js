@@ -8,14 +8,21 @@ module.exports = {
     host: "0.0.0.0",
     headers: {
       "Access-Control-Allow-Origin": "*",
+      "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, PATCH, OPTIONS",
+      "Access-Control-Allow-Headers": "X-Requested-With, content-type, Authorization",
     },
     historyApiFallback: true,
+    hot: true,
+    static: {
+      directory: path.join(__dirname, "dist"),
+      publicPath: "/",
+    },
   },
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "main.js",
     libraryTarget: "system",
-    publicPath: "http://localhost:3001/",
+    publicPath: process.env.PUBLIC_PATH || "http://localhost:3001/",
   },
   module: {
     rules: [
@@ -35,8 +42,6 @@ module.exports = {
       },
     ],
   },
-  // Removido externals para bundle completo - cada app funciona standalone
-  // externals: ["single-spa", "react", "react-dom"],
   resolve: {
     extensions: [".js", ".jsx"],
   },

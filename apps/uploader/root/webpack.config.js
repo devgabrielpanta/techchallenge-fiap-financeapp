@@ -15,7 +15,7 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, "dist"),
     filename: "root-config.js",
-    publicPath: "http://localhost:4200/",
+    publicPath: process.env.PUBLIC_PATH || "http://localhost:4200/",
   },
   plugins: [
     new HtmlWebpackPlugin({

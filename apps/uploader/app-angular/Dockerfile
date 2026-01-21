@@ -1,23 +1,36 @@
-FROM node:20-alpine
+FROM node:20
 
-# Instalar pnpm e Angular CLI
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Instalar Angular CLI globalmente
 RUN npm install -g @angular/cli@18
 
 WORKDIR /app
 
-# Copiar arquivos de dependências da raiz
-COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
-COPY uploader/app-angular/package.json ./uploader/app-angular/
+# Copiar código fonte do Angular primeiro
+COPY apps/uploader/app-angular/ ./apps/uploader/app-angular/
 
-# Instalar dependências do workspace
-RUN pnpm install --frozen-lockfile
+WORKDIR /app/apps/uploader/app-angular
 
-# Copiar código fonte
-COPY uploader/app-angular/ ./uploader/app-angular/
+# Usar npm diretamente para o Angular (pnpm tem problemas com dependências opcionais do Rollup)
+# Remover node_modules e package-lock.json se existirem (como sugerido no erro)
+RUN rm -rf node_modules package-lock.json
 
-WORKDIR /app/uploader/app-angular
+# Instalar dependências usando npm
+RUN npm install --legacy-peer-deps
+
+# Instalar explicitamente o pacote Rollup necessário baseado na arquitetura
+# O Angular CLI precisa dessas dependências opcionais do Rollup
+RUN ARCH=$(uname -m) && \
+    if [ "$ARCH" = "aarch64" ] || [ "$ARCH" = "arm64" ]; then \
+      npm install --save-dev --legacy-peer-deps @rollup/rollup-linux-arm64-gnu || \
+      (echo "Installing rollup fallback..." && npm install --save-dev --legacy-peer-deps rollup@latest); \
+    else \
+      npm install --save-dev --legacy-peer-deps @rollup/rollup-linux-x64-gnu || \
+      (echo "Installing rollup fallback..." && npm install --save-dev --legacy-peer-deps rollup@latest); \
+    fi
+
+# Tornar o script de inicialização executável
+RUN chmod +x start.sh
 
 EXPOSE 4201
 
-CMD ["pnpm", "start"]
+CMD ["./start.sh"]
