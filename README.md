@@ -52,49 +52,69 @@ Este projeto demonstra uma arquitetura de microfrontends utilizando:
 ```
 techchallenge-fiap-financeapp/
 ├── README.md                    # Documentação principal do projeto
+├── package.json
+├── turbo.json                   # Configuração do Turbo
+├── pnpm-workspace.yaml          # Configuração do PNPM Workspaces
 │
-├── backoffice/                  # Aplicação Host/Shell (Next.js)
-│   ├── src/
+├── apps/
+│   ├── backoffice/              # Aplicação Host/Shell (Next.js)
+│   │   ├── src/
+│   │   │   ├── app/             # Pages (Next.js App Router)
+│   │   │   │   ├── layout.tsx   # Layout principal
+│   │   │   │   ├── page.tsx     # Dashboard
+│   │   │   │   └── upload/      # Página que integra o microfrontend
+│   │   │   ├── components/      # Componentes React
+│   │   │   ├── context/         # Context providers
+│   │   │   └── lib/             # Utilitários
+│   │   ├── public/              # Assets estáticos
+│   │   ├── next.config.js       # Configuração Next.js
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   ├── dashboard/               # Microfrontend Dashboard
 │   │   ├── app/                 # Pages (Next.js App Router)
-│   │   │   ├── layout.tsx       # Layout principal
-│   │   │   ├── page.tsx         # Dashboard
-│   │   │   └── upload/          # Página que integra o microfrontend
-│   │   ├── components/          # Componentes React
-│   │   ├── context/             # Context providers
-│   │   └── lib/                 # Utilitários
-│   ├── public/                  # Assets estáticos
-│   ├── next.config.js           # Configuração Next.js
-│   ├── package.json
-│   └── tsconfig.json
+│   │   │   ├── components/      # Componentes de gráficos e visualizações
+│   │   │   ├── hooks/           # Custom hooks
+│   │   │   ├── services/        # Serviços de API
+│   │   │   ├── store/           # Redux store
+│   │   │   └── providers/       # Context providers
+│   │   ├── package.json
+│   │   └── next.config.ts       # Configuração Next.js
+│   │
+│   └── uploader/                # Microfrontend - Sistema de Upload
+│       ├── README.md            # Documentação específica do uploader
+│       │
+│       ├── root/                # Single-SPA Root Config (Orquestrador)
+│       │   ├── src/
+│       │   │   ├── root-config.js # Root config do Single-SPA
+│       │   │   └── index.html   # HTML base
+│       │   ├── package.json
+│       │   └── webpack.config.js # Webpack + Single-SPA config
+│       │
+│       ├── app-react/           # Microfrontend 1 - React (Dashboard)
+│       │   ├── src/
+│       │   │   ├── index.js     # Entry point React
+│       │   │   └── App.jsx      # Componente principal
+│       │   ├── package.json
+│       │   └── webpack.config.js
+│       │
+│       └── app-angular/         # Microfrontend 2 - Angular (Upload & Viewer)
+│           ├── src/
+│           │   ├── app/         # Estrutura Angular
+│           │   │   ├── app.component.ts
+│           │   │   ├── app.component.html
+│           │   │   └── app.component.css
+│           │   └── main.ts      # Entry point Angular
+│           ├── public/          # Armazenamento de arquivos
+│           ├── angular.json
+│           ├── package.json
+│           └── tsconfig.json
 │
-└── uploader/                    # Microfrontend - Sistema de Upload
-    ├── README.md                # Documentação específica do uploader
-    │
-    ├── root/                    # Single-SPA Root Config (Orquestrador)
-    │   ├── src/
-    │   │   ├── root-config.js   # Root config do Single-SPA
-    │   │   └── index.html       # HTML base
-    │   ├── package.json
-    │   └── webpack.config.js    # Webpack + Single-SPA config
-    │
-    ├── app-react/               # Microfrontend 1 - React (Dashboard)
-    │   ├── src/
-    │   │   ├── index.js         # Entry point React
-    │   │   └── App.jsx          # Componente principal
-    │   ├── package.json
-    │   └── webpack.config.js
-    │
-    └── app-angular/             # Microfrontend 2 - Angular (Upload & Viewer)
+└── packages/
+    └── theme/                   # Pacote compartilhado de tema
         ├── src/
-        │   ├── app/             # Estrutura Angular
-        │   │   ├── app.component.ts
-        │   │   ├── app.component.html
-        │   │   └── app.component.css
-        │   └── main.ts          # Entry point Angular
-        ├── public/              # Armazenamento de arquivos
-        ├── angular.json
-        ├── package.json
-        └── tsconfig.json
+        │   └── theme.css        # Estilos globais compartilhados
+        └── package.json
 ```
 
 ## 🏗️ Arquitetura
@@ -310,6 +330,31 @@ O build será gerado na pasta `apps/backoffice/storybook-static/`.
 | App React (Dashboard)         | 3001  | http://localhost:3001 |
 | App Angular (Upload & Viewer) | 4201  | http://localhost:4201 |
 | Storybook                     | 6006  | http://localhost:6006 |
+
+## ☁️ Cloud Security / Auth
+
+### Deploy na Vercel
+
+A aplicação principal (**Backoffice**) foi implantada na plataforma **Vercel**, aproveitando a integração nativa com Next.js para facilitar o processo de deploy contínuo e garantir alta disponibilidade.
+
+- **Plataforma**: Vercel
+- **Aplicação**: Backoffice (Next.js)
+- **Deploy Automático**: Integração com repositório Git para deploy contínuo
+- **Escalabilidade**: Infraestrutura gerenciada pela Vercel com CDN global
+- **URL de Produção**: [https://bytebank-techchallengefiap.vercel.app](https://bytebank-techchallengefiap.vercel.app)
+
+> **⚠️ Observação Importante:**
+>
+> O **Backoffice** está disponível em produção na Vercel. Porém, os microfrontends **App React (Dashboard)** e **App Angular (Upload & Viewer)** **não estão disponíveis em produção** e é necessário rodá-los localmente para que a aplicação funcione completamente. Para acessar todas as funcionalidades, execute os microfrontends seguindo as instruções na seção [🚀 Rodando o Projeto](#-rodando-o-projeto).
+
+### Gerenciamento de Credenciais e Secrets
+
+Por questões de segurança e boas práticas, todas as credenciais, chaves de API e variáveis de ambiente sensíveis **não estão armazenadas no repositório do projeto**.
+
+- **Configuração**: Secrets estão configuradas diretamente no painel da Vercel
+- **Segurança**: Credenciais protegidas e não versionadas no Git
+- **Ambientes**: Suporte a diferentes ambientes (desenvolvimento, staging, produção) com configurações específicas
+- **Acesso**: Apenas membros autorizados do time têm acesso às configurações de secrets na Vercel
 
 ## 🔧 Tecnologias Utilizadas
 
