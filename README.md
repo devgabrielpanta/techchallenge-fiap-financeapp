@@ -294,6 +294,7 @@ docker-compose down
 - `finance-app-dashboard` - Dashboard Next.js (porta 3001)
 - `finance-app-uploader-root` - Single-SPA Root (porta 4200)
 - `finance-app-uploader-angular` - Microfrontend Angular (porta 4201)
+- `finance-app-storybook` - Documentação de componentes (porta 6006)
 
 ### Executando o Storybook
 
@@ -320,7 +321,7 @@ O build será gerado na pasta `apps/backoffice/storybook-static/`.
 ### Configuração de Portas
 
 | Aplicação            | Porta | URL                          |
-| -------------------- | ----- | ---------------------        |
+| -------------------- | ----- | ---------------------------- |
 | Backoffice (Host)    | 3000  | http://localhost:3000        |
 | Dashboard (Next.js)  | 3001  | http://localhost:3001        |
 | Uploader Root        | 4200  | http://localhost:4200        |
@@ -418,6 +419,10 @@ Por questões de segurança e boas práticas, todas as credenciais, chaves de AP
 - ✅ **Upload de PDFs**: Interface Angular para envio de documentos
 - ✅ **Validação de Arquivos**: Verificação de tipo e tamanho
 - ✅ **Comunicação Bidirecional**: Integração com backoffice via postMessage
+
+### Storybook
+
+- ✅ **Documentação de Componentes**: Interface para visualização e teste de componentes
 
 ## 🏆 Objetivos de Aprendizado
 

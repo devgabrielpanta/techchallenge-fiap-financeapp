@@ -4,12 +4,13 @@ Este documento descreve como containerizar e executar a aplicação usando Docke
 
 ## 📋 Visão Geral
 
-A aplicação é containerizada em **4 containers independentes**:
+A aplicação é containerizada em **5 containers independentes**:
 
 1. **finance-app-backoffice** - Aplicação Next.js principal (porta 3000)
 2. **finance-app-dashboard** - Dashboard Next.js (porta 3001)
 3. **finance-app-uploader-root** - Single-SPA Root Config (porta 4200)
 4. **finance-app-uploader-angular** - Microfrontend Angular (porta 4201)
+5. **finance-app-storybook** - Storybook para documentação de componentes (porta 6006)
 
 ## 🏗️ Estrutura de Containers
 
@@ -71,6 +72,7 @@ docker-compose logs -f backoffice
 docker-compose logs -f dashboard
 docker-compose logs -f uploader-root
 docker-compose logs -f uploader-angular
+docker-compose logs -f storybook
 ```
 
 **Reconstruir um container específico:**
@@ -113,6 +115,14 @@ docker-compose up --build backoffice
 - **Servidor:** Angular CLI Dev Server
 - **Função:** Microfrontend para upload de PDFs
 
+### Storybook
+
+- **Nome:** `finance-app-storybook`
+- **Porta:** 6006
+- **Servidor:** Storybook Dev Server
+- **Função:** Documentação interativa de componentes do backoffice
+- **Dependências:** Requer backoffice para acessar componentes
+
 ## 🔧 Configuração
 
 ### Variáveis de Ambiente
@@ -133,6 +143,7 @@ Todos os containers compartilham a mesma network (`finance-app-network`), permit
 - `dashboard` (finance-app-dashboard)
 - `uploader-root` (finance-app-uploader-root)
 - `uploader-angular` (finance-app-uploader-angular)
+- `storybook` (finance-app-storybook)
 
 ## 🐛 Troubleshooting
 
@@ -184,4 +195,5 @@ Após subir os containers, os serviços estarão disponíveis em:
 - **Backoffice:** http://localhost:3000 (Aplicação principal)
 - **Dashboard:** http://localhost:3001 (Dashboard financeiro)
 - **Uploader Root:** http://localhost:4200 (Single-SPA)
-- **Uploader Angular:** http://localhost:4201 (Upload de PDFs)
+- **Uploader Angular:** http://localhost:4200/upload (Upload de PDFs)
+- **Storybook:** http://localhost:6006 (Documentação de componentes)

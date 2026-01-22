@@ -61,6 +61,20 @@ services:
     networks:
       - finance-app-network
 
+  storybook:
+    build:
+      context: .
+      dockerfile: apps/backoffice/Dockerfile.storybook
+    container_name: finance-app-storybook
+    ports:
+      - "6006:6006"
+    environment:
+      - NODE_ENV=development
+    networks:
+      - finance-app-network
+    depends_on:
+      - backoffice
+
 networks:
   finance-app-network:
     driver: bridge
