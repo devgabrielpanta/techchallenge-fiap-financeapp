@@ -160,15 +160,15 @@ O backoffice Next.js integra o microfrontend `uploader` e o `dashboard` usando i
 ```
 ┌──────────────────────────────────────────────┐
 │   Backoffice (Next.js)                       │
-│   ┌──────────────────┐  ┌─────────────────┐ │
-│   │  iframe          │  │  iframe         │ │
-│   │  ┌────────────┐  │  │  ┌───────────┐  │ │
-│   │  │ Dashboard  │  │  │  │Single-SPA │  │ │
-│   │  │ (Next.js)  │  │  │  │ ┌───────┐ │  │ │
-│   │  └────────────┘  │  │  │ │Angular│ │  │ │
-│   └──────────────────┘  │  │ └───────┘ │  │ │
-│                         │  └───────────┘  │ │
-│                         └─────────────────┘ │
+│   ┌──────────────────┐  ┌─────────────────┐  │
+│   │  iframe          │  │  iframe         │  │
+│   │  ┌────────────┐  │  │  ┌───────────┐  │  │
+│   │  │ Dashboard  │  │  │  │Single-SPA │  │  │
+│   │  │ (Next.js)  │  │  │  │ ┌───────┐ │  │  │
+│   │  └────────────┘  │  │  │ │Angular│ │  │  │
+│   └──────────────────┘  │  │ └───────┘ │  │  │
+│                         │  └───────────┘  │  │
+│                         └─────────────────┘  │
 └──────────────────────────────────────────────┘
 ```
 
@@ -319,13 +319,13 @@ O build será gerado na pasta `apps/backoffice/storybook-static/`.
 
 ### Configuração de Portas
 
-| Aplicação            | Porta | URL                   |
-| -------------------- | ----- | --------------------- |
-| Backoffice (Host)    | 3000  | http://localhost:3000 |
-| Dashboard (Next.js)  | 3001  | http://localhost:3001 |
-| Uploader Root        | 4200  | http://localhost:4200 |
-| App Angular (Upload) | 4201  | http://localhost:4201 |
-| Storybook            | 6006  | http://localhost:6006 |
+| Aplicação            | Porta | URL                          |
+| -------------------- | ----- | ---------------------        |
+| Backoffice (Host)    | 3000  | http://localhost:3000        |
+| Dashboard (Next.js)  | 3001  | http://localhost:3001        |
+| Uploader Root        | 4200  | http://localhost:4200        |
+| App Angular (Upload) | 4201  | http://localhost:4200/upload |
+| Storybook            | 6006  | http://localhost:6006        |
 
 ## ☁️ Cloud Security / Auth
 
@@ -341,7 +341,7 @@ A aplicação principal (**Backoffice**) foi implantada na plataforma **Vercel**
 
 > **⚠️ Observação Importante:**
 >
-> O **Backoffice** está disponível em produção na Vercel. Porém, os microfrontends **Dashboard (Next.js)** e **App Angular (Upload)** **não estão disponíveis em produção** e é necessário rodá-los localmente para que a aplicação funcione completamente. Para acessar todas as funcionalidades, execute os microfrontends seguindo as instruções na seção [🚀 Rodando o Projeto](#-rodando-o-projeto).
+> O **Backoffice** está disponível em produção na Vercel, porém, os microfrontends **Dashboard (Next.js)** e **App Angular (Upload)** **não estão disponíveis em produção** e é necessário rodá-los localmente para que a aplicação funcione completamente. Para acessar todas as funcionalidades, execute os microfrontends seguindo as instruções na seção [🐳 Docker](#-docker) ou [🚀 Rodando o Projeto](#-rodando-o-projeto).
 
 ### Gerenciamento de Credenciais e Secrets
 
