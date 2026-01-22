@@ -1,36 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Uploader Microfrontend</title>
-  <style>
-    body {
-      margin: 0;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-        'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-        sans-serif;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-  </style>
-  <!-- Zone.js - Obrigatório para Angular -->
-  <script src="https://cdn.jsdelivr.net/npm/zone.js@0.14.10/bundles/zone.umd.min.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Uploader Microfrontend</title>
+    <style>
+      body {
+        margin: 0;
+        font-family:
+          -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+          "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+          sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+    </style>
+    <!-- Zone.js - Obrigatório para Angular -->
+    <script src="https://cdn.jsdelivr.net/npm/zone.js@0.14.10/bundles/zone.umd.min.js"></script>
 
-  <!-- SystemJS - Necessário para System.import() -->
-  <script src="https://cdn.jsdelivr.net/npm/systemjs@6.14.3/dist/system.min.js"></script>
+    <!-- SystemJS - Necessário para System.import() -->
+    <script src="https://cdn.jsdelivr.net/npm/systemjs@6.14.3/dist/system.min.js"></script>
 
-  <script type="systemjs-importmap">
-  {
-    "imports": {
-      "angular-app": "http://localhost:4201/main.js",
-      "react-app": "http://localhost:3001/main.js"
-    }
-  }
-  </script>
-</head>
-<body>
+    <script>
+      // Configurar import map dinamicamente baseado no hostname
+      const angularUrl = `http://${window.location.hostname}:4201/main.js`;
+      const importMap = document.createElement("script");
+      importMap.type = "systemjs-importmap";
+      importMap.textContent = JSON.stringify({
+        imports: {
+          "angular-app": angularUrl,
+        },
+      });
+      document.currentScript.parentNode.insertBefore(
+        importMap,
+        document.currentScript.nextSibling,
+      );
+    </script>
+  </head>
+  <body>
     <div id="single-spa-application:angular-app"></div>
-    <div id="single-spa-application:react-app"></div>
-</body>
+  </body>
 </html>

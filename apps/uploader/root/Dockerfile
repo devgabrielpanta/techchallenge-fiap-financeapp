@@ -3,19 +3,16 @@ FROM node:20-alpine
 # Instalar pnpm
 RUN corepack enable && corepack prepare pnpm@latest --activate
 
-WORKDIR /app
+WORKDIR /app/apps/uploader/root
 
-# Copiar arquivos de dependências da raiz
-COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
-COPY apps/uploader/root/package.json ./apps/uploader/root/
+# Copiar package.json do uploader-root
+COPY apps/uploader/root/package.json ./
 
-# Instalar dependências do workspace
-RUN pnpm install --frozen-lockfile
+# Instalar dependências diretamente no diretório do uploader-root
+RUN pnpm install --shamefully-hoist
 
 # Copiar código fonte
-COPY apps/uploader/root/ ./apps/uploader/root/
-
-WORKDIR /app/apps/uploader/root
+COPY apps/uploader/root/ ./
 
 EXPOSE 4200
 

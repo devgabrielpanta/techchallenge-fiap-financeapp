@@ -14,7 +14,7 @@ export default function DashboardIframe() {
 
     iframeRef.current?.contentWindow?.postMessage(
       { type: "SET_THEME", theme },
-      "*"
+      "*",
     );
   }
 
@@ -35,7 +35,7 @@ export default function DashboardIframe() {
   return (
     <iframe
       ref={iframeRef}
-      src={`${config.uploaderRoot}/dashboard`}
+      src={config.dashboard}
       onLoad={() => setReady(true)}
       className="w-full h-full border-none"
       title="Dashboard Financeiro"

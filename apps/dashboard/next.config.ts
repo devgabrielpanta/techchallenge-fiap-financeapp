@@ -1,39 +1,13 @@
-import type { NextConfig } from 'next';
-import NextFederationPlugin from '@module-federation/nextjs-mf';
-
-// Necessário para Module Federation no Next
-process.env.NEXT_PRIVATE_LOCAL_WEBPACK = '5';
+import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   devIndicators: false,
-
-  // 🔴 SEM ISSO, NÃO FUNCIONA (desabilitado temporariamente por falta de suporte ao Module Federation)
-  turbopack: {},
+  output: "standalone", // Para Docker
+  turbopack: {}, // Required by Next.js 16 when webpack config is present
 
   webpack(config) {
-    config.plugins.push(
-      new NextFederationPlugin({
-        name: 'dashboard',
-        filename: 'static/chunks/remoteEntry.js',
-        exposes: {
-          './Dashboard': './app/DashboardRoot',
-        },
-        shared: {
-          react: {
-            singleton: true,
-            requiredVersion: false,
-          },
-          'react-dom': {
-            singleton: true,
-            requiredVersion: false,
-          },
-        },
-        extraOptions: {
-          exposePages: false,
-        },
-      })
-    );
-
+    // Module Federation configuration disabled for Docker compatibility
+    // Can be re-enabled for local development if needed
     return config;
   },
 };

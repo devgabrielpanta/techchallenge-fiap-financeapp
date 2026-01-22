@@ -9,7 +9,8 @@ WORKDIR /app
 
 # Copiar arquivos de dependências
 COPY package.json pnpm-lock.yaml* pnpm-workspace.yaml ./
-COPY apps/backoffice/package.json ./apps/backoffice/
+COPY apps/dashboard/package.json ./apps/dashboard/
+COPY packages/theme/package.json ./packages/theme/
 
 # Instalar dependências
 RUN pnpm install --frozen-lockfile
@@ -19,10 +20,11 @@ FROM base AS builder
 WORKDIR /app
 
 COPY --from=deps /app/node_modules ./node_modules
-COPY --from=deps /app/apps/backoffice/node_modules ./apps/backoffice/node_modules
+COPY --from=deps /app/apps/dashboard/node_modules ./apps/dashboard/node_modules
+COPY --from=deps /app/packages/theme ./packages/theme
 COPY . .
 
-WORKDIR /app/apps/backoffice
+WORKDIR /app/apps/dashboard
 
 # Build da aplicação
 RUN pnpm build
@@ -38,15 +40,15 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copiar arquivos do standalone build
-COPY --from=builder --chown=nextjs:nodejs /app/apps/backoffice/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/apps/backoffice/.next/static ./apps/backoffice/.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/apps/backoffice/public ./apps/backoffice/public
+COPY --from=builder --chown=nextjs:nodejs /app/apps/dashboard/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/apps/dashboard/.next/static ./apps/dashboard/.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/apps/dashboard/public ./apps/dashboard/public
 
 USER nextjs
 
-EXPOSE 3000
+EXPOSE 3001
 
-ENV PORT=3000
+ENV PORT=3001
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["node", "apps/backoffice/server.js"]
+CMD ["node", "apps/dashboard/server.js"]

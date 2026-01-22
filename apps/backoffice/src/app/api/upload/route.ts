@@ -53,7 +53,13 @@ export async function DELETE(request: NextRequest) {
     }
 
     // Caminho para a pasta public/uploads na raiz do projeto
-    const uploadsDir = path.join(process.cwd(), "..", "public", "uploads");
+    const uploadsDir = path.join(
+      process.cwd(),
+      "..",
+      "..",
+      "public",
+      "uploads",
+    );
     const filePath = path.join(uploadsDir, `${fileId}.pdf`);
 
     // Deleta o arquivo

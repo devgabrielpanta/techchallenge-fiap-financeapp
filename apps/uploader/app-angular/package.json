@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "ng serve --port 4201 --host 0.0.0.0 --disable-host-check",
-    "build": "ng build"
+    "start": "pnpm exec ng serve --port 4201 --host 0.0.0.0 --disable-host-check",
+    "build": "pnpm exec ng build"
   },
   "dependencies": {
     "@angular/animations": "^18.0.0",

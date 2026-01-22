@@ -1,4 +1,4 @@
-version: '3.8'
+version: "3.8"
 
 services:
   backoffice:
@@ -11,14 +11,16 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - NEXT_PUBLIC_UPLOADER_ROOT_URL=http://localhost:4200
+      - NEXT_PUBLIC_UPLOADER_ROOT_URL=http://finance-app-uploader-root:4200
+      - NEXT_PUBLIC_UPLOADER_ANGULAR_URL=http://finance-app-uploader-angular:4201
       - NEXT_PUBLIC_BACKOFFICE_URL=http://localhost:3000
+      - NEXT_PUBLIC_DASHBOARD_URL=http://finance-app-dashboard:3001
     networks:
       - finance-app-network
     depends_on:
       - uploader-root
-      - uploader-react
       - uploader-angular
+      - dashboard
 
   uploader-root:
     build:
@@ -32,18 +34,18 @@ services:
     networks:
       - finance-app-network
     depends_on:
-      - uploader-react
       - uploader-angular
 
-  uploader-react:
+  dashboard:
     build:
       context: .
-      dockerfile: apps/uploader/app-react/Dockerfile
-    container_name: finance-app-uploader-react
+      dockerfile: apps/dashboard/Dockerfile
+    container_name: finance-app-dashboard
     ports:
       - "3001:3001"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
+      - PORT=3001
     networks:
       - finance-app-network
 

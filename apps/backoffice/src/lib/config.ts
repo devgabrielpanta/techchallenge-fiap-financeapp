@@ -5,10 +5,15 @@
 
 export const config = {
   // URLs dos microfrontends
-  uploaderRoot: process.env.NEXT_PUBLIC_UPLOADER_ROOT_URL || 'http://localhost:4200',
-  uploaderReact: process.env.NEXT_PUBLIC_UPLOADER_REACT_URL || 'http://localhost:3001',
-  uploaderAngular: process.env.NEXT_PUBLIC_UPLOADER_ANGULAR_URL || 'http://localhost:4201',
-  
+  uploaderRoot:
+    process.env.NEXT_PUBLIC_UPLOADER_ROOT_URL || "http://localhost:4200",
+  uploaderReact:
+    process.env.NEXT_PUBLIC_UPLOADER_REACT_URL || "http://localhost:3001",
+  uploaderAngular:
+    process.env.NEXT_PUBLIC_UPLOADER_ANGULAR_URL || "http://localhost:4201",
+  dashboard: process.env.NEXT_PUBLIC_DASHBOARD_URL || "http://localhost:3001",
+
   // URL do backoffice (para postMessage)
-  backofficeUrl: process.env.NEXT_PUBLIC_BACKOFFICE_URL || 'http://localhost:3000',
+  backofficeUrl:
+    process.env.NEXT_PUBLIC_BACKOFFICE_URL || "http://localhost:3000",
 } as const;

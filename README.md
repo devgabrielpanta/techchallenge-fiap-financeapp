@@ -77,10 +77,6 @@ techchallenge-fiap-financeapp/
     │   ├── package.json
     │   └── webpack.config.js    # Webpack + Single-SPA config
     │
-    ├── app-react/               # Microfrontend 1 - React (Dashboard)
-    │   ├── src/
-    │   │   ├── index.js         # Entry point React
-    │   │   └── App.jsx          # Componente principal
     │   ├── package.json
     │   └── webpack.config.js
     │
@@ -214,11 +210,11 @@ cd apps/uploader/root
 npm install
 ```
 
-3. **Instalar dependências do App React:**
+3. **Instalar dependências do Dashboard:**
 
 ```bash
-cd apps/uploader/app-react
-npm install
+cd apps/dashboard
+pnpm install
 ```
 
 4. **Instalar dependências do App Angular:**
@@ -244,11 +240,11 @@ cd apps/uploader/root
 npm start
 ```
 
-**Terminal 3 - App React (Dashboard):**
+**Terminal 3 - Dashboard (Next.js):**
 
 ```bash
-cd apps/uploader/app-react
-npm start
+cd apps/dashboard
+pnpm dev
 ```
 
 **Terminal 4 - App Angular (Upload & Viewer):**

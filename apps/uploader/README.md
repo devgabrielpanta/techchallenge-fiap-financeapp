@@ -21,10 +21,6 @@ uploader/
 │   ├── package.json
 │   └── webpack.config.js
 │
-├── app-react/               # Microfrontend React (Dashboard)
-│   ├── src/
-│   │   ├── index.js         # Entry point (Single-SPA lifecycle)
-│   │   └── App.jsx          # Componente principal
 │   ├── package.json
 │   └── webpack.config.js
 │
@@ -59,15 +55,6 @@ cd app-angular
 pnpm install
 pnpm start
 # Rodando em http://localhost:4201
-```
-
-### 3. App React (Dashboard)
-
-```bash
-cd app-react
-pnpm install
-pnpm start
-# Rodando em http://localhost:3001
 ```
 
 ## 🔄 Single-SPA Lifecycle
@@ -126,7 +113,6 @@ window.postMessage(
 O Single-SPA gerencia as rotas internas:
 
 - `/upload` ou `/` → App Angular (Upload & Viewer)
-- `/dashboard` → App React (Dashboard)
 
 ## 🔧 Configuração
 
@@ -137,24 +123,6 @@ registerApplication({
   name: "angular-app",
   app: () => System.import("http://localhost:4201/main.js"),
   activeWhen: ["/upload", "/"],
-});
-
-registerApplication({
-  name: "react-app",
-  app: () => System.import("http://localhost:3001/main.js"),
-  activeWhen: ["/dashboard"],
-});
-```
-
-### App React (`app-react/src/index.js`)
-
-Usa `single-spa-react` para expor os lifecycles:
-
-```javascript
-const lifecycles = singleSpaReact({
-  React,
-  ReactDOM,
-  rootComponent: App,
 });
 ```
 

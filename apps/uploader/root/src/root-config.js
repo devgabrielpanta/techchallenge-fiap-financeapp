@@ -4,18 +4,10 @@ import { registerApplication, start } from "single-spa";
 // No navegador, sempre usar localhost (ou hostname atual) pois os serviços são expostos nas portas do host
 const getAngularUrl = () => {
   // Função é executada apenas quando o app é carregado (no browser)
-  if (typeof window !== 'undefined' && window.location) {
+  if (typeof window !== "undefined" && window.location) {
     return `http://${window.location.hostname}:4201/main.js`;
   }
-  return 'http://localhost:4201/main.js';
-};
-
-const getReactUrl = () => {
-  // Função é executada apenas quando o app é carregado (no browser)
-  if (typeof window !== 'undefined' && window.location) {
-    return `http://${window.location.hostname}:3001/main.js`;
-  }
-  return 'http://localhost:3001/main.js';
+  return "http://localhost:4201/main.js";
 };
 
 // Registrar aplicação Angular (Upload e Viewer)
@@ -23,13 +15,6 @@ registerApplication({
   name: "angular-app",
   app: () => System.import(getAngularUrl()),
   activeWhen: ["/upload"],
-});
-
-// Registrar aplicação React (Dashboard)
-registerApplication({
-  name: "react-app",
-  app: () => System.import(getReactUrl()),
-  activeWhen: ["/dashboard"],
 });
 
 // Iniciar Single-SPA
