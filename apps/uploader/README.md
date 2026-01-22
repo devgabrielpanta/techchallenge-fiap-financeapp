@@ -1,14 +1,13 @@
 # 📤 Uploader Microfrontend
 
-Microfrontend para upload/visualização de documentos (Angular) e dashboard financeiro (React), orquestrado por Single-SPA.
+Microfrontend para upload de documentos (PDFs) usando Angular, orquestrado por Single-SPA.
 
 ## 🏗️ Arquitetura
 
-Este microfrontend é composto por três aplicações:
+Este microfrontend é composto por duas aplicações:
 
-1. **Root Config** - Orquestrador Single-SPA que gerencia o ciclo de vida dos apps
-2. **App Angular** - Upload e visualização de documentos (PDFs)
-3. **App React** - Dashboard financeiro com gráficos e análises
+1. **Root Config** - Orquestrador Single-SPA que gerencia o ciclo de vida do app Angular
+2. **App Angular** - Upload e validação de documentos (PDFs)
 
 ## 📂 Estrutura
 
@@ -21,17 +20,13 @@ uploader/
 │   ├── package.json
 │   └── webpack.config.js
 │
-│   ├── package.json
-│   └── webpack.config.js
-│
-└── app-angular/             # Microfrontend Angular (Upload & Viewer)
+└── app-angular/             # Microfrontend Angular (Upload)
     ├── src/
-    │   ├── app/             # Módulos Angular
+    │   ├── app/             # Componentes Angular
     │   │   ├── app.component.ts
     │   │   ├── app.component.html
     │   │   └── app.component.css
     │   └── main.ts          # Entry point (Single-SPA lifecycle)
-    ├── public/              # Armazenamento de arquivos
     ├── angular.json
     ├── package.json
     └── tsconfig.json
@@ -48,11 +43,11 @@ pnpm start
 # Rodando em http://localhost:4200
 ```
 
-### 2. App Angular (Upload & Viewer)
+### 2. App Angular (Upload)
 
 ```bash
 cd app-angular
-pnpm install
+npm install
 pnpm start
 # Rodando em http://localhost:4201
 ```
@@ -112,7 +107,7 @@ window.postMessage(
 
 O Single-SPA gerencia as rotas internas:
 
-- `/upload` ou `/` → App Angular (Upload & Viewer)
+- `/upload` → App Angular (Upload)
 
 ## 🔧 Configuração
 
@@ -151,12 +146,6 @@ const lifecycles = singleSpaAngular({
 - `single-spa-angular` - Adapter Single-SPA para Angular
 - `@angular-builders/custom-webpack` - Custom webpack config
 
-### App React
-
-- `react` - Framework React
-- `react-dom` - React DOM
-- `single-spa-react` - Adapter Single-SPA para React
-
 ## 🐛 Troubleshooting
 
 ### Erro: "Cannot find module"
@@ -179,13 +168,13 @@ const lifecycles = singleSpaAngular({
 ## 📚 Recursos
 
 - [Single-SPA Documentation](https://single-spa.js.org/)
-- [single-spa-react Documentation](https://single-spa.js.org/docs/ecosystem-react)
 - [single-spa-angular Documentation](https://single-spa.js.org/docs/ecosystem-angular)
+- [Angular Documentation](https://angular.dev/)
 
-## 🎯 Próximos Passos
+## 🎯 Funcionalidades Implementadas
 
-1. ✅ Implementar upload e visualizador de PDF no App Angular
-2. Implementar gráficos e análises no Dashboard React
-3. Adicionar persistência de arquivos
-4. Melhorar tratamento de erros
-5. Adicionar testes unitários e de integração
+- ✅ Upload de PDFs no App Angular
+- ✅ Validação de arquivos (tipo e tamanho)
+- ✅ Comunicação com backoffice via postMessage
+- ✅ Integração com Single-SPA
+- ✅ Gerenciamento de arquivos enviados

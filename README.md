@@ -61,47 +61,51 @@ techchallenge-fiap-financeapp/
 │   │   ├── src/
 │   │   │   ├── app/             # Pages (Next.js App Router)
 │   │   │   │   ├── layout.tsx   # Layout principal
-│   │   │   │   ├── page.tsx     # Dashboard
-│   │   │   │   └── upload/      # Página que integra o microfrontend
+│   │   │   │   ├── page.tsx     # Página inicial
+│   │   │   │   ├── extract/     # Página de extrato integra o uploader (microfrontend angular)
+│   │   │   │   └── dashboard/   # Página que integra dashboard em next.js via iframe (microfrontend next.js)
 │   │   │   ├── components/      # Componentes React
 │   │   │   ├── context/         # Context providers
-│   │   │   └── lib/             # Utilitários
-│   │   ├── public/              # Assets estáticos
+│   │   │   └── lib/             # Utilitários e configurações
+│   │   ├── public/              # Assets estáticos e uploads
 │   │   ├── next.config.js       # Configuração Next.js
 │   │   ├── package.json
 │   │   └── tsconfig.json
 │   │
-│   ├── dashboard/               # Microfrontend Dashboard
-│   │   ├── app/                 # Pages (Next.js App Router)
-│   │   │   ├── layout.tsx       # Layout principal
-│   │   │   ├── page.tsx         # Dashboard
-│   │   │   └── upload/          # Página que integra o microfrontend
-│   │   ├── components/          # Componentes React
-│   │   ├── context/             # Context providers
-│   │   └── lib/                 # Utilitários
-│   ├── public/                  # Assets estáticos
-│   ├── next.config.js           # Configuração Next.js
-│   ├── package.json
-│   └── tsconfig.json
+│   ├── dashboard/               # Microfrontend Dashboard (Next.js)
+│   │   ├── src/
+│   │   │   ├── app/             # Pages (Next.js App Router)
+│   │   │   │   ├── layout.tsx   # Layout do dashboard
+│   │   │   │   └── page.tsx     # Dashboard principal
+│   │   │   ├── components/      # Componentes de gráficos
+│   │   │   └── lib/             # Utilitários
+│   │   ├── public/              # Assets estáticos
+│   │   ├── next.config.ts       # Configuração Next.js
+│   │   ├── package.json
+│   │   └── tsconfig.json
+│   │
+│   └── uploader/                # Microfrontend - Sistema de Upload
+│       ├── README.md            # Documentação específica do uploader
+│       │
+│       ├── root/                # Single-SPA Root Config (Orquestrador)
+│       │   ├── src/
+│       │   │   ├── root-config.js # Root config do Single-SPA
+│       │   │   └── index.html   # HTML base
+│       │   ├── package.json
+│       │   └── webpack.config.js # Webpack + Single-SPA config
+│       │
+│       └── app-angular/         # Microfrontend Angular (Upload)
+│           ├── src/
+│           │   ├── app/         # Componentes Angular
+│           │   │   ├── app.component.ts
+│           │   │   └── app.module.ts
+│           │   └── main.ts      # Entry point
+│           ├── angular.json
+│           ├── package.json
+│           └── tsconfig.json
 │
-└── uploader/                    # Microfrontend - Sistema de Upload
-    ├── README.md                # Documentação específica do uploader
-    │
-    ├── root/                    # Single-SPA Root Config (Orquestrador)
-    │   ├── src/
-    │   │   ├── root-config.js   # Root config do Single-SPA
-    │   │   └── index.html       # HTML base
-    │   ├── package.json
-    │   └── webpack.config.js    # Webpack + Single-SPA config
-    │
-    ├── app-react/               # Microfrontend 1 - React (Dashboard)
-    │   ├── src/
-    │   │   ├── index.js         # Entry point React
-    │   │   └── App.jsx          # Componente principal
-    │   ├── package.json
-    │   └── webpack.config.js
-    │
-    └── app-angular/             # Microfrontend 2 - Angular (Upload & Viewer)
+└── packages/
+    └── theme/                   # Pacote compartilhado de tema
         ├── src/
         │   └── theme.css        # Estilos globais compartilhados
         └── package.json
@@ -120,50 +124,52 @@ Aplicação principal que funciona como shell/container:
 - Integra o microfrontend `uploader` via **iframe**
 - Comunicação com o iframe via **postMessage API**
 
-#### 2. Uploader (Microfrontend)
+#### 2. Dashboard (Next.js - Microfrontend)
+
+Aplicação de dashboard financeiro integrada via iframe:
+
+- **Next.js 16** com App Router
+- Gráficos e visualizações de dados
+- Métricas financeiras
+- Interface de relatórios
+- Integração com backoffice via postMessage
+
+#### 3. Uploader (Microfrontend)
 
 Sistema de upload e visualização de PDFs, orquestrado por **Single-SPA**:
 
-**2.1 Root Config**
+**3.1 Root Config**
 
 - **Single-SPA Root Config**: Define e carrega os microfrontends
 - Gerencia o ciclo de vida dos apps
-- Roteamento interno entre apps React e Angular
+- Roteamento interno para Angular
 
-**2.2 App Angular**
+**3.2 App Angular**
 
 - Upload de PDFs
-- Visualizador de PDFs integrado
 - Validação de arquivos
 - Gerenciamento de arquivos enviados
-- Preview em tempo real
-
-**2.3 App React**
-
-- Dashboard financeiro
-- Gráficos e análises
-- Visualização de métricas
-- Interface de relatórios
+- Comunicação com backoffice via postMessage
 
 ## 🔗 Integração via iframe
 
 ### Como Funciona
 
-O backoffice Next.js integra o microfrontend `uploader` usando iframe:
+O backoffice Next.js integra o microfrontend `uploader` e o `dashboard` usando iframe:
 
 ```
-┌─────────────────────────────────────┐
-│   Backoffice (Next.js)              │
-│   ┌─────────────────────────────┐   │
-│   │  iframe                     │   │
-│   │  ┌───────────────────────┐  │   │
-│   │  │  Single-SPA           │  │   │
-│   │  │  ┌─────┐  ┌─────────┐ │  │   │
-│   │  │  │React│  │ Angular │ │  │   │
-│   │  │  └─────┘  └─────────┘ │  │   │
-│   │  └───────────────────────┘  │   │
-│   └─────────────────────────────┘   │
-└─────────────────────────────────────┘
+┌──────────────────────────────────────────────┐
+│   Backoffice (Next.js)                       │
+│   ┌──────────────────┐  ┌─────────────────┐ │
+│   │  iframe          │  │  iframe         │ │
+│   │  ┌────────────┐  │  │  ┌───────────┐  │ │
+│   │  │ Dashboard  │  │  │  │Single-SPA │  │ │
+│   │  │ (Next.js)  │  │  │  │ ┌───────┐ │  │ │
+│   │  └────────────┘  │  │  │ │Angular│ │  │ │
+│   └──────────────────┘  │  │ └───────┘ │  │ │
+│                         │  └───────────┘  │ │
+│                         └─────────────────┘ │
+└──────────────────────────────────────────────┘
 ```
 
 ### Comunicação
@@ -284,10 +290,10 @@ docker-compose down
 
 **Containers criados:**
 
-- `backoffice` - Aplicação Next.js (porta 3000)
-- `uploader-root` - Single-SPA Root (porta 4200)
-- **Uploader React**: Serve o bundle React para dashboard financeiro (porta 3001)
-- `uploader-angular` - Microfrontend Angular (porta 4201)
+- `finance-app-backoffice` - Aplicação Next.js principal (porta 3000)
+- `finance-app-dashboard` - Dashboard Next.js (porta 3001)
+- `finance-app-uploader-root` - Single-SPA Root (porta 4200)
+- `finance-app-uploader-angular` - Microfrontend Angular (porta 4201)
 
 ### Executando o Storybook
 
@@ -313,13 +319,13 @@ O build será gerado na pasta `apps/backoffice/storybook-static/`.
 
 ### Configuração de Portas
 
-| Aplicação                     | Porta | URL                   |
-| ----------------------------- | ----- | --------------------- |
-| Backoffice (Host)             | 3000  | http://localhost:3000 |
-| Uploader Root                 | 4200  | http://localhost:4200 |
-| App React (Dashboard)         | 3001  | http://localhost:3001 |
-| App Angular (Upload & Viewer) | 4201  | http://localhost:4201 |
-| Storybook                     | 6006  | http://localhost:6006 |
+| Aplicação            | Porta | URL                   |
+| -------------------- | ----- | --------------------- |
+| Backoffice (Host)    | 3000  | http://localhost:3000 |
+| Dashboard (Next.js)  | 3001  | http://localhost:3001 |
+| Uploader Root        | 4200  | http://localhost:4200 |
+| App Angular (Upload) | 4201  | http://localhost:4201 |
+| Storybook            | 6006  | http://localhost:6006 |
 
 ## ☁️ Cloud Security / Auth
 
@@ -335,7 +341,7 @@ A aplicação principal (**Backoffice**) foi implantada na plataforma **Vercel**
 
 > **⚠️ Observação Importante:**
 >
-> O **Backoffice** está disponível em produção na Vercel. Porém, os microfrontends **App React (Dashboard)** e **App Angular (Upload & Viewer)** **não estão disponíveis em produção** e é necessário rodá-los localmente para que a aplicação funcione completamente. Para acessar todas as funcionalidades, execute os microfrontends seguindo as instruções na seção [🚀 Rodando o Projeto](#-rodando-o-projeto).
+> O **Backoffice** está disponível em produção na Vercel. Porém, os microfrontends **Dashboard (Next.js)** e **App Angular (Upload)** **não estão disponíveis em produção** e é necessário rodá-los localmente para que a aplicação funcione completamente. Para acessar todas as funcionalidades, execute os microfrontends seguindo as instruções na seção [🚀 Rodando o Projeto](#-rodando-o-projeto).
 
 ### Gerenciamento de Credenciais e Secrets
 
@@ -356,11 +362,17 @@ Por questões de segurança e boas práticas, todas as credenciais, chaves de AP
 - **Tailwind CSS** - Estilização utilitária
 - **Storybook** - Documentação de componentes da UI
 
+### Dashboard
+
+- **Next.js 16** - Framework React
+- **React 19** - Biblioteca para interfaces
+- **TypeScript** - Tipagem estática
+- **Tailwind CSS** - Estilização utilitária
+
 ### Uploader
 
 - **Single-SPA** - Framework orquestrador de microfrontends
-- **React** - Microfrontend de dashboard
-- **Angular** - Microfrontend de upload e visualização
+- **Angular 18** - Microfrontend de upload
 - **Webpack 5** - Module bundler
 - **TypeScript** - Tipagem estática
 
@@ -395,11 +407,16 @@ Por questões de segurança e boas práticas, todas as credenciais, chaves de AP
 - ✅ **Extrato**: Listagem completa de movimentações com filtros e paginação
 - ✅ **Upload de Documentos**: Integração com microfrontend para envio de arquivos
 
+### Microfrontend Dashboard
+
+- ✅ **Dashboard Financeiro**: Interface Next.js para gráficos e análises
+- ✅ **Visualização de Métricas**: Dados financeiros em tempo real
+- ✅ **Comunicação Bidirecional**: Integração com backoffice via postMessage
+
 ### Microfrontend Uploader
 
 - ✅ **Upload de PDFs**: Interface Angular para envio de documentos
-- ✅ **Visualizador de PDFs**: Interface Angular para visualização de documentos
-- ✅ **Dashboard Financeiro**: Interface React para gráficos e análises
+- ✅ **Validação de Arquivos**: Verificação de tipo e tamanho
 - ✅ **Comunicação Bidirecional**: Integração com backoffice via postMessage
 
 ## 🏆 Objetivos de Aprendizado
