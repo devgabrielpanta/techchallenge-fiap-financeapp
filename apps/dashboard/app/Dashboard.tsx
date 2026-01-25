@@ -30,7 +30,7 @@ export default function DashboardRoot() {
   useThemeSync();
 
   const selectedPeriod = useSelector(
-    (state: RootState) => state.dashboard.selectedPeriod
+    (state: RootState) => state.dashboard.selectedPeriod,
   );
 
   const { data, isLoading, error } = useDashboardData(selectedPeriod);
@@ -51,21 +51,21 @@ export default function DashboardRoot() {
   return (
     <div className="w-full overflow-x-hidden grid grid-cols-1 gap-6 md:pr-4">
       <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-        <div>
+        <header>
           <h1 className="text-3xl font-bold text-[var(--color-text)]">
             Dashboard Financeiro
           </h1>
           <p className="text-sm text-[var(--color-text-muted)] mb-6">
             Visão geral das finanças por período
           </p>
-        </div>
+        </header>
 
         <PeriodSelector aria-label="Selecionar período para atualização dos gráficos" />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <div
-          tabIndex={0}
+        <section
+          aria-label="Receitas"
           className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg"
         >
           <Card
@@ -75,9 +75,9 @@ export default function DashboardRoot() {
             isLoading={isLoading}
             aria-label={`Receitas totais: R$ ${totalRevenue.toLocaleString("pt-BR")}, mudança: ${revenueChange}%`}
           />
-        </div>
-        <div
-          tabIndex={0}
+        </section>
+        <section
+          aria-label="Despesas"
           className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg"
         >
           <Card
@@ -87,9 +87,9 @@ export default function DashboardRoot() {
             isLoading={isLoading}
             aria-label={`Despesas totais: R$ ${totalExpenses.toLocaleString("pt-BR")}, mudança: ${expensesChange}%`}
           />
-        </div>
-        <div
-          tabIndex={0}
+        </section>
+        <section
+          aria-label="Saldo"
           className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg"
         >
           <Card
@@ -99,9 +99,9 @@ export default function DashboardRoot() {
             isLoading={isLoading}
             aria-label={`Saldo: R$ ${balance.toLocaleString("pt-BR")}, mudança: ${revenueChange - expensesChange}%`}
           />
-        </div>
-        <div
-          tabIndex={0}
+        </section>
+        <section
+          aria-label="Despesa Média"
           className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg"
         >
           <Card
@@ -111,19 +111,23 @@ export default function DashboardRoot() {
             isLoading={isLoading}
             aria-label={`Despesa Média: R$ ${averageExpense.toLocaleString("pt-BR")}`}
           />
-        </div>
+        </section>
       </div>
 
       {error && <p className="text-red-500 mb-4">{error}</p>}
 
-      <div
-        tabIndex={0}
-        role="img"
-        aria-label={`Gráfico de evolução financeira mostrando receitas, despesas e saldo para o período ${selectedPeriod}.`}
+      <figure
+        role="group"
+        aria-labelledby="evolucao-title"
         className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg"
       >
         <FinancialEvolutionChart period={selectedPeriod} showBalanceLine />
 
+        <figcaption id="evolucao-title" className="sr-only">
+          Gráfico de evolução financeira mostrando receitas, despesas e saldo
+          para o período {selectedPeriod}.
+        </figcaption>
+
         {/* Texto para leitores de tela */}
         {data?.charts.evolution.labels.length && (
           <span className="sr-only">
@@ -133,25 +137,29 @@ export default function DashboardRoot() {
                 const despesa = data.charts.evolution.expenses[idx];
                 const saldo = receita - despesa;
                 return `${label}: Receita R$ ${receita.toLocaleString(
-                  "pt-BR"
+                  "pt-BR",
                 )}, Despesa R$ ${despesa.toLocaleString(
-                  "pt-BR"
+                  "pt-BR",
                 )}, Saldo R$ ${saldo.toLocaleString("pt-BR")}`;
               })
               .join(". ")}
           </span>
         )}
-      </div>
+      </figure>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <div
-          tabIndex={0}
-          role="img"
-          aria-label={`Gráfico de pizza mostrando despesas por categoria para o período ${selectedPeriod}.`}
+        <figure
+          role="group"
+          aria-labelledby="expenses-by-category-title"
           className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg"
         >
           <ExpensesByCategoryChart period={selectedPeriod} showPercentage />
 
+          <figcaption id="expenses-by-category-title" className="sr-only">
+            Gráfico de pizza mostrando despesas por categoria para o período $
+            {selectedPeriod}.
+          </figcaption>
+
           {/* Texto para leitores de tela */}
           {data?.charts.expensesByCategory.length && (
             <span className="sr-only">
@@ -159,27 +167,32 @@ export default function DashboardRoot() {
                 .map(
                   (item) =>
                     `${item.category}: R$ ${item.amount.toLocaleString(
-                      "pt-BR"
+                      "pt-BR",
                     )} (${(
                       (item.amount /
                         data.charts.expensesByCategory.reduce(
                           (a, b) => a + b.amount,
-                          0
+                          0,
                         )) *
                       100
-                    ).toFixed(1)}%)`
+                    ).toFixed(1)}%)`,
                 )
                 .join(", ")}
             </span>
           )}
-        </div>
-        <div
-          tabIndex={0}
-          aria-label={`Gráfico de barras mostrando despesas por categoria para o período ${selectedPeriod}.`}
+        </figure>
+        <figure
+          role="group"
+          aria-labelledby="ranking-by-category-title"
           className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg"
         >
           <RankingByCategoryChart period={selectedPeriod} />
 
+          <figcaption id="ranking-by-category-title" className="sr-only">
+            Gráfico de barras mostrando despesas por categoria para o período $
+            {selectedPeriod}.
+          </figcaption>
+
           {/* Texto para leitores de tela */}
           {data?.charts.expensesByCategory.length && (
             <span className="sr-only">
@@ -187,28 +200,33 @@ export default function DashboardRoot() {
                 .map(
                   (item) =>
                     `${item.category}: R$ ${item.amount.toLocaleString(
-                      "pt-BR"
+                      "pt-BR",
                     )} (${(
                       (item.amount /
                         data.charts.expensesByCategory.reduce(
                           (a, b) => a + b.amount,
-                          0
+                          0,
                         )) *
                       100
-                    ).toFixed(1)}%)`
+                    ).toFixed(1)}%)`,
                 )
                 .join(", ")}
             </span>
           )}
-        </div>
+        </figure>
       </div>
 
-      <div
-        tabIndex={0}
-        aria-label={`Gráfico de área acumulada mostrando a evolução acumulada de receitas e despesas ao longo do período ${selectedPeriod}.`}
+      <figure
+        role="group"
+        aria-labelledby="accumulated-area-chart-title"
         className="focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg"
       >
         <AccumulatedAreaChart period={selectedPeriod} />
+
+        <figcaption id="accumulated-area-chart-title" className="sr-only">
+          Gráfico de área acumulada mostrando a evolução acumulada de receitas e
+          despesas ao longo do período ${selectedPeriod}.
+        </figcaption>
 
         {/* Texto para leitores de tela */}
         {data?.charts.evolution.labels.length && (
@@ -219,15 +237,15 @@ export default function DashboardRoot() {
                 const despesa = data.charts.evolution.expenses[idx];
                 const saldo = receita - despesa;
                 return `${label}: Receita R$ ${receita.toLocaleString(
-                  "pt-BR"
+                  "pt-BR",
                 )}, Despesa R$ ${despesa.toLocaleString(
-                  "pt-BR"
+                  "pt-BR",
                 )}, Saldo R$ ${saldo.toLocaleString("pt-BR")}`;
               })
               .join(". ")}
           </span>
         )}
-      </div>
+      </figure>
     </div>
   );
 }

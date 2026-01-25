@@ -94,6 +94,7 @@ export const Sidebar: React.FC = () => {
 
       {/* Sidebar Desktop */}
       <aside
+        aria-labelledby="sidebar-title"
         className={cn(
           "hidden lg:flex lg:flex-col lg:justify-between",
           "sticky top-[64px] h-[calc(100vh-84px)] w-[260px] p-4",
@@ -101,9 +102,13 @@ export const Sidebar: React.FC = () => {
           "rounded-[var(--radius-md)] m-[10px] overflow-y-auto scrollbar-thin scrollbar-thumb-[var(--color-border)] scrollbar-track-transparent",
         )}
       >
+        <h2 id="sidebar-title" className="sr-only">
+          Menu
+        </h2>
         <nav className="flex flex-col gap-2">
           {links.map((link) => (
-            <a
+            <button
+              type="button"
               key={link.href}
               onClick={() => router.push(link.href)}
               className={cn(
@@ -114,7 +119,7 @@ export const Sidebar: React.FC = () => {
               )}
             >
               {link.label}
-            </a>
+            </button>
           ))}
         </nav>
 

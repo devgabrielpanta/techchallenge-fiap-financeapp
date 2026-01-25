@@ -1,9 +1,6 @@
 "use client";
 import { AlertCircleIcon, CheckCircle2Icon } from "lucide-react";
-import {
-  Alert,
-  AlertTitle,
-} from "@/components/ui/alert/Alert";
+import { Alert, AlertTitle } from "@/components/ui/alert/Alert";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/store/store";
 import { useEffect, useRef } from "react";
@@ -39,14 +36,24 @@ export default function Feedback() {
   switch (status) {
     case "error":
       return (
-        <Alert className={alertClassName} variant="destructive">
+        <Alert
+          role="alert"
+          aria-live="assertive"
+          className={alertClassName}
+          variant="destructive"
+        >
           <AlertCircleIcon />
           <AlertTitle>{message}</AlertTitle>
         </Alert>
       );
     case "success":
       return (
-        <Alert className={alertClassName} variant="default">
+        <Alert
+          role="alert"
+          aria-live="assertive"
+          className={alertClassName}
+          variant="default"
+        >
           <CheckCircle2Icon />
           <AlertTitle>{message}</AlertTitle>
         </Alert>

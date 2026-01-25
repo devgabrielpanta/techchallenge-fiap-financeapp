@@ -9,7 +9,10 @@ import CarouselItem from "./CarouselItem";
 
 export function CoverflowCarousel() {
   return (
-    <div className="w-full max-w-[1600px] mx-auto py-10">
+    <div
+      className="w-full max-w-[1600px] mx-auto py-10"
+      aria-label="Atalhos da home"
+    >
       <Swiper
         modules={[EffectCoverflow, Pagination, Autoplay]}
         effect="coverflow"
@@ -45,6 +48,7 @@ export function CoverflowCarousel() {
             className="flex items-center justify-center rounded-[var(--radius-md)]
                        text-[var(--color-text)] transition-transform duration-300"
             style={{ width: "200px", height: "250px" }}
+            aria-label={`${item.title}: ${item.description}`}
           >
             <CarouselItem {...item} />
           </SwiperSlide>

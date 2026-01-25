@@ -21,7 +21,7 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   Tooltip,
-  Legend
+  Legend,
 );
 
 type Props = {
@@ -101,14 +101,20 @@ export default function AccumulatedAreaChart({ period }: Props) {
   };
 
   return (
-    <div className="bg-[var(--color-surface)] p-4 rounded-[var(--radius-md)] shadow-sm border border-[var(--color-border)] h-[350px] flex flex-col">
-      <h2 className="text-lg font-semibold mb-4 text-[var(--color-text)]">
+    <section
+      aria-labelledby="accumulated-chart-title"
+      className="bg-[var(--color-surface)] p-4 rounded-[var(--radius-md)] shadow-sm border border-[var(--color-border)] h-[350px] flex flex-col"
+    >
+      <h2
+        id="accumulated-chart-title"
+        className="text-lg font-semibold mb-4 text-[var(--color-text)]"
+      >
         Receita vs Despesa Acumulada ({periodLabel})
       </h2>
 
       <div className="flex-1 relative">
         <Line data={{ labels, datasets }} options={options} />
       </div>
-    </div>
+    </section>
   );
 }

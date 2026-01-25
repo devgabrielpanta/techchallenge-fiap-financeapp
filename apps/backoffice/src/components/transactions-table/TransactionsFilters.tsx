@@ -114,7 +114,7 @@ export default function TransactionsFilters({
                       >
                         <Checkbox
                           className=""
-                          id={filter}
+                          id={`filter-${obj}-${filter}`}
                           checked={filteredTransactions.some((transaction) =>
                             transaction[obj as keyof FilterSchema].includes(
                               transactionFilter,

@@ -131,16 +131,32 @@ export default function ExtractPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 space-y-2">
           {/** Dialog de adicionar por categoria */}
           <div className="order-1 md:order-2 flex justify-center md:justify-end w-full h-fit">
-            <Button className="" onClick={() => setOpenCategoryDialog(true)}>
+            <Button
+              className=""
+              onClick={() => setOpenCategoryDialog(true)}
+              aria-haspopup="dialog"
+              aria-expanded={openCategoryDialog}
+            >
               Adicionar transação por categoria
             </Button>
 
             <CommandDialog
               open={openCategoryDialog}
               onOpenChange={setOpenCategoryDialog}
+              aria-labelledby="category-dialog-title"
             >
+              <h2 id="category-dialog-title" className="sr-only">
+                Selecionar categoria de transação
+              </h2>
+
               <Command className="rounded-lg border shadow-md md:min-w-[450px]">
-                <CommandInput placeholder="Presquisar por uma categoria..." />
+                <label htmlFor="category-search" className="sr-only">
+                  Pesquisar categoria
+                </label>
+                <CommandInput
+                  id="category-search"
+                  placeholder="Presquisar por uma categoria..."
+                />
                 <CommandList>
                   <CommandEmpty>No results found.</CommandEmpty>
                   {Array.from(new Set(transactions.map((t) => t.category))).map(
@@ -149,6 +165,12 @@ export default function ExtractPage() {
                         key={`cmd-item-${category}`}
                         onSelect={() => startAddingToCategory(category)}
                         className="group cursor-pointer hover:bg-[var(--color-hover)] active:bg-[var(--color-hover)]"
+                        tabIndex={0}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter" || e.key === " ") {
+                            startAddingToCategory(category);
+                          }
+                        }}
                       >
                         <span className="font-medium group-hover:font-semibold group-active:font-semibold group-hover:text-[var(--color-primary)] group-active:text-[var(--color-primary)]">
                           {category}
@@ -163,9 +185,14 @@ export default function ExtractPage() {
 
           <div className="order-2 md:order-1 flex gap-2 mb-4 flex-row justify-between md:justify-start items-center">
             {/** Search bar */}
+            <label htmlFor="search-transactions" className="sr-only">
+              Pesquisar transações
+            </label>
             <input
               type="text"
+              id="search-transactions"
               placeholder="Pesquisar..."
+              aria-label="Pesquisar transações"
               value={searchTerm}
               onChange={(e) => {
                 setSearchTerm(e.target.value);
@@ -212,6 +239,7 @@ export default function ExtractPage() {
             <div className="flex gap-2">
               <button
                 onClick={handlePrev}
+                aria-label="Página anterior"
                 disabled={currentPage === 1}
                 className={`px-3 py-1 border rounded-md bg-[var(--color-surface)] transition-colors duration-200 
               ${
@@ -224,6 +252,7 @@ export default function ExtractPage() {
               </button>
               <button
                 onClick={handleNext}
+                aria-label="Próxima página"
                 disabled={currentPage === totalPages}
                 className={`px-3 py-1 border rounded-md bg-[var(--color-surface)] transition-colors duration-200
               ${
@@ -240,7 +269,11 @@ export default function ExtractPage() {
 
         {/* Indicador de carregamento no mobile */}
         {isMobile && visibleCount < filteredTransactions.length && (
-          <div className="text-center text-[var(--color-text-muted)] py-4">
+          <div
+            role="status"
+            aria-live="polite"
+            className="text-center text-[var(--color-text-muted)] py-4"
+          >
             Carregando mais transações...
           </div>
         )}

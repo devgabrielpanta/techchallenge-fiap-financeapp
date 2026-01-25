@@ -4,7 +4,7 @@ import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
   selector: "app-root",
   standalone: false,
   template: `
-    <div class="upload-container">
+    <div class="upload-container" aria-live="polite" aria-atomic="true">
       <div *ngIf="!uploadedFileName" class="upload-wrapper">
         <input
           #fileInput
@@ -13,8 +13,15 @@ import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
           (change)="onFileSelected($event)"
           class="file-input"
           id="pdf-upload"
+          aria-describedby="upload-helper"
         />
-        <label for="pdf-upload" class="upload-button">
+        <label
+          for="pdf-upload"
+          class="upload-button"
+          role="button"
+          tabindex="0"
+          aria-label="Selecionar arquivo PDF para upload"
+        >
           <svg
             width="16"
             height="16"
@@ -29,7 +36,7 @@ import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
           </svg>
           Selecionar arquivo
         </label>
-        <p class="helper-text">Nenhum arquivo selecionado</p>
+        <p id="upload-helper" class="helper-text">Nenhum arquivo selecionado</p>
       </div>
 
       <div *ngIf="uploadedFileName" class="file-display">
@@ -47,15 +54,19 @@ import { Component, OnInit, ElementRef, ViewChild } from "@angular/core";
             ></path>
             <polyline points="13 2 13 9 20 9"></polyline>
           </svg>
-          <span class="file-name" [title]="uploadedFileName">{{
-            uploadedFileName
-          }}</span>
+          <span
+            class="file-name"
+            [title]="uploadedFileName"
+            aria-label="Arquivo selecionado: {{ uploadedFileName }}"
+            >{{ uploadedFileName }}</span
+          >
         </div>
         <button
           (click)="removeFile()"
           class="remove-button"
           type="button"
           title="Remover arquivo"
+          aria-label="Remover arquivo selecionado"
         >
           <svg
             width="16"
@@ -179,7 +190,8 @@ export class AppComponent implements OnInit {
     // Obter URL do backoffice dinamicamente
     // No navegador, sempre usar hostname atual pois os serviços são expostos nas portas do host
     const getBackofficeUrl = () => {
-      const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
+      const hostname =
+        typeof window !== "undefined" ? window.location.hostname : "localhost";
       return (window as any).__BACKOFFICE_URL__ || `http://${hostname}:3000`;
     };
 
@@ -219,8 +231,10 @@ export class AppComponent implements OnInit {
     reader.onload = () => {
       const base64 = reader.result as string;
 
-      const hostname = typeof window !== 'undefined' ? window.location.hostname : 'localhost';
-      const backofficeUrl = (window as any).__BACKOFFICE_URL__ || `http://${hostname}:3000`;
+      const hostname =
+        typeof window !== "undefined" ? window.location.hostname : "localhost";
+      const backofficeUrl =
+        (window as any).__BACKOFFICE_URL__ || `http://${hostname}:3000`;
       window.parent.postMessage(
         {
           type: "FILE_UPLOADED",
@@ -241,7 +255,8 @@ export class AppComponent implements OnInit {
       this.fileInput.nativeElement.value = "";
     }
 
-    const backofficeUrl = (window as any).__BACKOFFICE_URL__ || 'http://localhost:3000';
+    const backofficeUrl =
+      (window as any).__BACKOFFICE_URL__ || "http://localhost:3000";
     window.parent.postMessage(
       {
         type: "FILE_REMOVED",

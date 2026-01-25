@@ -335,6 +335,9 @@ export const TransactionModal = () => {
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 backdrop-blur-[2px]"
       onClick={handleCloseModal}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="transaction-modal-title"
     >
       <div
         className="bg-[var(--color-surface)] rounded-[var(--radius-md)] w-full max-w-md p-6 relative"
@@ -344,12 +347,16 @@ export const TransactionModal = () => {
           <button
             className="absolute -top-8 -right-8 bg-[var(--color-surface)] hover:text-[var(--color-primary)] text-[var(--color-text)] hover:text-[var(--color-white)] rounded-full p-2 shadow-md transition-colors"
             onClick={handleCloseModal}
+            aria-label="Fechar modal"
           >
             <X size={20} />
           </button>
 
           <div className="flex flex-row justify-between items-center mb-8">
-            <h2 className="text-lg font-semibold text-[var(--color-primary)]">
+            <h2
+              className="text-lg font-semibold text-[var(--color-primary)]"
+              id="transaction-modal-title"
+            >
               {transactionAction === "create"
                 ? "Adicionar nova transação"
                 : "Editar transação"}

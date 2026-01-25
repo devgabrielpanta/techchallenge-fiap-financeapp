@@ -86,13 +86,19 @@ export default function RankingByCategoryChart({ period }: Props) {
   };
 
   return (
-    <div className="bg-[var(--color-surface)] p-4 rounded-[var(--radius-md)] shadow-sm border border-[var(--color-border)] h-[400px] flex flex-col">
-      <h2 className="text-lg font-semibold mb-4">
+    <section
+      aria-labelledby="ranking-category-chart-title"
+      className="bg-[var(--color-surface)] p-4 rounded-[var(--radius-md)] shadow-sm border border-[var(--color-border)] h-[400px] flex flex-col"
+    >
+      <h2
+        id="ranking-category-chart-title"
+        className="text-lg font-semibold mb-4"
+      >
         Ranking de Categorias ({periodLabel})
       </h2>
       <div className="flex-1 relative">
         <Bar data={chartData} options={options} />
       </div>
-    </div>
+    </section>
   );
 }

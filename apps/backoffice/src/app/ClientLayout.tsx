@@ -18,14 +18,20 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
   return (
     <>
       <ThemeBridge />
-      <Header />
+      <header>
+        <Header />
+      </header>
 
       <div className="flex flex-1 w-full justify-center mt-[64px]">
         <div className="flex flex-col lg:flex-row w-full max-w-[1600px]">
-          <Sidebar />
+          <nav aria-label="Menu principal">
+            <Sidebar />
+          </nav>
 
           <div className="flex-1 flex flex-col h-[calc(100vh-64px)] overflow-y-auto gap-10">
-            <main className="flex-1 p-4">{children}</main>
+            <main id="main-content" className="flex-1 p-4">
+              {children}
+            </main>
 
             <footer className="p-4 text-center text-sm border-t">
               © 2025 Bytebank - Tech Challenge FIAP
@@ -42,7 +48,7 @@ export default function ClientLayout({ children }: { children: ReactNode }) {
         src={`${config.uploaderRoot}/upload`}
         className="hidden"
         title="Preload Upload Component"
-        aria-hidden
+        aria-hidden="true"
       />
     </>
   );
