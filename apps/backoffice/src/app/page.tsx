@@ -49,7 +49,7 @@ export default function HomePage() {
               className="p-1 text-[var(--color-primary)] transition-colors cursor-pointer"
               aria-label={visible ? "Ocultar saldo" : "Mostrar saldo"}
             >
-              {visible ? <EyeOff size={20} /> : <Eye size={20} />}
+              {visible ? <EyeOff size={20} aria-hidden="true" /> : <Eye size={20} aria-hidden="true" />}
             </button>
           </div>
         </div>
@@ -58,6 +58,7 @@ export default function HomePage() {
             <Button
               variant="primary"
               className="rounded-full w-13 h-13 p-0 flex items-center justify-center"
+              aria-label="Criar nova transação"
               onClick={() => dispatch(startCreateTransaction())}
             >
               <CirclePlus size={30} />
@@ -69,6 +70,7 @@ export default function HomePage() {
             <Button
               variant="primary"
               className="rounded-full w-13 h-13 p-0 flex items-center justify-center"
+              aria-label="Ver extrato"
               onClick={() => router.push("/extract")}
             >
               <DollarSign size={30} />

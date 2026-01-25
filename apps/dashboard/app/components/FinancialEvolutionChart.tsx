@@ -19,7 +19,7 @@ ChartJS.register(
   CategoryScale,
   LinearScale,
   Tooltip,
-  Legend
+  Legend,
 );
 
 type Props = {
@@ -70,7 +70,7 @@ export default function FinancialEvolutionChart({
   // Aqui entra a linha de saldo, se a prop estiver ativa
   if (showBalanceLine && charts) {
     const saldo = charts.evolution.revenue.map(
-      (rev, idx) => rev - charts.evolution.expenses[idx]
+      (rev, idx) => rev - charts.evolution.expenses[idx],
     );
     datasets.push({
       label: "Saldo",
@@ -126,8 +126,14 @@ export default function FinancialEvolutionChart({
   };
 
   return (
-    <div className="bg-[var(--color-surface)] p-4 rounded-[var(--radius-md)] shadow-sm border border-[var(--color-border)] h-[350px] flex flex-col">
-      <h2 className="text-lg font-semibold mb-4">
+    <section
+      aria-labelledby="financial-evolution-chart-title"
+      className="bg-[var(--color-surface)] p-4 rounded-[var(--radius-md)] shadow-sm border border-[var(--color-border)] h-[350px] flex flex-col"
+    >
+      <h2
+        id="financial-evolution-chart-title"
+        className="text-lg font-semibold mb-4"
+      >
         Evolução Financeira ({periodLabel})
       </h2>
 
@@ -140,6 +146,6 @@ export default function FinancialEvolutionChart({
           <Line data={data} options={options} />
         )}
       </div>
-    </div>
+    </section>
   );
 }

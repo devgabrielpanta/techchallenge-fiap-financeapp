@@ -40,9 +40,11 @@ export default function Card({
                   : "text-[var(--color-text-muted)]"
             }`}
           >
-            {isPositive && <ArrowUp size={16} />}
-            {isNegative && <ArrowDown size={16} />}
-            {!isPositive && !isNegative && <ArrowRight size={16} />}
+            {isPositive && <ArrowUp size={16} aria-hidden="true" />}
+            {isNegative && <ArrowDown size={16} aria-hidden="true" />}
+            {!isPositive && !isNegative && (
+              <ArrowRight size={16} aria-hidden="true" />
+            )}
 
             <span>{Math.abs(change).toFixed(2)}%</span>
           </div>

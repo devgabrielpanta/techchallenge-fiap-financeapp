@@ -25,6 +25,7 @@ export const Extract: React.FC<ExtractProps> = () => {
   if (!showExtract) return null;
   return (
     <aside
+      aria-labelledby="extract-title"
       className={cn(
         "w-full lg:w-[260px] flex-shrink-0",
         "bg-[var(--color-surface)] border border-[var(--color-border)] shadow-lg",
@@ -38,7 +39,10 @@ export const Extract: React.FC<ExtractProps> = () => {
     >
       <div className="p-4 flex flex-col gap-3">
         <div className="flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-[var(--color-primary)]">
+          <h2
+            id="extract-title"
+            className="text-lg font-semibold text-[var(--color-primary)]"
+          >
             Extrato
           </h2>
           <span className="text-xs">Últimas transações</span>

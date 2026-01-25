@@ -42,6 +42,12 @@ export default async function RootLayout({
   return (
     <html lang="pt-BR" className="light">
       <body className="min-h-screen flex flex-col bg-[var(--color-background)] color-[var(--color-text)] transition-colors">
+        <a
+          href="#main-content"
+          className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 bg-white p-2 z-50"
+        >
+          Pular para o conteúdo principal
+        </a>
         <ReduxProvider>
           <ReduxHydration transactions={transactions} />
           <ClientLayout>{children}</ClientLayout>

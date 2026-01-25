@@ -72,7 +72,7 @@ export default function ExpensesByCategoryChart({
             if (showPercentage && expensesByCategory.length > 0) {
               const total = expensesByCategory.reduce(
                 (sum, item) => sum + item.amount,
-                0
+                0,
               );
               const pct = ((value / total) * 100).toFixed(1);
               return `${label}: R$ ${value.toLocaleString("pt-BR")} (${pct}%)`;
@@ -101,17 +101,18 @@ export default function ExpensesByCategoryChart({
   }
 
   return (
-    <div
+    <section
+      aria-labelledby="expenses-category-title"
       className="bg-[var(--color-surface)] p-4 rounded-[var(--radius-md)] shadow-sm border border-[var(--color-border)]"
       aria-label="Gráfico de despesas por categoria"
     >
-      <h2 className="text-lg font-semibold mb-4">
+      <h2 id="expenses-category-title" className="text-lg font-semibold mb-4">
         Despesas por Categoria ({periodLabel})
       </h2>
 
       <div className="relative h-[320px] flex items-center justify-center">
         <Doughnut data={chartData} options={options} />
       </div>
-    </div>
+    </section>
   );
 }

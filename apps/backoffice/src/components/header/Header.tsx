@@ -55,6 +55,7 @@ export const Header: React.FC = () => {
             }
             className="p-2 rounded-full transition-colors bg-[var(--color-background)] hover:bg-[var(--color-primary)] hover:text-[var(--color-white)] color-[var(--color-text)] cursor-pointer"
             aria-label="Alternar tema"
+            aria-pressed={theme === "dark"}
           >
             {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
           </button>

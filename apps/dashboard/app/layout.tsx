@@ -1,5 +1,5 @@
-import './globals.css';
-import { ReduxProvider } from './providers/redux-provider';
+import "./globals.css";
+import { ReduxProvider } from "./providers/redux-provider";
 
 export default function RootLayout({
   children,
@@ -9,7 +9,9 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className="bg-transparent text-inherit ">
-        <ReduxProvider>{children}</ReduxProvider>
+        <ReduxProvider>
+          <main id="main-content">{children}</main>
+        </ReduxProvider>
       </body>
     </html>
   );
