@@ -205,7 +205,7 @@ useEffect(() => {
   });
 }, []);
 ```
-
+<!--
 ## 🚀 Rodando o Projeto
 
 ### Pré-requisitos
@@ -273,8 +273,9 @@ pnpm dev
 cd apps/uploader/app-angular
 npm start
 ```
+-->
 
-## 🐳 Docker
+## 🐳 Executando o projeto via Docker
 
 A aplicação pode ser executada usando Docker Compose para facilitar o deploy e desenvolvimento.
 
@@ -295,7 +296,7 @@ docker-compose down
 - `finance-app-uploader-root` - Single-SPA Root (porta 4200)
 - `finance-app-uploader-angular` - Microfrontend Angular (porta 4201)
 - `finance-app-storybook` - Documentação de componentes (porta 6006)
-
+<!--
 ### Executando o Storybook
 
 O Storybook está configurado no **backoffice** para documentação e desenvolvimento de componentes isolados.
@@ -317,7 +318,7 @@ pnpm build-storybook
 ```
 
 O build será gerado na pasta `apps/backoffice/storybook-static/`.
-
+-->
 ### Configuração de Portas
 
 | Aplicação            | Porta | URL                          |
@@ -342,7 +343,7 @@ A aplicação principal (**Backoffice**) foi implantada na plataforma **Vercel**
 
 > **⚠️ Observação Importante:**
 >
-> O **Backoffice** está disponível em produção na Vercel, porém, os microfrontends **Dashboard (Next.js)** e **App Angular (Upload)** **não estão disponíveis em produção** e é necessário rodá-los localmente para que a aplicação funcione completamente. Para acessar todas as funcionalidades, execute os microfrontends seguindo as instruções na seção [🐳 Docker](#-docker) ou [🚀 Rodando o Projeto](#-rodando-o-projeto).
+> O **Backoffice** está disponível em produção na Vercel, porém, os microfrontends **Dashboard (Next.js)** e **App Angular (Upload)** **não estão disponíveis em produção** e é necessário rodá-los localmente para que a aplicação funcione completamente. Para acessar todas as funcionalidades, execute os microfrontends seguindo as instruções na seção [🐳 Executando o projeto via Docker](#-executando-o-projeto-via-docker).
 
 ### Gerenciamento de Credenciais e Secrets
 
